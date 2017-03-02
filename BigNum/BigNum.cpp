@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <math.h>
+#include <unistd.h>
 
 void printNum(unsigned int * num, unsigned int size){
 	unsigned int i;
@@ -155,28 +156,27 @@ void divNum(unsigned int * A, unsigned int * B, unsigned int * D, unsigned int *
 		getNum(dr, tmpp);
         mulNum(tmpp, B, tmpres, size); // getNum * B = tmpres
         //while (bigger(tmpres, A, size) == 1){
-        while (bigger(tmpres, tmp_a, size)){
-        	//printNum(tmpres, size);
-        	//printNum(A, size);
-        	//printf("\n");
+        char bgr_des = bigger(tmpres, tmp_a, size);
+        while (bgr_des !=0 && bgr_des !=2){
+            //printf("bgr_des %d \n", bgr_des);
+            //printNum(tmpres, size);
+            //printNum(tmp_a, size);
+            //printf("\n");            
         	dr --;
         	setZero(tmpp, size);
         	getNum(dr, tmpp);
         	mulNum(tmpp, B, tmpres, size); // getNum * B = tmpres
+            bgr_des = bigger(tmpres, tmp_a, size);
+
         }
-		//printf("passed with: \n");
-        //printNum(tmpres, size);
-        //printNum(A, size);
-        //printf("************* \n");
-
-
+        
         subNum(tmp_a, tmpres, tmp_aa , size); // A - tmpres
-
-        /*
+        
 		printf(">-----------\n");
 		printNum(tmp_a, 32);
 		printNum(tmpres, 32);
-		printf("-----------<\n");*/
+		printf("-----------<\n");
+sleep(1);
 
         addNum(D, tmpp, tmpd, size); // D + getNum = tmpd
         copyNum(D, tmpd, size); // D = tmpd

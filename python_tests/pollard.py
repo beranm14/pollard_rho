@@ -27,7 +27,8 @@ def pollardRho(N):
 		j = j + 1
 	return g
 
-print gcd(123456789123456789,987654321987654321)
+print hex(gcd(0x0B00000000, 0x0100000000))
+print gcd(0x1B69B4BACD05F15, 0xDB4DA5F7EF412B1)
 
 # print pollardRho(162167)
 

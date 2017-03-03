@@ -65,8 +65,8 @@ void mulNum(unsigned int * A, unsigned int * B, unsigned int * C, unsigned int s
     copyNum(tmpa, A, size);
     setZero(C, size);
     setZero(tmpc, size);
-    unsigned char j = 0x01;
-    for(unsigned char k = 0; k < sizeof(A); k++){
+    unsigned int j = 1;
+    for(unsigned char k = 0; k < 32; k++){ // needed to be changed accordingly with sizeof the datatype
         for(unsigned char i = 0; i < size; i++){
             if (B[i] & j){
                 addNum(C, tmpa, tmpc, size);
@@ -132,7 +132,7 @@ void getNum(unsigned int a, unsigned int * A){
 void divNum(unsigned int * A, unsigned int * B, unsigned int * D, unsigned int * R, unsigned int size){
 	// A / B = D + R/B
     // if (alen == 0 || blen == 0 || alen < blen){
-    if (zeroNum(A, size) || zeroNum(B, size) || bigger(B, A, size)){
+    if (zeroNum(A, size) || zeroNum(B, size) || bigger(B, A, size) == 1){
         copyNum(R, A, size);
         setZero(D, size);
         return;
@@ -152,10 +152,21 @@ void divNum(unsigned int * A, unsigned int * B, unsigned int * D, unsigned int *
         setZero(tmp_aa, size);
 
         dr = (getHighBit(tmp_a, size) - getHighBit(B, size)); // finding number to divide to
-        //printf("dr %d \n", dr);
+
 		getNum(dr, tmpp);
-        mulNum(tmpp, B, tmpres, size); // getNum * B = tmpres
+        mulNum(B, tmpp, tmpres, size); // getNum * B = tmpres
         //while (bigger(tmpres, A, size) == 1){
+        /*printf("Gonna build this num:  \n");
+        printf("dr %d \n", dr);
+        printNum(tmpp, 32);
+        printf("From this B:  \n");
+        printNum(B, 32);
+        printf("To divide this tmp_a:  \n");
+        printNum(tmp_a, 32);
+        printf("This is what I got:  \n");
+        printNum(tmpres, 32);
+        sleep(1);
+        printf("=======================\n");*/
         char bgr_des = bigger(tmpres, tmp_a, size);
         while (bgr_des !=0 && bgr_des !=2){
             //printf("bgr_des %d \n", bgr_des);
@@ -172,11 +183,11 @@ void divNum(unsigned int * A, unsigned int * B, unsigned int * D, unsigned int *
         
         subNum(tmp_a, tmpres, tmp_aa , size); // A - tmpres
         
-		printf(">-----------\n");
-		printNum(tmp_a, 32);
-		printNum(tmpres, 32);
-		printf("-----------<\n");
-sleep(1);
+		//printf(">-----------\n");
+		//printNum(tmp_a, 32);
+		//printNum(tmpres, 32);
+		//printf("-----------<\n");
+        //sleep(1);
 
         addNum(D, tmpp, tmpd, size); // D + getNum = tmpd
         copyNum(D, tmpd, size); // D = tmpd

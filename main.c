@@ -6,6 +6,7 @@
 #include "BigNum/BigNum.h"
 
 
+/*
 static long gcdl(long a, long b) {
   long r;
   while(b!=0){
@@ -20,22 +21,23 @@ static long gcdl(long a, long b) {
     getchar(); 
   }
   return a;
-}
+}*/
 
 
 unsigned int * gcd(unsigned int * N, unsigned int * M, unsigned int size){
 	unsigned int * nm_d = (unsigned int *)malloc(sizeof(unsigned int) * size);
 	unsigned int * nm_r = (unsigned int *)malloc(sizeof(unsigned int) * size);
 	while(!zeroNum(M, size)){
-		divNum(N, M, nm_d, nm_r, size);
-		copyNum(N, M, size);
-		copyNum(M, nm_r, size);
-
-		printf("**************************\n");
+		/*printf("**************************\n");
 		printf("N:\n");
 		printNum(N, size);
 		printf("M:\n");
 		printNum(M, size);
+		printf("++++++++++++++++++++++++++\n");*/
+		divNum(N, M, nm_d, nm_r, size);
+		copyNum(N, M, size);
+		copyNum(M, nm_r, size);
+
 		
 		//getchar(); 
 	}
@@ -74,8 +76,14 @@ int main(int argc, char **argv) {
 	setZero(B, 32);
 	setZero(D, 32);
 	setZero(R, 32);
-	A[0] = 0x00000005;
-    B[0] = 0x00000002;
+	//1B6 9B4B ACD0 5F15	
+	//A[1] = 0x01B69B4B;
+    A[1] = 0x0000000B;
+    A[0] = 0x00000000;
+	//DB4 DA5F 7EF4 12B1
+	//B[1] = 0x0DB4DA5F;
+	B[1] = 0x00000001;
+	B[0] = 0x00000000;
 	gcd(A, B, 32);
     //divNum(A, B, D, R, 32);
     printf("Results \n");
@@ -83,7 +91,8 @@ int main(int argc, char **argv) {
 	printNum(B, 32);
     printNum(D, 32);
 	printNum(R, 32);
-	printf("********************\n");
+	return 0;
+	/*printf("********************\n");
 	setZero(A, 32);
 	setZero(B, 32);
 	setZero(D, 32);
@@ -103,18 +112,36 @@ int main(int argc, char **argv) {
 	setZero(D, 32);
 	setZero(R, 32);	
 	//1B6 9B4B ACD0 5F15
-	A[1] = 0x01B69B4B;
-    A[0] = 0xACD05F15;
-    //DB4 DA5F 7EF4 12B1
-	B[1] = 0x0DB4DA5F;
-	B[0] = 0x7EF412B1;
-	gcd(A, B, 32);
+	A[0] = 0x00000008;
+	//DB4 DA5F 7EF4 12B1
+	//B[1] = 0x0DB4DA5F;
+	B[0] = 0x00000008;
+	divNum(A, B, D, R, 32);
     //divNum(A, B, D, R, 32);
     printf("Results \n");
     printNum(A, 32);
 	printNum(B, 32);
     printNum(D, 32);
 	printNum(R, 32);
+	printf("********************\n");
+	printf("********************\n");
+	printf("********************\n");
+	printf("********************\n");
+	printf("********************\n");
+	setZero(A, 32);
+	setZero(B, 32);
+	setZero(D, 32);
+	setZero(R, 32);	
+	A[0] = 0x89;
+    //DB4 DA5F 7EF4 12B1
+	B[0] = 0x21;
+	gcd(A, B, 32);
+    //divNum(A, B, D, R, 32);
+    printf("Results \n");
+    printNum(A, 32);
+	printNum(B, 32);
+    printNum(D, 32);
+	printNum(R, 32);*/
 	//printf("gcdl %ld\n",gcdl(0x00000005, 0x00000002));
 	return 0;
 }

@@ -59,17 +59,30 @@ void shiftLeftNum(unsigned int * A, unsigned int k){
     }
 }
 
+void addfromto(unsigned int * A, unsigned int * B, unsigned int * C, unsigned int from, unsigned int size){
+	unsigned int i;
+	unsigned long int tmp;
+	unsigned long int tmp_carry;
+	unsigned int carry = 0;
+	for(i = from; i < size; i ++){
+		tmp = ((unsigned long int) A[i] + B[i-from]);
+		C[i] = (tmp & 0xFFFFFFFF) + carry;
+		tmp_carry = ((unsigned long int) tmp & 0xFFFFFFFF00000000); 
+		carry = ((unsigned long int) tmp_carry >> 32);
+	}
+}
+
 void mulNum(unsigned int * A, unsigned int * B, unsigned int * C, unsigned int size){
     unsigned int * tmpa = (unsigned int *)malloc(sizeof(unsigned int) * size);
     unsigned int * tmpc = (unsigned int *)malloc(sizeof(unsigned int) * size);
     copyNum(tmpa, A, size);
     setZero(C, size);
     setZero(tmpc, size);
-    unsigned int j = 1;
-    for(unsigned char k = 0; k < 32; k++){ // needed to be changed accordingly with sizeof the datatype
-        for(unsigned char i = 0; i < size; i++){
+    unsigned long int j = 1;
+    for(unsigned int k = 0; k < 32; k++){ // needed to be changed accordingly with sizeof the datatype
+        for(unsigned int i = 0; i < size; i++){
             if (B[i] & j){
-                addNum(C, tmpa, tmpc, size);
+                addfromto(C, tmpa, tmpc, i, size);
                 copyNum(C, tmpc, size);
             }
         }

@@ -4,7 +4,8 @@ def gcd(n, m):
 	if m == 0:
 		return n 
 	else:
-		return gcd (m,n % m)
+		print hex(n % m), " \n"
+		return gcd (m, n % m)
 
 def pollardRho(N):
 	if N%2==0:
@@ -27,8 +28,9 @@ def pollardRho(N):
 		j = j + 1
 	return g
 
-print hex(gcd(0x0B00000000, 0x0100000000))
-print gcd(0x1B69B4BACD05F15, 0xDB4DA5F7EF412B1)
+#print hex(0x7530eca9*0x200000000)
+print hex(gcd(0x8000099912345678, 0x000000007530eca9))
+#print gcd(0x1B69B4BACD05F15, 0xDB4DA5F7EF412B1)
 
 # print pollardRho(162167)
 

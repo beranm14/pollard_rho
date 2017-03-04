@@ -35,6 +35,10 @@ unsigned int * gcd(unsigned int * N, unsigned int * M, unsigned int size){
 		printNum(M, size);
 		printf("++++++++++++++++++++++++++\n");*/
 		divNum(N, M, nm_d, nm_r, size);
+		/*printf("**************************\n");
+		printf("nm_r: \n");
+		printNum(nm_r, size);
+		printf("++++++++++++++++++++++++++\n");*/
 		copyNum(N, M, size);
 		copyNum(M, nm_r, size);
 
@@ -78,12 +82,16 @@ int main(int argc, char **argv) {
 	setZero(R, 32);
 	//1B6 9B4B ACD0 5F15	
 	//A[1] = 0x01B69B4B;
-    A[1] = 0x0000000B;
-    A[0] = 0x00000000;
+    //A[0] = 0x00000000;
+	/*A[1] = 0x80000999; // to keep
+    A[0] = 0x12345678; // to keep
+	//A[0] = 0x80000003;
 	//DB4 DA5F 7EF4 12B1
 	//B[1] = 0x0DB4DA5F;
-	B[1] = 0x00000001;
-	B[0] = 0x00000000;
+	//B[1] = 0x00000001;
+	//B[0] = 0x00000000;
+	B[1] = 0x80000999; // to keep
+	B[0] = 0x87654321; // to keep
 	gcd(A, B, 32);
     //divNum(A, B, D, R, 32);
     printf("Results \n");
@@ -91,14 +99,34 @@ int main(int argc, char **argv) {
 	printNum(B, 32);
     printNum(D, 32);
 	printNum(R, 32);
-	return 0;
-	/*printf("********************\n");
+	return 0;*/
+	printf("********************\n");
 	setZero(A, 32);
 	setZero(B, 32);
 	setZero(D, 32);
 	setZero(R, 32);	
-	A[15] = 0x00000002;
-    B[0] = 0x00000004;
+	//A[1] = 0x80000999;
+    A[0] = 0x7530eca9;
+    //B[0] = 0x00000004;
+	B[1] = 0x00000002;
+	B[0] = 0x00000001;
+	//gcd(A, B, 32);
+    mulNum(A, B, D, 32);
+    printf("Results \n");
+    printNum(A, 32);
+	printNum(B, 32);
+    printNum(D, 32);
+	printNum(R, 32);
+	//return 0;
+	printf("********************\n");
+	setZero(A, 32);
+	setZero(B, 32);
+	setZero(D, 32);
+	setZero(R, 32);	
+	A[1] = 0x80000999;
+    A[0] = 0x12345678;
+    B[1] = 0x00000000;
+	B[0] = 0x7530eca9;
 	gcd(A, B, 32);
     //divNum(A, B, D, R, 32);
     printf("Results \n");
@@ -107,7 +135,7 @@ int main(int argc, char **argv) {
     printNum(D, 32);
 	printNum(R, 32);
 	printf("********************\n");
-	setZero(A, 32);
+	/*setZero(A, 32);
 	setZero(B, 32);
 	setZero(D, 32);
 	setZero(R, 32);	

@@ -134,7 +134,7 @@ unsigned int getHighBit(unsigned int * A, unsigned int size){
         return 0;
     unsigned int bits_size = size * 32;
     unsigned int l = 0;
-    for (unsigned int i = size - 1; i != -1; i --){
+    for (long int i = size - 1; i != -1; i --){
         unsigned int tmp = 0x80000000;
         while ((A[i] & tmp) == 0 && tmp != 0){
             tmp >>= 1;
@@ -148,7 +148,7 @@ unsigned int getHighBit(unsigned int * A, unsigned int size){
 }
 
 char isEven(unsigned int * A, unsigned int size){
-	if (A[0] & 1 == 0)
+	if ((A[0] & 1) == 0)
 		return 1;
 	return 0;
 }
@@ -256,4 +256,62 @@ void divNum(unsigned int * A, unsigned int * B, unsigned int * D, unsigned int *
     free(tmpp);
     free(tmpres);
     free(tmpd);	
+}
+
+
+void modNum(unsigned int * A, unsigned int * B, unsigned int * R, unsigned int size){
+    // A / B = D + R/B
+    // if (alen == 0 || blen == 0 || alen < blen){
+    if (zeroNum(A, size) || bigger(B, A, size) == 2){
+        setZero(R, size);
+        return;
+    }
+    if (bigger(B, A, size) == 1){
+        copyNum(R, A, size);
+        return;
+    }
+
+    unsigned int * tmp_a = (unsigned int *)malloc(sizeof(unsigned int) * size);
+    unsigned int * tmp_aa = (unsigned int *)malloc(sizeof(unsigned int) * size);
+    unsigned int * tmpp = (unsigned int *)malloc(sizeof(unsigned int) * size);
+    unsigned int * tmpres = (unsigned int *)malloc(sizeof(unsigned int) * size);
+    unsigned int * tmpd = (unsigned int *)malloc(sizeof(unsigned int) * size);
+    
+    copyNum(tmp_a, A, size);
+    unsigned int dr;
+    while( 1 ){
+        setZero(tmpp, size);
+        setZero(tmpd, size);
+        setZero(tmpres, size);
+        setZero(tmp_aa, size);
+
+        dr = (getHighBit(tmp_a, size) - getHighBit(B, size)); // finding number to divide to
+
+        getNum(dr, tmpp, size);
+        mulNum(B, tmpp, tmpres, size); // getNum * B = tmpres
+
+        char bgr_des = bigger(tmpres, tmp_a, size);
+        while (bgr_des !=0 && bgr_des !=2){
+            dr --;
+            setZero(tmpp, size);
+            getNum(dr, tmpp, size);
+            mulNum(tmpp, B, tmpres, size); // getNum * B = tmpres
+            bgr_des = bigger(tmpres, tmp_a, size);
+
+        }
+        
+        subNum(tmp_a, tmpres, tmp_aa , size); // A - tmpres
+
+        copyNum(R, tmp_aa, size); 
+        if(bigger(B, R, size))
+            break;
+        else{
+            copyNum(tmp_a, R, size);
+        }
+    }
+    free(tmp_a);
+    free(tmp_aa);
+    free(tmpp);
+    free(tmpres);
+    free(tmpd); 
 }

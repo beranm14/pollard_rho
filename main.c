@@ -83,7 +83,12 @@ void PollardRho(unsigned int * N, unsigned int * R, unsigned int size){
 	setZero(g, size);
 	g[0] = 1;
 	// count y = ((x*x)+1)%N
-
+	unsigned int * res = (unsigned int *)malloc(sizeof(unsigned int) * size);
+	setZero(res, size);
+	mulNum(x, x, res, size);
+	unsigned int * addoneres = (unsigned int *)malloc(sizeof(unsigned int) * size);
+	setZero(addoneres, size);
+	addOne(res, addoneres, size);
 
 	while (isOne(g)){
 

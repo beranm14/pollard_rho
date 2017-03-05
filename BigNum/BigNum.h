@@ -21,6 +21,8 @@ char bigger(unsigned int * A, unsigned int * B, unsigned int size);
 
 unsigned int getHighBit(unsigned int * A, unsigned int size);
 
+char isEven(unsigned int * A, unsigned int size);
+
 void getNum(unsigned int a, unsigned int * A);
 
 void divNum(unsigned int * A, unsigned int * B, unsigned int * D, unsigned int * R, unsigned int size);

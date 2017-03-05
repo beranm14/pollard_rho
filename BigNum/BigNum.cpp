@@ -119,7 +119,7 @@ unsigned int getHighBit(unsigned int * A, unsigned int size){
         return 0;
     unsigned int bits_size = size * 32;
     unsigned int l = 0;
-    for (int i = size - 1; i != -1; i --){
+    for (unsigned int i = size - 1; i != -1; i --){
         unsigned int tmp = 0x80000000;
         while ((A[i] & tmp) == 0 && tmp != 0){
             tmp >>= 1;
@@ -132,9 +132,24 @@ unsigned int getHighBit(unsigned int * A, unsigned int size){
     return l;
 }
 
-void getNum(unsigned int a, unsigned int * A){
-    unsigned int where = a / 32;
-    unsigned int which = a % 32;
+char isEven(unsigned int * A, unsigned int size){
+	if (A[0] & 1 == 0)
+		return 1;
+	return 0;
+}
+char isOne(unsigned int * A, unsigned int size){
+	for (unsigned int i = 1; i < size; i++){
+		if (A[i] > 0)
+			return 0;
+	}
+	if (A[0] == 1)
+		return 1;
+	return 0;
+}
+
+void getNum(unsigned int a, unsigned int * A, unsigned int size){
+    unsigned int where = a / size;
+    unsigned int which = a % size;
     A[where] = 1;
     while (which){
         A[where] <<= 1;
@@ -166,7 +181,7 @@ void divNum(unsigned int * A, unsigned int * B, unsigned int * D, unsigned int *
 
         dr = (getHighBit(tmp_a, size) - getHighBit(B, size)); // finding number to divide to
 
-		getNum(dr, tmpp);
+		getNum(dr, tmpp, size);
         mulNum(B, tmpp, tmpres, size); // getNum * B = tmpres
         //while (bigger(tmpres, A, size) == 1){
         /*printf("Gonna build this num:  \n");
@@ -188,7 +203,7 @@ void divNum(unsigned int * A, unsigned int * B, unsigned int * D, unsigned int *
             //printf("\n");            
         	dr --;
         	setZero(tmpp, size);
-        	getNum(dr, tmpp);
+        	getNum(dr, tmpp, size);
         	mulNum(tmpp, B, tmpres, size); // getNum * B = tmpres
             bgr_des = bigger(tmpres, tmp_a, size);
 

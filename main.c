@@ -66,8 +66,29 @@ def pollardRho(N):
 		g = gcd(abs(x-y),N)
 	return g
 */
-void PollardRho(unsigned int * A, unsigned int size){
+void PollardRho(unsigned int * N, unsigned int * R, unsigned int size){
+	zeroNum(R, size);
+	if isEven(N, size){
+		R[0] = 2;
+		return;
+	}
+	unsigned int * x = (unsigned int *)malloc(sizeof(unsigned int) * size);
+	unsigned int * y = (unsigned int *)malloc(sizeof(unsigned int) * size);
+	unsigned int * c = (unsigned int *)malloc(sizeof(unsigned int) * size);
+	unsigned int * g = (unsigned int *)malloc(sizeof(unsigned int) * size);
+	setZero(x, size);
+	x[0] = 7;
+	setZero(c, size);
+	c[0] = 1;
+	setZero(g, size);
+	g[0] = 1;
+	// count y = ((x*x)+1)%N
 
+
+	while (isOne(g)){
+
+
+	}
 }
 
 
@@ -123,9 +144,9 @@ int main(int argc, char **argv) {
 	setZero(B, 32);
 	setZero(D, 32);
 	setZero(R, 32);	
-	A[1] = 0x80000999;
+	A[1] = 0xF0010999;
     A[0] = 0x12345678;
-    B[1] = 0x00000000;
+    B[1] = 0xF0000000;
 	B[0] = 0x7530eca9;
 	gcd(A, B, 32);
     //divNum(A, B, D, R, 32);

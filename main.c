@@ -65,7 +65,6 @@ def pollardRho(N):
 	y = ((x*x)%N+c)%N
 	c = 1
 	g = 1
-	j = 0
 	while g==1:             
 		x = ((x*x)%N+c)%N
 		y1 = ((y*y)%N+c)%N
@@ -73,66 +72,91 @@ def pollardRho(N):
 		g = gcd(abs(x-y),N)
 	return g
 */
-/*
+
 void PollardRho(unsigned int * N, unsigned int * R, unsigned int size){
 	zeroNum(R, size);
 	if (isEven(N, size)){
 		R[0] = 2;
 		return;
 	}
+	unsigned int j = 0;
 	unsigned int * x = (unsigned int *)malloc(sizeof(unsigned int) * size);
 	unsigned int * y = (unsigned int *)malloc(sizeof(unsigned int) * size);
+	unsigned int * y1 = (unsigned int *)malloc(sizeof(unsigned int) * size);
 	unsigned int * c = (unsigned int *)malloc(sizeof(unsigned int) * size);
 	unsigned int * g = (unsigned int *)malloc(sizeof(unsigned int) * size);
+	unsigned int * abs_mxy = (unsigned int *)malloc(sizeof(unsigned int) * size);
+	setZero(y1, size);
 	setZero(x, size);
 	x[0] = 7;
 	setZero(c, size);
 	c[0] = 1;
 	setZero(g, size);
 	g[0] = 1;
-	// count y = ((x*x)+1)%N
-	unsigned int * res = (unsigned int *)malloc(sizeof(unsigned int) * size);
-	setZero(res, size);
-	mulNum(x, x, res, size);
-	unsigned int * addoneres = (unsigned int *)malloc(sizeof(unsigned int) * size);
-	setZero(addoneres, size);
-	addOne(res, addoneres, size);
-
+	fxfun(N, x, c, y , size);
 	while (isOne(g, size)){
-
-
+		fxfun(N, x, c, x, size);
+		fxfun(N, y, c, y1, size);
+		fxfun(N, y1, c, y, size);
+		if(bigger(x, y, size)){
+			subNum(x, y, abs_mxy, size);
+		}else{
+			subNum(y, x, abs_mxy, size);	
+		}
+		copyNum(g, abs_mxy, size);
+		gcd(g, N, size);
+		j++;
+		printf("%d\n",j);
+		sleep(1);
 	}
+	copyNum(R, g, size);
+	free(x);
+	free(y);
+	free(y1);
+	free(c);
+	free(g);
+	free(abs_mxy);
 }
-*/
+
 
 
 int main(int argc, char **argv) {
-	unsigned int X[32];
+	/*unsigned int X[32];
 	unsigned int Y[32];
-	unsigned int N[32];
 	unsigned int A[32];
 	unsigned int B[32];
 	unsigned int C[32];
-	unsigned int D[32];
+	unsigned int D[32];*/
+	unsigned int N[32];
 	unsigned int R[32];
 	//void fxfun(unsigned int * N, unsigned int * X, unsigned int * C, unsigned int * Y, unsigned int size)
+	setZero(N, 32);	
+	setZero(R, 32);
+	//N[0] = 0x00000009;
+    N[0] = 162167;
+    PollardRho(N, R, 32);
+	printf("Results \n");
+    printNum(N, 32);
+	printNum(R, 32);
+	printf("********************\n");	
+	/*
 	setZero(A, 32);
 	setZero(C, 32);
 	setZero(N, 32);	
 	setZero(X, 32);	
 	setZero(Y, 32);	
-	N[1] = 0xF0010999;
-    N[0] = 0x12345678;
+	//N[1] = 0xF0010999;
+    N[31] = 0x12345678;
     C[1] = 0x00000001;
-	X[0] = 0x00000002;
+	X[15] = 0x00000001;
+	X[0] = 0x10000002;
 	fxfun(N, X, C, Y , 32);
 	printf("Results \n");
     printNum(N, 32);
 	printNum(X, 32);
     printNum(C, 32);
 	printNum(Y, 32);
-	printf("********************\n");	
-	return 0;
+	printf("********************\n"); */	
 	//1B6 9B4B ACD0 5F15	
 	//A[1] = 0x01B69B4B;
     //A[0] = 0x00000000;
@@ -153,7 +177,7 @@ int main(int argc, char **argv) {
     printNum(D, 32);
 	printNum(R, 32);
 	return 0;*/
-	printf("********************\n");
+	/*printf("********************\n");
 	setZero(A, 32);
 	setZero(B, 32);
 	setZero(D, 32);
@@ -163,7 +187,7 @@ int main(int argc, char **argv) {
     A[0] = 0x12345678;
     B[1] = 0xF0000000;
 	B[0] = 0x7530eca9;
-	//gcd(A, B, 32);
+	gcd(A, B, 32);
     divNum(A, B, D, R, 32);
     printf("Results \n");
     printNum(A, 32);
@@ -185,7 +209,7 @@ int main(int argc, char **argv) {
     printNum(A, 32);
 	printNum(B, 32);
     printNum(R, 32);
-	printf("********************\n");
+	printf("********************\n");*/
 	/*setZero(A, 32);
 	setZero(B, 32);
 	setZero(D, 32);

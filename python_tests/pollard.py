@@ -20,16 +20,22 @@ def pollardRho(N):
 		y1 = ((y*y)%N+c)%N
 		y = ((y1*y1)%N+c)%N
 		g = gcd(abs(x-y),N)
-		j = j + 1
+
+		"""print(hex(x))
+		print(hex(y))
+		print(hex(abs(x-y)))
 		print j 
+		print "====================="""
+		j = j + 1
 	return g
 
 #print hex(0x7530eca9*0x200000000)
 #print hex(gcd(0xF001099912345678, 0xF00000007530eca9))
 #print gcd(0x1B69B4BACD05F15, 0xDB4DA5F7EF412B1)
 
-print pollardRho(162167)
-# print pollardRho(1234567)
+print hex(pollardRho(162167))
+print hex(pollardRho(1234567))
+print hex(pollardRho(0xf0000000f00000007530eca9))
 
 #for i in range(2,1000):
 #	print (str(i) + " " + str(pollardRho(i)) + " div " +str(i // pollardRho(i)))

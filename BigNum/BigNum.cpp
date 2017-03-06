@@ -108,6 +108,27 @@ void mulNum(unsigned int * A, unsigned int * B, unsigned int * C, unsigned int s
     free(tmpc);
 }
 
+void sqrtNum(unsigned int * A, unsigned int * C, unsigned int size){
+    unsigned int * tmpa = (unsigned int *)malloc(sizeof(unsigned int) * size);
+    unsigned int * tmpc = (unsigned int *)malloc(sizeof(unsigned int) * size);
+    copyNum(tmpa, A, size);
+    setZero(C, size);
+    setZero(tmpc, size);
+    unsigned long int j = 1;
+    for(unsigned int k = 0; k < 32; k++){ // needed to be changed accordingly with sizeof the datatype
+        for(unsigned int i = 0; i < size; i++){
+            if (A[i] & j){
+                addfromto(C, tmpa, tmpc, i, size);
+                copyNum(C, tmpc, size);
+            }
+        }
+        j <<= 1;
+        shiftLeftNum(tmpa, size);
+    }
+    free(tmpa);
+    free(tmpc);
+}
+
 char zeroNum(unsigned int * num, unsigned int size){
 	unsigned int i;
 	for(i = 0; i < size; i ++)
@@ -198,24 +219,8 @@ void divNum(unsigned int * A, unsigned int * B, unsigned int * D, unsigned int *
 
 		getNum(dr, tmpp, size);
         mulNum(B, tmpp, tmpres, size); // getNum * B = tmpres
-        //while (bigger(tmpres, A, size) == 1){
-        /*printf("Gonna build this num:  \n");
-        printf("dr %d \n", dr);
-        printNum(tmpp, 32);
-        printf("From this B:  \n");
-        printNum(B, 32);
-        printf("To divide this tmp_a:  \n");
-        printNum(tmp_a, 32);
-        printf("This is what I got:  \n");
-        printNum(tmpres, 32);
-        sleep(1);
-        printf("=======================\n");*/
         char bgr_des = bigger(tmpres, tmp_a, size);
         while (bgr_des !=0 && bgr_des !=2){
-            //printf("bgr_des %d \n", bgr_des);
-            //printNum(tmpres, size);
-            //printNum(tmp_a, size);
-            //printf("\n");            
         	dr --;
         	setZero(tmpp, size);
         	getNum(dr, tmpp, size);
@@ -225,31 +230,15 @@ void divNum(unsigned int * A, unsigned int * B, unsigned int * D, unsigned int *
         }
         
         subNum(tmp_a, tmpres, tmp_aa , size); // A - tmpres
-        
-		//printf(">-----------\n");
-		//printNum(tmp_a, 32);
-		//printNum(tmpres, 32);
-		//printf("-----------<\n");
-        //sleep(1);
-
         addNum(D, tmpp, tmpd, size); // D + getNum = tmpd
         copyNum(D, tmpd, size); // D = tmpd
-
-        
-		//copyNum(tmp_a, tmp_aa, size); 
         copyNum(R, tmp_aa, size); 
-        //if(getHighBit(R, size) < blen)
-        if(bigger(B, R, size))
+        if(bigger(B, R, size)){
+        	//copyNum(R, tmp_aa, size); // need review
             break;
-        else{
+        }else{
             copyNum(tmp_a, R, size);
         }
-/*        printNum(A, 32);
-		printNum(B, 32);
-		printNum(D, 32);
-		printNum(R, 32);
-		printf("************\n"); */
-//		break;
 	}
     free(tmp_a);
     free(tmp_aa);
@@ -301,11 +290,11 @@ void modNum(unsigned int * A, unsigned int * B, unsigned int * R, unsigned int s
         }
         
         subNum(tmp_a, tmpres, tmp_aa , size); // A - tmpres
+        copyNum(R, tmp_aa, size); // need review
+        if(bigger(B, R, size)){
 
-        copyNum(R, tmp_aa, size); 
-        if(bigger(B, R, size))
             break;
-        else{
+        }else{
             copyNum(tmp_a, R, size);
         }
     }

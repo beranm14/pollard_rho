@@ -29,5 +29,9 @@ void addOne(unsigned int * A, unsigned int * C, unsigned int size);
 
 void getNum(unsigned int a, unsigned int * A);
 
+void sqrtNum(unsigned int * A, unsigned int * C, unsigned int size);
+
+void modNum(unsigned int * A, unsigned int * B, unsigned int * R, unsigned int size);
+
 void divNum(unsigned int * A, unsigned int * B, unsigned int * D, unsigned int * R, unsigned int size);
 #endif

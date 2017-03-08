@@ -33,11 +33,12 @@ unsigned int * gcd(unsigned int * N, unsigned int * M, unsigned int size){
 		printf("M:\n");
 		printNum(M, size);
 		printf("++++++++++++++++++++++++++\n");*/
-		modNum(N, M, nm_r, size);
+		modNum(N, M, size);
 		/*printf("**************************\n");
 		printf("nm_r: \n");
 		printNum(nm_r, size);
 		printf("++++++++++++++++++++++++++\n");*/
+		copyNum(nm_r, M, size);
 		copyNum(N, M, size);
 		copyNum(M, nm_r, size);
 
@@ -50,13 +51,11 @@ unsigned int * gcd(unsigned int * N, unsigned int * M, unsigned int size){
 
 void fxfun(unsigned int * N, unsigned int * X, unsigned int * C, unsigned int * Y, unsigned int size){
 	setZero(Y, size);
-	unsigned int * y_sqr = (unsigned int *)malloc(sizeof(unsigned int) * size);
-	sqrtNum(X, y_sqr, size);
-	modNum(y_sqr, N, y_sqr, size);
-	addNum(y_sqr, C, y_sqr, size);
-	modNum(y_sqr, N, y_sqr, size);
-	copyNum(Y, y_sqr, size);
-	free(y_sqr);
+	powNum(X, size);
+	modNum(X, N, size);
+	addNum(X, C, size);
+	modNum(X, N, size);
+	copyNum(Y, X, size);
 }
 /*
 def pollardRho(N):
@@ -109,9 +108,11 @@ void PollardRho(unsigned int * N, unsigned int * R, unsigned int size){
 		fxfun(N, y, c, y1, size);
 		fxfun(N, y1, c, y, size);
 		if(bigger(x, y, size) == 1){
-			subNum(x, y, abs_mxy, size);
+			copyNum(abs_mxy, x, size);
+			subNum(abs_mxy, y, size);
 		}else{
-			subNum(y, x, abs_mxy, size);	
+			copyNum(abs_mxy, y, size);
+			subNum(abs_mxy, x, size);	
 		}
 		copyNum(g, abs_mxy, size);
 		gcd(g, n_b, size);
@@ -123,8 +124,11 @@ void PollardRho(unsigned int * N, unsigned int * R, unsigned int size){
 		printf("%d\n",j);
 		printf("=====================\n");*/
 		j++;
+		if(j%1000 == 0)
+			printf("1000\n");
 		//sleep(1);
 	}
+	printf("%d\n", j);
 	copyNum(R, g, size);
 	free(x);
 	free(y);
@@ -137,28 +141,32 @@ void PollardRho(unsigned int * N, unsigned int * R, unsigned int size){
 
 
 int main(int argc, char **argv) {
+	unsigned int A[32];
+	unsigned int B[32];
+	unsigned int R[32];
+	unsigned int D[32];
 	/*unsigned int X[32];
 	unsigned int Y[32];
-	unsigned int A[32];
-	unsigned int C[32];*/
-	unsigned int N[32];
-	unsigned int R[32];
-	/*unsigned int B[32];
-	unsigned int D[32];*/
+	unsigned int C[32];
+	unsigned int N[32];*/
 	//void fxfun(unsigned int * N, unsigned int * X, unsigned int * C, unsigned int * Y, unsigned int size)
-	setZero(N, 32);	
-	setZero(R, 32);
+	//setZero(N, 32);	
+	//setZero(R, 32);
 	//N[0] = 0x00000009;
 	//0xF00000007530eca9
-    N[2] = 0xf0000000;
-    N[1] = 0xf0000000;
-    N[0] = 0x7530eca9;
+    /*N[3] = 0x8ebaf1b9;
+    N[2] = 0xfebaf1ba;
+    N[1] = 0xfeba9876;
+    N[0] = 0x7530eca9;*/
+    /*0 x 1 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000001*/
+    /*N[8] = 1;
+    N[0] = 1;
     PollardRho(N, R, 32);
 	printf("Results \n");
     printNum(N, 32);
 	printNum(R, 32);
 	printf("********************\n");
-	/*	
+	*//*	
 	setZero(A, 32);
 	setZero(C, 32);
 	setZero(N, 32);	
@@ -176,44 +184,43 @@ int main(int argc, char **argv) {
     printNum(C, 32);
 	printNum(Y, 32);	*/
 	/*printf("********************\n"); 	
+	setZero(A, 32);
+	setZero(B, 32);
 	//1B6 9B4B ACD0 5F15	
 	//A[1] = 0x01B69B4B;
     //A[0] = 0x00000000;
 	A[1] = 0x80000999; // to keep
-    A[0] = 0x12345678; // to keep
+    A[0] = 0x10000002; // to keep
 	//A[0] = 0x80000003;
 	//DB4 DA5F 7EF4 12B1
 	//B[1] = 0x0DB4DA5F;
 	//B[1] = 0x00000001;
 	//B[0] = 0x00000000;
 	B[1] = 0x80000999; // to keep
-	B[0] = 0x87654321; // to keep
-	gcd(A, B, 32);
-    //divNum(A, B, D, R, 32);
+	B[0] = 0x00001000; // to keep
+	//gcd(A, B, 32);
+    mulNum(A, B, 32);
     printf("Results \n");
     printNum(A, 32);
-	printNum(B, 32);
-    printNum(D, 32);
-	printNum(R, 32);
-	return 0;*/
-	/*printf("********************\n");
+	//printNum(B, 32);*/
+    printf("********************\n");
 	setZero(A, 32);
 	setZero(B, 32);
 	setZero(D, 32);
 	setZero(R, 32);	
 	//A[1] = 0x80000999;
 	A[1] = 0xF0010999;
-    A[0] = 0x12345678;
-    B[1] = 0xF0000000;
-	B[0] = 0x7530eca9;
-	gcd(A, B, 32);
-    divNum(A, B, D, R, 32);
+    A[0] = 0x00000008;
+    //B[1] = 0xF0000000;
+	B[0] = 0x10000003;
+	//shiftRightNum(A, 32);
+	modNum(A, B, 32);
     printf("Results \n");
     printNum(A, 32);
 	printNum(B, 32);
-    printNum(D, 32);
-	printNum(R, 32);
-	printf("********************\n");
+    printf("********************\n");
+	return 0;
+	/*
 	setZero(A, 32);
 	setZero(B, 32);
 	setZero(D, 32);

@@ -109,7 +109,7 @@ void PollardRho(unsigned int * N, unsigned int size){
 		printNum(Y, size);
 		printf("N\n");
 		printNum(N, size);
-		printf("B========================\n");*/
+		printf("B========================\n"); */
 		if(bigger(X, Y, size) == 1){
 			copyNum(abs_mxy, X, size);
 			subNum(abs_mxy, Y, size);
@@ -129,8 +129,10 @@ void PollardRho(unsigned int * N, unsigned int size){
 		printNum(N, size);
 		printf("A========================\n");*/
 		j++;
-		if(j%1000 == 0)
+		if(j%1000 == 0){
 			printf("%d\n", j);
+			//return;
+		}
 		//sleep(1);
 	}
 	printf("%d\n", j);
@@ -145,7 +147,6 @@ void PollardRho(unsigned int * N, unsigned int size){
 
 
 int main(int argc, char **argv) {
-	unsigned int N[32];
 	/*unsigned int X[32];
 	unsigned int C[32];
 	unsigned int X[32];
@@ -207,15 +208,16 @@ int main(int argc, char **argv) {
     printNum(A, 32);
 	//printNum(B, 32);*/
     printf("********************\n");
-	setZero(N, 17);
-	//N[1] = 0x00000111;
-    //N[0] = 0x10000009;
-    N[8] = 1;
-    N[0] = 1;
-    PollardRho(N, 17);
-    printf("Results \n");
-    printNum(N, 17);
-	printf("********************\n");
+    unsigned int N[32];
+	setZero(N, 32);
+    
+    N[1] = 0x00000111;
+    N[0] = 0x10000009;
+    
+    PollardRho(N, 32);
+    printf("Results\n");
+    printNum(N, 32);
+    printf("********************\n");
 	return 0;
 	/*
 	setZero(A, 32);

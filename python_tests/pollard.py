@@ -7,6 +7,8 @@ def gcd(n, m):
 		#print hex(n % m), " \n"
 		return gcd (m, n % m)
 
+import time 
+
 def pollardRho(N):
 	if N%2==0:
 		return 2
@@ -20,15 +22,17 @@ def pollardRho(N):
 		y1 = ((y*y)%N+c)%N
 		y = ((y1*y1)%N+c)%N
 		g = gcd(abs(x-y),N)
-
-		"""print(hex(x))
+		"""
+		print(hex(x))
 		print(hex(y))
-		print(hex(abs(x-y)))
+		print(hex(N))
 		print j 
-		print "====================="""
+		print "====================="
+		"""
 		j = j + 1
 		if j%1000 == 0:
-			print j		
+			print j
+		#e.sleep(1)		
 	print j
 	return g
 
@@ -36,8 +40,9 @@ def pollardRho(N):
 #print hex(gcd(0xF001099912345678, 0xF00000007530eca9))
 #print gcd(0x1B69B4BACD05F15, 0xDB4DA5F7EF412B1)
 
-#print hex(pollardRho(0x11110000009))
-print hex(pollardRho(1238926361552897*93461639715357977769163558199606896584051237541638188580280321))
+#print hex((0x0000011110000009)%(0x100000002))
+print hex(pollardRho(0x11110000009))
+#print hex(pollardRho(1238926361552897*93461639715357977769163558199606896584051237541638188580280321))
 
 """
 print hex(pollardRho(1234567))

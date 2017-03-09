@@ -38,4 +38,10 @@ void divNum(unsigned int * A, unsigned int * B, unsigned int * D, unsigned int s
 void addfromto(unsigned int * A, unsigned int * B, unsigned int from, unsigned int size);
 
 void shiftRightNum(unsigned int * A, unsigned int k);
+
+unsigned int getBit(unsigned int a, unsigned int * A, unsigned int size);
+
+void setBit(unsigned int a, unsigned int * A, unsigned int size);
+
+
 #endif

@@ -28,7 +28,7 @@ def pollardRho(N):
 		print "====================="""
 		j = j + 1
 		if j%1000 == 0:
-			print "1000"		
+			print j		
 	print j
 	return g
 
@@ -36,12 +36,14 @@ def pollardRho(N):
 #print hex(gcd(0xF001099912345678, 0xF00000007530eca9))
 #print gcd(0x1B69B4BACD05F15, 0xDB4DA5F7EF412B1)
 
-print hex(pollardRho(2799))
+#print hex(pollardRho(0x11110000009))
+print hex(pollardRho(1238926361552897*93461639715357977769163558199606896584051237541638188580280321))
+
+"""
 print hex(pollardRho(1234567))
 print hex(pollardRho(0x8ebaf1b9febaf1bafeba98767530eca9))
 print hex(1238926361552897*93461639715357977769163558199606896584051237541638188580280321)
-print hex(pollardRho(1238926361552897*93461639715357977769163558199606896584051237541638188580280321))
-
+"""
 #for i in range(2,1000):
 #	print (str(i) + " " + str(pollardRho(i)) + " div " +str(i // pollardRho(i)))
 

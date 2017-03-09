@@ -235,11 +235,11 @@ void divNum(unsigned int * A, unsigned int * B, unsigned int * D, unsigned int s
         subNum(A, tmp_b, size); // residuo
         addNum(D, get_num, size);
         setZero(get_num, size);
-        printf("===================\n");
+        /*printf("===================\n");
         printNum(A, size);
         printNum(B, size);
         printNum(D, size);
-        printf("===================\n");
+        printf("===================\n");*/
         if(bigger(B, A, size)){
             break;
         }
@@ -273,10 +273,10 @@ void modNum(unsigned int * A, unsigned int * B, unsigned int size){
             dr --;
         }
         subNum(A, tmp_b, size); // residuo
-        printf("===================\n");
+       /* printf("===================\n");
         printNum(A, size);
         printNum(B, size);
-        printf("===================\n");
+        printf("===================\n");*/
         if(bigger(B, A, size)){
             break;
         }

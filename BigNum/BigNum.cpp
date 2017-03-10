@@ -62,6 +62,13 @@ void copyNum(unsigned int * A, unsigned int * B, unsigned int size){
 	for(i = 0; i < size; i ++)
 		A[i] = B[i];
 }
+
+void copyFromTo(unsigned int * A, unsigned int * B, unsigned int from, unsigned int size){
+	unsigned int i;
+	for(i = from; i < size; i ++)
+		A[i] = B[i - from];
+}
+
 void shiftLeftNum(unsigned int * A, unsigned int k){ // shift for 32 bits in one step would be nice to consider
     char flg;
     char flc = 0;
@@ -216,6 +223,13 @@ void setBit(unsigned int a, unsigned int * A, unsigned int size){
     unsigned int pnt = ((unsigned int) 1 << which);
     A[where] |= pnt; 
 }
+void unsBit(unsigned int a, unsigned int * A, unsigned int size){
+    unsigned int where = a / size;
+    unsigned int which = a % size;
+    unsigned int pnt = ((unsigned int) 1 << which);
+    A[where] &= ~(pnt); 
+}
+
 
 void divNum(unsigned int * N, unsigned int * D, unsigned int * Q, unsigned int size){
     if (zeroNum(D, size) || zeroNum(N, size) || bigger(D, N, size) == 1){
@@ -264,37 +278,31 @@ void modNum(unsigned int * N, unsigned int * D, unsigned int size){
     free(R);
 }
 */
-void modNum(unsigned int * A, unsigned int * B, unsigned int size){
-    // A / B = D + R/B
-    // if (alen == 0 || blen == 0 || alen < blen){
-    if (zeroNum(A, size) || zeroNum(B, size) || bigger(B, A, size) == 1){
+void modNum(unsigned int * N, unsigned int * Di, unsigned int size){
+    if (zeroNum(N, size) || zeroNum(Di, size) || bigger(N, Di, size) == 1){
         return;
     }
-    unsigned int * tmp_b = (unsigned int *)malloc(sizeof(unsigned int) * size);
-    while( 1 ){
-        copyNum(tmp_b, B, size);
-        unsigned int dr = 0;
-        char gr_des = bigger(tmp_b, A, size);
-        while(gr_des == 0){ // dokud je B menší než A
-            // shiftuj doleva
-            shiftLeftNum(tmp_b, size);
-            gr_des = bigger(tmp_b, A, size);
-            dr ++;
-        }
-        // pokud bylo rovno ok
-        // pokud bylo větší shift doprava
-        if(gr_des == 1){
-            shiftRightNum(tmp_b, size);
-            dr --;
-        }
-        subNum(A, tmp_b, size); // residuo
-       /* printf("===================\n");
-        printNum(A, size);
-        printNum(B, size);
-        printf("===================\n");*/
-        if(bigger(B, A, size)){
+    unsigned int * P = (unsigned int *)malloc(sizeof(unsigned int) * size * 2);
+    unsigned int * D = (unsigned int *)malloc(sizeof(unsigned int) * size * 2);
+    unsigned int * Q = (unsigned int *)malloc(sizeof(unsigned int) * size * 2);
+    setZero(Q, 2*size);
+	setZero(P, 2*size);
+	setZero(D, 2*size);
+    copyFromTo(D, Di, size, 2*size);
+    for (unsigned int i = 2*size*32 - 1; ; i--){
+    	shiftLeftNum(P, 2*size);
+    	subNum(P, D, 2*size);
+    	if(! zeroNum(P, 2*size)){
+    		setBit(i, Q, 2*size);
+    	}else{
+    		unsBit(i, Q, 2*size); // set zero
+    		addNum(P, D, 2*size);
+    	}
+        if (i == 0)
             break;
-        }
     }
-    free(tmp_b);
+    copyNum(N, P, size);
+    free(P);
+    free(D);
+    free(Q);
 }

@@ -1,0 +1,49 @@
+/*
+P := N
+D := D << n            -- P and D need twice the word width of N and Q
+
+for i := n − 1 .. 0 do  -- For example 31..0 for 32 bits
+  P := 2 * P − D          -- Trial subtraction from shifted value
+  if P ≥ 0 then
+    q(i) := 1          -- Result-bit 1
+  else
+    q(i) := 0          -- Result-bit 0
+    P := P + D         -- New partial remainder is (restored) shifted value
+  end
+end
+*/
+
+void modNum(unsigned int * A, unsigned int * B, unsigned int size){
+    // A / B = D + R/B
+    // if (alen == 0 || blen == 0 || alen < blen){
+    if (zeroNum(A, size) || zeroNum(B, size) || bigger(B, A, size) == 1){
+        return;
+    }
+    unsigned int * tmp_b = (unsigned int *)malloc(sizeof(unsigned int) * size);
+    while( 1 ){
+        copyNum(tmp_b, B, size);
+        unsigned int dr = 0;
+        char gr_des = bigger(tmp_b, A, size);
+        while(gr_des == 0){ // dokud je B menší než A
+            // shiftuj doleva
+            shiftLeftNum(tmp_b, size);
+            gr_des = bigger(tmp_b, A, size);
+            dr ++;
+        }
+        // pokud bylo rovno ok
+        // pokud bylo větší shift doprava
+        if(gr_des == 1){
+            shiftRightNum(tmp_b, size);
+            dr --;
+        }
+        subNum(A, tmp_b, size); // residuo
+       /* printf("===================\n");
+        printNum(A, size);
+        printNum(B, size);
+        printf("===================\n");*/
+        if(bigger(B, A, size)){
+            break;
+        }
+    }
+    free(tmp_b);
+}

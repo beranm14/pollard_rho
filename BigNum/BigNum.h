@@ -11,6 +11,8 @@ void subNum(unsigned int * A, unsigned int * B, unsigned int size);
 
 void copyNum(unsigned int * A, unsigned int * B, unsigned int size);
 
+void copyFromTo(unsigned int * A, unsigned int * B, unsigned int from, unsigned int size);
+
 void shiftLeftNum(unsigned int * A, unsigned int k);
 
 void mulNum(unsigned int * A, unsigned int * B, unsigned int size);

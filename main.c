@@ -207,16 +207,34 @@ int main(int argc, char **argv) {
     printf("Results \n");
     printNum(A, 32);
 	//printNum(B, 32);*/
+/*
+	printf("********************\n");
+    unsigned int A[2*32];
+	unsigned int B[2*32];
+	setZero(A, 2*32);
+	setZero(B, 2*32);
+	A[0] = 1;    
+	copyFromTo(B, A, 32, 2*32);
+	printNum(B, 2*32);
+*/
     printf("********************\n");
     unsigned int N[32];
 	setZero(N, 32);
+    unsigned int D[32];
+	setZero(D, 32);
+    unsigned int Q[32];
+	setZero(Q, 32);
     
-    N[1] = 0x00000111;
-    N[0] = 0x10000009;
+    //N[1] = 0x00000111;
+    N[0] = 0x00000008;
+    //D[1] = 0x00000111;
+    D[0] = 0x00000002;
     
-    PollardRho(N, 32);
+    divNum(N, D, Q, 32);
     printf("Results\n");
     printNum(N, 32);
+    printNum(D, 32);
+    printNum(Q, 32);
     printf("********************\n");
 	return 0;
 	/*

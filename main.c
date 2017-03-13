@@ -29,9 +29,9 @@ static long gcdl(long a, long b) {
 void gcd(unsigned int * A, unsigned int * B, unsigned int size){
 	unsigned int * R = (unsigned int *)malloc(sizeof(unsigned int) * size);
 	
-	unsigned int * D = (unsigned int *)malloc(sizeof(unsigned int) * size);
+	/*unsigned int * D = (unsigned int *)malloc(sizeof(unsigned int) * size);
 	unsigned int * RT = (unsigned int *)malloc(sizeof(unsigned int) * size);
-	unsigned int * BT = (unsigned int *)malloc(sizeof(unsigned int) * size);
+	unsigned int * BT = (unsigned int *)malloc(sizeof(unsigned int) * size);*/
 	while(!zeroNum(B, size)){
 		/*printf("**************************\n");
 		printf("A:\n");
@@ -40,16 +40,16 @@ void gcd(unsigned int * A, unsigned int * B, unsigned int size){
 		printNum(B, size);
 		printf("+++\n");*/
 
-		copyNum(RT, A, size);
-		copyNum(BT, B, size);
+		//copyNum(RT, A, size);
+		//copyNum(BT, B, size);
 
 		copyNum(R, A, size);
 		modNum(R, B, size);
 		copyNum(A, B, size);
 		copyNum(B, R, size);
 		
-		setZero(D, size);
-		divNum(RT, BT, D, size);
+		//setZero(D, size);
+		//divNum(RT, BT, D, size);
 		
 		/*printf("***\n");
 		printf("RT: \n");

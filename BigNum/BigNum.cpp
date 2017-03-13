@@ -231,113 +231,28 @@ void unsBit(unsigned int a, unsigned int * A, unsigned int size){
     A[where] &= ~(pnt); 
 }
 
-/*
-void modNum(unsigned int * N, unsigned int * D, unsigned int size){
-    if (zeroNum(D, size) || zeroNum(N, size) || bigger(D, N, size) == 1){
+ 
+void divNum(unsigned int * A, unsigned int * B, unsigned int * D, unsigned int size){
+	if (zeroNum(A, size) || zeroNum(B, size) || bigger(B, A, size) == 1){
         return;
     }
     unsigned int * R = (unsigned int *)malloc(sizeof(unsigned int) * size);
     setZero(R, size);
-    for (unsigned int i = size*32 - 1; ; i--){ // 32 is sizeof int, need to changed to sizeof
-        shiftLeftNum(R, size);
-        (getBit(i, N, size) ? R[0] |= 1 : R[0] &= ~1);
-        if(bigger(R, D, size) == 1 || bigger(R, D, size) == 2){
-            subNum(R, D, size);
-        }
-        if (i == 0)
-            break;
-    }
-    copyNum(N, R, size);
-    free(R);
-}
-*/
-
- 
-void divNum(unsigned int * A, unsigned int * B, unsigned int * D, unsigned int size){
-    /*unsigned int * R = (unsigned int *)malloc(sizeof(unsigned int) * size);
-    setZero(R, size);
     KnuthDiv(A, B, D, R, size);
     copyNum(A, R, size);
-    free(R);*/
-    if (zeroNum(A, size) || zeroNum(B, size) || bigger(B, A, size) == 1){
-        setZero(D, size);
-        return;
-    }
-    setZero(D, size);
-    unsigned int * get_num = (unsigned int *)malloc(sizeof(unsigned int) * size);
-    unsigned int * tmp_b = (unsigned int *)malloc(sizeof(unsigned int) * size);
-    setZero(get_num, size);
-    while( 1 ){
-        copyNum(tmp_b, B, size);
-        unsigned int dr = 0;
-        char gr_des = bigger(tmp_b, A, size);
-        while(gr_des == 0){ 
-            shiftLeftNum(tmp_b, size);
-            gr_des = bigger(tmp_b, A, size);
-            dr ++;
-        }
-        if(gr_des == 1){
-            shiftRightNum(tmp_b, size);
-            dr --;
-        }
-        getNum(dr, get_num, size);
-        subNum(A, tmp_b, size); // residuo
-        addNum(D, get_num, size);
-        setZero(get_num, size);
-
-        if(bigger(B, A, size)){
-            break;
-        }
-    }
-    free(tmp_b);
-    free(get_num);
+    free(R);
 }
 
 void modNum(unsigned int * A, unsigned int * B, unsigned int size){
 	if (zeroNum(A, size) || zeroNum(B, size) || bigger(B, A, size) == 1){
         return;
     }
-	//printf("==============\n");
-    unsigned int * R = (unsigned int *)malloc(sizeof(unsigned int) * size);
+	unsigned int * R = (unsigned int *)malloc(sizeof(unsigned int) * size);
     unsigned int * D = (unsigned int *)malloc(sizeof(unsigned int) * size);
-    /*printf("A ");
-    printNum(A, size);
-    printf("B ");
-    printNum(B, size);*/
     setZero(R, size);
     setZero(D, size);
     KnuthDiv(A, B, D, R, size);
     copyNum(A, R, size);
     free(R);	
     free(D);
-    /*printf("D ");
-    printNum(D, size);
-    printf("R ");
-    printNum(R, size);
-    printf("RA ");
-    printNum(A, size);
-    printf("++++++++++++++\n");*/
-    /*if (zeroNum(A, size) || zeroNum(B, size) || bigger(B, A, size) == 1){
-        return;
-    }
-    unsigned int * tmp_b = (unsigned int *)malloc(sizeof(unsigned int) * size);
-    while( 1 ){
-        copyNum(tmp_b, B, size);
-        unsigned int dr = 0;
-        char gr_des = bigger(tmp_b, A, size);
-        while(gr_des == 0){ // dokud je B menší než A
-            shiftLeftNum(tmp_b, size);
-            gr_des = bigger(tmp_b, A, size);
-            dr ++;
-        }
-        if(gr_des == 1){
-            shiftRightNum(tmp_b, size);
-            dr --;
-        }
-        subNum(A, tmp_b, size); // residuo
-        if(bigger(B, A, size)){
-            break;
-        }
-    }
-    free(tmp_b);*/
 }

@@ -4,8 +4,13 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <math.h>
-#include <stdio.h>
 #include <unistd.h>
+
+/*
+Source code found at: http://llvm.org/docs/doxygen/html/APInt_8cpp_source.html#l01509
+And edited to work on 32 bit unsigned integers
+*/
+
 
 inline unsigned int max ( int a, int b ) { return a > b ? a : b; }
 inline unsigned int min ( int a, int b ) { return a > b ? b : a; }

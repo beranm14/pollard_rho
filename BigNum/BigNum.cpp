@@ -258,51 +258,31 @@ void divNum(unsigned int * N, unsigned int * D, unsigned int * Q, unsigned int s
     free(R);
 }
 
-/*
-void modNum(unsigned int * N, unsigned int * D, unsigned int size){
-    if (zeroNum(D, size) || zeroNum(N, size) || bigger(D, N, size) == 1){
+void modNum(unsigned int * A, unsigned int * B, unsigned int size){
+    if (zeroNum(A, size) || zeroNum(B, size) || bigger(B, A, size) == 1){
         return;
     }
-    unsigned int * R = (unsigned int *)malloc(sizeof(unsigned int) * size);
-    setZero(R, size);
-    for (unsigned int i = size*32 - 1; ; i--){ // 32 is sizeof int, need to changed to sizeof
-        shiftLeftNum(R, size);
-        (getBit(i, N, size) ? R[0] |= 1 : R[0] &= ~1);
-        if(bigger(R, D, size) == 1 || bigger(R, D, size) == 2){
-            subNum(R, D, size);
+    unsigned int * tmp_b = (unsigned int *)malloc(sizeof(unsigned int) * size);
+    while( 1 ){
+        copyNum(tmp_b, B, size);
+        unsigned int dr = 0;
+        char gr_des = bigger(tmp_b, A, size);
+        while(gr_des == 0){ // dokud je B menší než A
+            // shiftuj doleva
+            shiftLeftNum(tmp_b, size);
+            gr_des = bigger(tmp_b, A, size);
+            dr ++;
         }
-        if (i == 0)
+        // pokud bylo rovno ok
+        // pokud bylo větší shift doprava
+        if(gr_des == 1){
+            shiftRightNum(tmp_b, size);
+            dr --;
+        }
+        subNum(A, tmp_b, size); // residuo
+        if(bigger(B, A, size)){
             break;
+        }
     }
-    copyNum(N, R, size);
-    free(R);
-}
-*/
-void modNum(unsigned int * N, unsigned int * Di, unsigned int size){
-    if (zeroNum(N, size) || zeroNum(Di, size) || bigger(N, Di, size) == 1){
-        return;
-    }
-    unsigned int * P = (unsigned int *)malloc(sizeof(unsigned int) * size * 2);
-    unsigned int * D = (unsigned int *)malloc(sizeof(unsigned int) * size * 2);
-    unsigned int * Q = (unsigned int *)malloc(sizeof(unsigned int) * size * 2);
-    setZero(Q, 2*size);
-	setZero(P, 2*size);
-	setZero(D, 2*size);
-    copyFromTo(D, Di, size, 2*size);
-    for (unsigned int i = 2*size*32 - 1; ; i--){
-    	shiftLeftNum(P, 2*size);
-    	subNum(P, D, 2*size);
-    	if(! zeroNum(P, 2*size)){
-    		setBit(i, Q, 2*size);
-    	}else{
-    		unsBit(i, Q, 2*size); // set zero
-    		addNum(P, D, 2*size);
-    	}
-        if (i == 0)
-            break;
-    }
-    copyNum(N, P, size);
-    free(P);
-    free(D);
-    free(Q);
+    free(tmp_b);
 }

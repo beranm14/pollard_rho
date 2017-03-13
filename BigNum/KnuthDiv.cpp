@@ -35,13 +35,15 @@ int nlz(unsigned x) {
    return n;
 }
  
+
 int KnuthDiv(unsigned u[], unsigned v[],unsigned q[], unsigned r[], unsigned int size) {
    int m = countRealSize(u, size);
    int n = countRealSize(v, size);
    //printf("%d\n", m);
    //printf("%d\n", n);
-   const uint64_t b = 67108864; 
-   const uint64_t mask = 67108863; 
+   // 26 zeroes need to changed to 
+   const uint64_t b = 0x100000000; //0x4000000; //67108864; 
+   const uint64_t mask = 0xffffffff; //0x3ffffff; //67108863; 
    unsigned *un, *vn;                        
    uint64_t qhat;                  
    uint64_t rhat;                 
@@ -65,13 +67,13 @@ int KnuthDiv(unsigned u[], unsigned v[],unsigned q[], unsigned r[], unsigned int
    s = nlz(v[n-1])-7; 
    vn = (unsigned *)alloca(4*n);
    for (i = n - 1; i > 0; i--)
-      vn[i] = ((v[i] << s)&mask) | (((uint64_t)v[i-1] >> (26-s))&mask);
+      vn[i] = ((v[i] << s)&mask) | (((uint64_t)v[i-1] >> (32-s))&mask);
    vn[0] = (v[0] << s)&mask;
  
    un = (unsigned *)alloca(4*(m + 1));
-   un[m] = ((uint64_t)u[m-1] >> (26-s))&mask;
+   un[m] = ((uint64_t)u[m-1] >> (32-s))&mask;
    for (i = m - 1; i > 0; i--)
-      un[i] = ((u[i] << s)&mask) | (((uint64_t)u[i-1] >> (26-s))&mask);
+      un[i] = ((u[i] << s)&mask) | (((uint64_t)u[i-1] >> (32-s))&mask);
    un[0] = (u[0] << s)&mask;
  
    for (j = m - n; j >= 0; j--) {
@@ -89,7 +91,7 @@ again:
          p = qhat*vn[i];
          t = un[i+j] - k - (p & mask);
          un[i+j] = t&mask;
-         k = ((p >> 26)) - ((t >> 26));
+         k = ((p >> 32)) - ((t >> 32));
       }
       t = un[j+n] - k;
       un[j+n] = t;
@@ -101,15 +103,15 @@ again:
          for (i = 0; i < n; i++) {
             t = (uint64_t)un[i+j] + vn[i] + k;
             un[i+j] = t&mask;
-            k = (t >> 26);
+            k = ((uint64_t)t >> 32);
          }
          un[j+n] = un[j+n] + k;
       }
    } 
    if (r != NULL) {
       for (i = 0; i < n-1; i++)
-         r[i] = ((un[i] >> s)&mask) | (((uint64_t)un[i+1] << (26-s))&mask);
-      r[n-1] = (un[n-1] >> s)&mask;
+         r[i] = (((uint64_t) un[i] >> s)&mask) | (((uint64_t)un[i+1] << (32-s))&mask);
+      r[n-1] = ((uint64_t)un[n-1] >> s)&mask;
    }
    return 0;
 }

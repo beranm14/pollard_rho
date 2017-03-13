@@ -254,17 +254,17 @@ void modNum(unsigned int * N, unsigned int * D, unsigned int size){
 
  
 void divNum(unsigned int * A, unsigned int * B, unsigned int * D, unsigned int size){
-    unsigned int * R = (unsigned int *)malloc(sizeof(unsigned int) * size);
+    /*unsigned int * R = (unsigned int *)malloc(sizeof(unsigned int) * size);
     setZero(R, size);
     KnuthDiv(A, B, D, R, size);
     copyNum(A, R, size);
-    free(R);
+    free(R);*/
     if (zeroNum(A, size) || zeroNum(B, size) || bigger(B, A, size) == 1){
         setZero(D, size);
         return;
     }
     setZero(D, size);
-    /*unsigned int * get_num = (unsigned int *)malloc(sizeof(unsigned int) * size);
+    unsigned int * get_num = (unsigned int *)malloc(sizeof(unsigned int) * size);
     unsigned int * tmp_b = (unsigned int *)malloc(sizeof(unsigned int) * size);
     setZero(get_num, size);
     while( 1 ){
@@ -290,7 +290,7 @@ void divNum(unsigned int * A, unsigned int * B, unsigned int * D, unsigned int s
         }
     }
     free(tmp_b);
-    free(get_num);*/
+    free(get_num);
 }
 
 void modNum(unsigned int * A, unsigned int * B, unsigned int size){

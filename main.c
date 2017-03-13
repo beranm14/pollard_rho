@@ -28,21 +28,34 @@ static long gcdl(long a, long b) {
 
 void gcd(unsigned int * A, unsigned int * B, unsigned int size){
 	unsigned int * R = (unsigned int *)malloc(sizeof(unsigned int) * size);
+	
+	unsigned int * D = (unsigned int *)malloc(sizeof(unsigned int) * size);
+	unsigned int * RT = (unsigned int *)malloc(sizeof(unsigned int) * size);
+	unsigned int * BT = (unsigned int *)malloc(sizeof(unsigned int) * size);
 	while(!zeroNum(B, size)){
 		/*printf("**************************\n");
-		printf("N:\n");
-		printNum(N, size);
-		printf("M:\n");
-		printNum(M, size);
-		printf("++++++++++++++++++++++++++\n");*/
+		printf("A:\n");
+		printNum(A, size);
+		printf("B:\n");
+		printNum(B, size);
+		printf("+++\n");*/
+
+		copyNum(RT, A, size);
+		copyNum(BT, B, size);
+
 		copyNum(R, A, size);
 		modNum(R, B, size);
 		copyNum(A, B, size);
 		copyNum(B, R, size);
 		
-		/*printf("**************************\n");
-		printf("nm_r: \n");
-		printNum(nm_r, size);
+		setZero(D, size);
+		divNum(RT, BT, D, size);
+		
+		/*printf("***\n");
+		printf("RT: \n");
+		printNum(RT, size);
+		printf("R: \n");
+		printNum(R, size);
 		printf("++++++++++++++++++++++++++\n");*/
 		//getchar(); 
 	}
@@ -144,33 +157,50 @@ int main(int argc, char **argv) {
     N[0] = 0x7530eca9;*/
     /*0 x 1 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000001*/
 
-/*	unsigned int N[17];
-	setZero(N, 17);
+
+	unsigned int N[32];
+	setZero(N, 32);
     //N[8] = 1;
     N[1] = 0x00000111;
     N[0] = 0x10000009;
-    PollardRho(N, 17);
+    PollardRho(N, 32);
 	printf("Results \n");
-    printNum(N, 17);
-	printf("********************\n");*/
+    printNum(N, 32);
+	printf("********************\n");
 
-	unsigned int U[2];
-	unsigned int V[2];
-	unsigned int D[2];
-	unsigned int R[2];
+/*
+	unsigned int U[32];
+	unsigned int V[32];
+	unsigned int D[32];
+	unsigned int R[32];
 	setZero(U, 2);
 	setZero(V, 2);
 	setZero(D, 2);
 	setZero(R, 2);
-	U[1] = 0x00000008;
-	U[0] = 0x00000008;
-	V[0] = 0x00000002;
-	KnuthDiv(U, V, D, R, 2);
+	U[1] = 0x00000111;
+	U[0] = 0x10000009;
+	V[1] = 0x000000e7;
+	V[0] = 0xc26be3f7;
+	//KnuthDiv(U, V, D, R, 2);
+	modNum(U, V, 2);
 	printNum(U, 2);
 	printNum(V, 2);
 	printNum(D, 2);
 	printNum(R, 2);
-
+	printf("====================\n");
+	setZero(U, 32);
+	setZero(V, 32);
+	setZero(D, 32);
+	setZero(R, 32);
+	U[1] = 0x00000111;
+	U[0] = 0x10000009;
+	V[1] = 0x000000e7;
+	V[0] = 0xc26be3f7;
+	divNum(U, V, D, 32);
+	printNum(U, 2);
+	printNum(V, 2);
+	printNum(D, 2);
+	printNum(R, 2);*/
 	/*	
 	setZero(A, 32);
 	setZero(C, 32);

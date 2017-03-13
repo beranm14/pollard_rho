@@ -162,15 +162,17 @@ int main(int argc, char **argv) {
     N[2] = 0xfebaf1ba;
     N[1] = 0xfeba9876;
     N[0] = 0x7530eca9;*/
-    /*0 x 1 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000001*/
-    /*N[8] = 1;
+    //0 x 1 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000001
+	unsigned int N[32];
+    setZero(N, 32);
+    N[8] = 1;
     N[0] = 1;
-    PollardRho(N, R, 32);
+    PollardRho(N, 32);
 	printf("Results \n");
     printNum(N, 32);
-	printNum(R, 32);
 	printf("********************\n");
-	*//*	
+	return 0;
+	/*	
 	setZero(A, 32);
 	setZero(C, 32);
 	setZero(N, 32);	
@@ -217,7 +219,7 @@ int main(int argc, char **argv) {
 	copyFromTo(B, A, 32, 2*32);
 	printNum(B, 2*32);
 */
-    printf("********************\n");
+   /* printf("********************\n");
     unsigned int N[32];
 	setZero(N, 32);
     unsigned int D[32];
@@ -236,7 +238,7 @@ int main(int argc, char **argv) {
     printNum(D, 32);
     printNum(Q, 32);
     printf("********************\n");
-	return 0;
+	return 0;*/
 	/*
 	setZero(A, 32);
 	setZero(B, 32);

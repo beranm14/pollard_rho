@@ -164,9 +164,10 @@ int main(int argc, char **argv) {
     N[0] = 0x7530eca9;*/
     //0 x 1 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000001
 	unsigned int N[32];
-    setZero(N, 32);
-    N[8] = 1;
-    N[0] = 1;
+	setZero(N, 32);
+    //N[8] = 1;
+    N[1] = 0x00000111;
+    N[0] = 0x10000009;
     PollardRho(N, 32);
 	printf("Results \n");
     printNum(N, 32);

@@ -131,7 +131,8 @@ void PollardRho(unsigned int * N, unsigned int size){
 		j++;
 		if(j%1000 == 0){
 			printf("%d\n", j);
-			//return;
+			if (j == 10000) 
+				return;
 		}
 		//sleep(1);
 	}
@@ -147,14 +148,16 @@ void PollardRho(unsigned int * N, unsigned int size){
 
 
 int main(int argc, char **argv) {
-	unsigned int N[17];
-	setZero(N, 17);
+	unsigned int N[32];
+	setZero(N, 32);
     //N[8] = 1;
-    N[1] = 0x00000111;
-    N[0] = 0x10000009;
-    PollardRho(N, 17);
+    N[8] = 1;
+    N[0] = 1;
+    //N[1] = 0x00000111;
+    //N[0] = 0x10000009;
+    PollardRho(N, 32);
 	printf("Results \n");
-    printNum(N, 17);
+    printNum(N, 32);
 	printf("********************\n");
 	/*unsigned int X[32];
 	unsigned int C[32];

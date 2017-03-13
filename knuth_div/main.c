@@ -79,7 +79,7 @@ int divmnu(unsigned short q[], unsigned short r[],
    // digit on the dividend; we do that unconditionally.
 
    s = nlz(v[n-1]) - 16;        // 0 <= s <= 15.
-   vn = (unsigned short *)alloca(2*n);
+   vn = (unsigned short *)alloca(2*n*sizeof(unsigned short *));
    for (i = n - 1; i > 0; i--)
       vn[i] = (v[i] << s) | (v[i-1] >> 16-s);
    vn[0] = v[0] << s;

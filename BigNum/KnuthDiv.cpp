@@ -4,19 +4,22 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <math.h>
+#include <stdio.h>
 #include <unistd.h>
 
 inline unsigned int max ( int a, int b ) { return a > b ? a : b; }
 inline unsigned int min ( int a, int b ) { return a > b ? b : a; }
 
 
-unsigned int countRealSize (unsigned int *v, unsigned int size){
+int countRealSize (unsigned int *v, unsigned int size){
    while (v[size - 1] == 0){
 		size --;
-   		if (size == 0)
+   		if (size == 1){
+            return 1;
    			break;
+         }
    }
-   return size + 1;
+   return size;
 }
 
 int nlz(unsigned x) {
@@ -33,8 +36,10 @@ int nlz(unsigned x) {
 }
  
 int KnuthDiv(unsigned u[], unsigned v[],unsigned q[], unsigned r[], unsigned int size) {
-   unsigned m = countRealSize(u, size);
-   unsigned n = countRealSize(v, size);
+   int m = countRealSize(u, size);
+   int n = countRealSize(v, size);
+   //printf("%d\n", m);
+   //printf("%d\n", n);
    const uint64_t b = 67108864; 
    const uint64_t mask = 67108863; 
    unsigned *un, *vn;                        
@@ -58,12 +63,12 @@ int KnuthDiv(unsigned u[], unsigned v[],unsigned q[], unsigned r[], unsigned int
       return 0;
    } 
    s = nlz(v[n-1])-7; 
-   vn = (unsigned *)malloc(4*n*sizeof(int));
+   vn = (unsigned *)alloca(4*n);
    for (i = n - 1; i > 0; i--)
       vn[i] = ((v[i] << s)&mask) | (((uint64_t)v[i-1] >> (26-s))&mask);
    vn[0] = (v[0] << s)&mask;
  
-   un = (unsigned *)malloc(4*(m + 1)*sizeof(int));
+   un = (unsigned *)alloca(4*(m + 1));
    un[m] = ((uint64_t)u[m-1] >> (26-s))&mask;
    for (i = m - 1; i > 0; i--)
       un[i] = ((u[i] << s)&mask) | (((uint64_t)u[i-1] >> (26-s))&mask);

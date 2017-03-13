@@ -4,6 +4,8 @@
 #include <math.h>
 #include <unistd.h>
 #include "BigNum/BigNum.h"
+#include "BigNum/KnuthDiv.h"
+
 
 
 /*
@@ -141,7 +143,8 @@ int main(int argc, char **argv) {
     N[1] = 0xfeba9876;
     N[0] = 0x7530eca9;*/
     /*0 x 1 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000001*/
-	unsigned int N[17];
+
+/*	unsigned int N[17];
 	setZero(N, 17);
     //N[8] = 1;
     N[1] = 0x00000111;
@@ -149,7 +152,25 @@ int main(int argc, char **argv) {
     PollardRho(N, 17);
 	printf("Results \n");
     printNum(N, 17);
-	printf("********************\n");
+	printf("********************\n");*/
+
+	unsigned int U[2];
+	unsigned int V[2];
+	unsigned int D[2];
+	unsigned int R[2];
+	setZero(U, 2);
+	setZero(V, 2);
+	setZero(D, 2);
+	setZero(R, 2);
+	U[1] = 0x00000008;
+	U[0] = 0x00000008;
+	V[0] = 0x00000002;
+	KnuthDiv(U, V, D, R, 2);
+	printNum(U, 2);
+	printNum(V, 2);
+	printNum(D, 2);
+	printNum(R, 2);
+
 	/*	
 	setZero(A, 32);
 	setZero(C, 32);

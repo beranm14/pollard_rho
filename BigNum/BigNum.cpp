@@ -259,12 +259,12 @@ void divNum(unsigned int * A, unsigned int * B, unsigned int * D, unsigned int s
     KnuthDiv(A, B, D, R, size);
     copyNum(A, R, size);
     free(R);
-    /*if (zeroNum(A, size) || zeroNum(B, size) || bigger(B, A, size) == 1){
+    if (zeroNum(A, size) || zeroNum(B, size) || bigger(B, A, size) == 1){
         setZero(D, size);
         return;
     }
     setZero(D, size);
-    unsigned int * get_num = (unsigned int *)malloc(sizeof(unsigned int) * size);
+    /*unsigned int * get_num = (unsigned int *)malloc(sizeof(unsigned int) * size);
     unsigned int * tmp_b = (unsigned int *)malloc(sizeof(unsigned int) * size);
     setZero(get_num, size);
     while( 1 ){
@@ -294,13 +294,29 @@ void divNum(unsigned int * A, unsigned int * B, unsigned int * D, unsigned int s
 }
 
 void modNum(unsigned int * A, unsigned int * B, unsigned int size){
+	if (zeroNum(A, size) || zeroNum(B, size) || bigger(B, A, size) == 1){
+        return;
+    }
+	//printf("==============\n");
     unsigned int * R = (unsigned int *)malloc(sizeof(unsigned int) * size);
     unsigned int * D = (unsigned int *)malloc(sizeof(unsigned int) * size);
+    /*printf("A ");
+    printNum(A, size);
+    printf("B ");
+    printNum(B, size);*/
     setZero(R, size);
+    setZero(D, size);
     KnuthDiv(A, B, D, R, size);
     copyNum(A, R, size);
     free(R);	
-    free(D);	
+    free(D);
+    /*printf("D ");
+    printNum(D, size);
+    printf("R ");
+    printNum(R, size);
+    printf("RA ");
+    printNum(A, size);
+    printf("++++++++++++++\n");*/
     /*if (zeroNum(A, size) || zeroNum(B, size) || bigger(B, A, size) == 1){
         return;
     }

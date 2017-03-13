@@ -3,6 +3,15 @@
 #include <ctype.h>
 #include <math.h>
 #include <unistd.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <math.h>
+#include <unistd.h>
+#include <limits.h>
+#include <iostream>
+
 #include "BigNum/BigNum.h"
 #include "BigNum/KnuthDiv.h"
 
@@ -24,67 +33,79 @@ static long gcdl(long a, long b) {
   }
   return a;
 }*/
-
+unsigned int tm = 31;
 
 void gcd(unsigned int * A, unsigned int * B, unsigned int size){
-	unsigned int * R = (unsigned int *)malloc(sizeof(unsigned int) * size);
+	unsigned int * BB = (unsigned int *)malloc(sizeof(unsigned int) * size);
+	unsigned int * RR = (unsigned int *)malloc(sizeof(unsigned int) * size);
 	
-	unsigned int * D = (unsigned int *)malloc(sizeof(unsigned int) * size);
-	unsigned int * RT = (unsigned int *)malloc(sizeof(unsigned int) * size);
-	unsigned int * BT = (unsigned int *)malloc(sizeof(unsigned int) * size);
+	unsigned int * R_tmp = (unsigned int *)malloc(sizeof(unsigned int) * size);
+	unsigned int * A_tmp = (unsigned int *)malloc(sizeof(unsigned int) * size);
+	unsigned int * B_tmp = (unsigned int *)malloc(sizeof(unsigned int) * size);
+	copyNum(A_tmp, A, size);
+	copyNum(B_tmp, B, size);
 
-	int ret = 0;
-	int s = 0;
+
+	unsigned int * R = (unsigned int *)malloc(sizeof(unsigned int) * size);
 	while(!zeroNum(B, size)){
-		printf("**************************\n");
-		printf("A:\n");
-		printNum(A, size);
-		printf("B:\n");
-		printNum(B, size);
-		printf("+++\n");
-
-		copyNum(RT, A, size);
-		copyNum(BT, B, size);
-
+		/*printf("**************************\n");
+		printf("N:\n");
+		printNum(N, size);
+		printf("M:\n");
+		printNum(M, size);
+		printf("++++++++++++++++++++++++++\n");*/
+		copyNum(R_tmp, A_tmp, size);
+		testModNum(R_tmp, B_tmp, size);
+		copyNum(A_tmp, B_tmp, size);
+		copyNum(B_tmp, R_tmp, size);
+		
 		copyNum(R, A, size);
-		modNum(R, B, size, s);
+		copyNum(BB, B, size);
+		copyNum(RR, R, size);
 		
-		setZero(D, size);
-		divNum(RT, BT, D, size);
-		
-		while(bigger(RT, R ,size) != 2){
-			copyNum(R, A, size);
-			modNum(R, B, size, s);
-			s ++;
-			if (s % 10000 == 0){
-				printf("%d \n", s);
-				printNum(RT, size);
-				printNum(R, size);
-			}
-		}
-		printf("\n");
+		modNum(R, B, size, tm);
 		copyNum(A, B, size);
 		copyNum(B, R, size);
-		
-		printf("***\n");
-		printf("s: %d\n", s);
-		printf("RT: ");
-		printNum(RT, size);
-		printf("R: ");
+
+		printf("**************************\n");
+		printNum(RR, size);
+		printNum(BB, size);
+		printf("**----**\n");
 		printNum(R, size);
-		printf("ret %d\n", ret);
+		printNum(R_tmp, size);
+		getchar();
 		printf("++++++++++++++++++++++++++\n");
-		getchar(); 
+
+		/*printf("**************************\n");
+		printf("nm_r: \n");
+		printNum(nm_r, size);
+		printf("++++++++++++++++++++++++++\n");*/
+		//getchar(); 
 	}
 	free(R);
 }
 
 void fxfun(unsigned int * N, unsigned int * X, unsigned int * C, unsigned int size){
 	//setZero(Y, size);
+	unsigned int * X_tmp = (unsigned int *)malloc(sizeof(unsigned int) * size);
+	copyNum(X_tmp, X, size);
+	powNum(X_tmp, size);
+	testModNum(X_tmp, N, size);
+	addNum(X_tmp, C, size);
+	testModNum(X_tmp, N, size);
+
+
 	powNum(X, size);
-	modNum(X, N, size, 7);
+	modNum(X, N, size, tm);
 	addNum(X, C, size);
-	modNum(X, N, size, 7);
+	modNum(X, N, size, tm);
+
+	if(bigger(X_tmp, X, size) != 2){
+		printf("fail on fxfun\n");
+		printNum(X_tmp, size);
+		printNum(X, size);
+		getchar();
+	}
 	//copyNum(Y, X, size);
 }
 /*
@@ -177,10 +198,10 @@ int main(int argc, char **argv) {
 
 	unsigned int N[32];
 	setZero(N, 32);
-    N[8] = 1;
-    //N[1] = 0x00000111;
-    N[0] = 1;
-    //N[0] = 0x10000009;
+    //N[8] = 1;
+    N[1] = 0x00000111;
+    //N[0] = 1;
+    N[0] = 0x10000009;
     PollardRho(N, 32);
 	printf("Results \n");
     printNum(N, 32);

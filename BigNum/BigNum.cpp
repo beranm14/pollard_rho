@@ -259,18 +259,53 @@ void divNum(unsigned int * N, unsigned int * D, unsigned int * Q, unsigned int s
 	free(R);
 }
 
-int modNum(unsigned int * A, unsigned int * B, unsigned int size, int s){
-	int ret = 0;
+void modNum(unsigned int * A, unsigned int * B, unsigned int size, unsigned int tm){
 	if (zeroNum(A, size) || zeroNum(B, size) || bigger(B, A, size) == 1){
-        return -100;
+        return;
     }
 	unsigned int * R = (unsigned int *)malloc(sizeof(unsigned int) * size);
     unsigned int * D = (unsigned int *)malloc(sizeof(unsigned int) * size);
     setZero(R, size);
     setZero(D, size);
-     ret = KnuthDiv(A, B, D, R, size, s);
+    unsigned int m = countRealSize(A, size);
+    unsigned int n = countRealSize(B, size);
+    if(n > 1){
+    	KnuthDiv(A, B, D, R, m, n, tm);
+    }else{
+    	testModNum(A, B, size);
+    	return;
+    }
     copyNum(A, R, size);
     free(R);	
     free(D);
-    return ret;
+}
+
+
+void testModNum(unsigned int * A, unsigned int * B, unsigned int size){
+    if (zeroNum(A, size) || zeroNum(B, size) || bigger(B, A, size) == 1){
+        return;
+    }
+    unsigned int * tmp_b = (unsigned int *)malloc(sizeof(unsigned int) * size);
+    while( 1 ){
+        copyNum(tmp_b, B, size);
+        unsigned int dr = 0;
+        char gr_des = bigger(tmp_b, A, size);
+        while(gr_des == 0){ // dokud je B menší než A
+            // shiftuj doleva
+            shiftLeftNum(tmp_b, size);
+            gr_des = bigger(tmp_b, A, size);
+            dr ++;
+        }
+        // pokud bylo rovno ok
+        // pokud bylo větší shift doprava
+        if(gr_des == 1){
+            shiftRightNum(tmp_b, size);
+            dr --;
+        }
+        subNum(A, tmp_b, size); // residuo
+        if(bigger(B, A, size)){
+            break;
+        }
+    }
+    free(tmp_b);
 }

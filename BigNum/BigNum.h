@@ -33,7 +33,9 @@ void getNum(unsigned int a, unsigned int * A);
 
 void powNum(unsigned int * A, unsigned int size);
 
-int modNum(unsigned int * A, unsigned int * B, unsigned int size, int s);
+void modNum(unsigned int * A, unsigned int * B, unsigned int size, unsigned int tm);
+
+void testModNum(unsigned int * A, unsigned int * B, unsigned int size);
 
 void TestModNum(unsigned int * A, unsigned int * B, unsigned int size);
 

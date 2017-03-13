@@ -5,6 +5,8 @@
 #include <ctype.h>
 #include <math.h>
 #include <unistd.h>
+#include <limits.h>
+#include <iostream>
 
 /*
 Source code found at: http://llvm.org/docs/doxygen/html/APInt_8cpp_source.html#l01509
@@ -19,10 +21,6 @@ inline unsigned int min ( int a, int b ) { return a > b ? b : a; }
 int countRealSize (unsigned int *v, unsigned int size){
    while (v[size - 1] == 0){
 		size --;
-   		if (size == 1){
-            return 1;
-   			break;
-         }
    }
    return size;
 }
@@ -39,11 +37,21 @@ int nlz(unsigned x) {
    if (x <= 0x7FFFFFFF) {n = n + 1;}
    return n;
 }
- 
 
-int KnuthDiv(unsigned u[], unsigned v[],unsigned q[], unsigned r[], unsigned int size, int tm) {
-   int m = countRealSize(u, size);
-   int n = countRealSize(v, size);
+unsigned countLeadingZeros(unsigned in){
+	unsigned out = 0;
+	unsigned pnt = 0x80000000;
+	while((in & pnt) == 0){
+		out ++;
+		pnt >>= 1;
+	}
+	return out;
+}
+
+
+int KnuthDiv(unsigned u[], unsigned v[],unsigned q[], unsigned r[], int m, int n, unsigned int tm) {
+   /*int m = countRealSize(u, size);
+   int n = countRealSize(v, size);*/
    // 26 zeroes need to changed to 
    const uint64_t b = 0x100000000; //0x4000000; //67108864; 
    //const uint64_t mask = 0xffffffff; //0x3ffffff; //67108863; 
@@ -51,8 +59,9 @@ int KnuthDiv(unsigned u[], unsigned v[],unsigned q[], unsigned r[], unsigned int
    uint64_t qhat;                  
    uint64_t rhat;                 
    uint64_t p;                
-   int64_t t, k, s;
-   int64_t i, j;
+   int64_t t, k;
+   int i, j, s;
+   tm = 0;
  
    if (m < n || n <= 0 || v[n-1] == 0)
       return 1; 
@@ -66,7 +75,7 @@ int KnuthDiv(unsigned u[], unsigned v[],unsigned q[], unsigned r[], unsigned int
       if (r != NULL) r[0] = k;
       return 0;
    } 
-   s = nlz(v[n-1])-tm; 
+   s = nlz(v[n-1]) - 0; 
    vn = (uint64_t *)malloc(4*n*sizeof(uint64_t *));
    for (i = n - 1; i > 0; i--)
       vn[i] = ((v[i] << s)) | (((uint64_t)v[i-1] >> (32-s)));
@@ -97,11 +106,9 @@ again:
       k = 0;
       for (i = 0; i < n; i++) {
          p = qhat*vn[i];
-         //t = un[i+j] - k - (p & mask);
-         t = un[i+j] - k - p;
+         t = un[i+j] - k - (p & 0xFFFFFFFF);
          un[i+j] = t;
-         //un[i+j] = t&mask;
-         k = (((uint64_t)p >> 32)) - (((uint64_t)t >> 32));
+         k = (p >> 32) - (t >> 32);
       }
       t = un[j+n] - k;
       un[j+n] = t;

@@ -147,6 +147,15 @@ void PollardRho(unsigned int * N, unsigned int size){
 
 
 int main(int argc, char **argv) {
+	unsigned int N[17];
+	setZero(N, 17);
+    //N[8] = 1;
+    N[1] = 0x00000111;
+    N[0] = 0x10000009;
+    PollardRho(N, 17);
+	printf("Results \n");
+    printNum(N, 17);
+	printf("********************\n");
 	/*unsigned int X[32];
 	unsigned int C[32];
 	unsigned int X[32];
@@ -217,7 +226,7 @@ int main(int argc, char **argv) {
 	copyFromTo(B, A, 32, 2*32);
 	printNum(B, 2*32);
 */
-    printf("********************\n");
+   /* printf("********************\n");
     unsigned int N[32];
 	setZero(N, 32);
     unsigned int D[32];
@@ -236,7 +245,7 @@ int main(int argc, char **argv) {
     printNum(D, 32);
     printNum(Q, 32);
     printf("********************\n");
-	return 0;
+	return 0;*/
 	/*
 	setZero(A, 32);
 	setZero(B, 32);

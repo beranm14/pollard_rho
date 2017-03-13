@@ -232,27 +232,45 @@ void unsBit(unsigned int a, unsigned int * A, unsigned int size){
 }
 
  
-void divNum(unsigned int * A, unsigned int * B, unsigned int * D, unsigned int size){
-	if (zeroNum(A, size) || zeroNum(B, size) || bigger(B, A, size) == 1){
+void divNum(unsigned int * N, unsigned int * D, unsigned int * Q, unsigned int size){
+    if (zeroNum(D, size) || zeroNum(N, size) || bigger(D, N, size) == 1){
         return;
     }
     unsigned int * R = (unsigned int *)malloc(sizeof(unsigned int) * size);
+    setZero(Q, size);
     setZero(R, size);
-    KnuthDiv(A, B, D, R, size);
-    copyNum(A, R, size);
-    free(R);
+    unsigned int i = size*32-1;
+    while (1){ // 32 is sizeof int, need to changed to sizeof
+        shiftLeftNum(R, size);
+        if (getBit(i, N, size)){
+            R[0] |= 1;
+        }else{
+            R[0] &= ~((unsigned int) 1);
+        }
+        if(bigger(R, D, size) == 2 || bigger(R, D, size) == 1){
+            subNum(R, D, size);
+            setBit(i, Q, size);
+        }
+        if (i == 0)
+            break;
+        i --;
+    }
+    copyNum(N, R, size);
+	free(R);
 }
 
-void modNum(unsigned int * A, unsigned int * B, unsigned int size){
+int modNum(unsigned int * A, unsigned int * B, unsigned int size, int s){
+	int ret = 0;
 	if (zeroNum(A, size) || zeroNum(B, size) || bigger(B, A, size) == 1){
-        return;
+        return -100;
     }
 	unsigned int * R = (unsigned int *)malloc(sizeof(unsigned int) * size);
     unsigned int * D = (unsigned int *)malloc(sizeof(unsigned int) * size);
     setZero(R, size);
     setZero(D, size);
-    KnuthDiv(A, B, D, R, size);
+     ret = KnuthDiv(A, B, D, R, size, s);
     copyNum(A, R, size);
     free(R);	
     free(D);
+    return ret;
 }

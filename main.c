@@ -29,35 +29,52 @@ static long gcdl(long a, long b) {
 void gcd(unsigned int * A, unsigned int * B, unsigned int size){
 	unsigned int * R = (unsigned int *)malloc(sizeof(unsigned int) * size);
 	
-	/*unsigned int * D = (unsigned int *)malloc(sizeof(unsigned int) * size);
+	unsigned int * D = (unsigned int *)malloc(sizeof(unsigned int) * size);
 	unsigned int * RT = (unsigned int *)malloc(sizeof(unsigned int) * size);
-	unsigned int * BT = (unsigned int *)malloc(sizeof(unsigned int) * size);*/
+	unsigned int * BT = (unsigned int *)malloc(sizeof(unsigned int) * size);
+
+	int ret = 0;
+	int s = 0;
 	while(!zeroNum(B, size)){
-		/*printf("**************************\n");
+		printf("**************************\n");
 		printf("A:\n");
 		printNum(A, size);
 		printf("B:\n");
 		printNum(B, size);
-		printf("+++\n");*/
+		printf("+++\n");
 
-		//copyNum(RT, A, size);
-		//copyNum(BT, B, size);
+		copyNum(RT, A, size);
+		copyNum(BT, B, size);
 
 		copyNum(R, A, size);
-		modNum(R, B, size);
+		modNum(R, B, size, s);
+		
+		setZero(D, size);
+		divNum(RT, BT, D, size);
+		
+		while(bigger(RT, R ,size) != 2){
+			copyNum(R, A, size);
+			modNum(R, B, size, s);
+			s ++;
+			if (s % 10000 == 0){
+				printf("%d \n", s);
+				printNum(RT, size);
+				printNum(R, size);
+			}
+		}
+		printf("\n");
 		copyNum(A, B, size);
 		copyNum(B, R, size);
 		
-		//setZero(D, size);
-		//divNum(RT, BT, D, size);
-		
-		/*printf("***\n");
-		printf("RT: \n");
+		printf("***\n");
+		printf("s: %d\n", s);
+		printf("RT: ");
 		printNum(RT, size);
-		printf("R: \n");
+		printf("R: ");
 		printNum(R, size);
-		printf("++++++++++++++++++++++++++\n");*/
-		//getchar(); 
+		printf("ret %d\n", ret);
+		printf("++++++++++++++++++++++++++\n");
+		getchar(); 
 	}
 	free(R);
 }
@@ -65,9 +82,9 @@ void gcd(unsigned int * A, unsigned int * B, unsigned int size){
 void fxfun(unsigned int * N, unsigned int * X, unsigned int * C, unsigned int size){
 	//setZero(Y, size);
 	powNum(X, size);
-	modNum(X, N, size);
+	modNum(X, N, size, 7);
 	addNum(X, C, size);
-	modNum(X, N, size);
+	modNum(X, N, size, 7);
 	//copyNum(Y, X, size);
 }
 /*
@@ -160,9 +177,10 @@ int main(int argc, char **argv) {
 
 	unsigned int N[32];
 	setZero(N, 32);
-    //N[8] = 1;
-    N[1] = 0x00000111;
-    N[0] = 0x10000009;
+    N[8] = 1;
+    //N[1] = 0x00000111;
+    N[0] = 1;
+    //N[0] = 0x10000009;
     PollardRho(N, 32);
 	printf("Results \n");
     printNum(N, 32);

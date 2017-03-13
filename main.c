@@ -95,21 +95,9 @@ void PollardRho(unsigned int * N, unsigned int size){
 	fxfun(N, Y, C, size);
 	//printf();
 	while (isOne(G, size)){
-		/*printf("Tady to padlo\n");
-		printNum(N, size);
-		printNum(x, size);
-		printNum(c, size);*/
 		fxfun(N, X, C, size);
 		fxfun(N, Y, C, size);
 		fxfun(N, Y, C, size);
-		/*printf("B========================\n");
-		printf("X\n");
-		printNum(X, size);
-		printf("Y\n");
-		printNum(Y, size);
-		printf("N\n");
-		printNum(N, size);
-		printf("B========================\n"); */
 		if(bigger(X, Y, size) == 1){
 			copyNum(abs_mxy, X, size);
 			subNum(abs_mxy, Y, size);
@@ -120,20 +108,10 @@ void PollardRho(unsigned int * N, unsigned int size){
 		copyNum(G, abs_mxy, size);
 		copyNum(N_tmp, N, size);
 		gcd(G, N_tmp, size);
-		/*printf("A========================\n");
-		printf("X\n");
-		printNum(X, size);
-		printf("Y\n");
-		printNum(Y, size);
-		printf("N\n");
-		printNum(N, size);
-		printf("A========================\n");*/
 		j++;
 		if(j%1000 == 0){
 			printf("%d\n", j);
-			//return;
 		}
-		//sleep(1);
 	}
 	printf("%d\n", j);
 	copyNum(N, G, size);
@@ -163,14 +141,16 @@ int main(int argc, char **argv) {
     N[1] = 0xfeba9876;
     N[0] = 0x7530eca9;*/
     /*0 x 1 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000001*/
-    /*N[8] = 1;
-    N[0] = 1;
-    PollardRho(N, R, 32);
+	unsigned int N[17];
+	setZero(N, 17);
+    //N[8] = 1;
+    N[1] = 0x00000111;
+    N[0] = 0x10000009;
+    PollardRho(N, 17);
 	printf("Results \n");
-    printNum(N, 32);
-	printNum(R, 32);
+    printNum(N, 17);
 	printf("********************\n");
-	*//*	
+	/*	
 	setZero(A, 32);
 	setZero(C, 32);
 	setZero(N, 32);	
@@ -216,7 +196,7 @@ int main(int argc, char **argv) {
 	A[0] = 1;    
 	copyFromTo(B, A, 32, 2*32);
 	printNum(B, 2*32);
-*/
+
     printf("********************\n");
     unsigned int N[32];
 	setZero(N, 32);
@@ -236,7 +216,7 @@ int main(int argc, char **argv) {
     printNum(D, 32);
     printNum(Q, 32);
     printf("********************\n");
-	return 0;
+	return 0;*/
 	/*
 	setZero(A, 32);
 	setZero(B, 32);

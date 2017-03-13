@@ -168,13 +168,13 @@ char bigger(unsigned int * A, unsigned int * B, unsigned int size){
 	return 2;
 }
 
+
 unsigned int getHighBit(unsigned int * A, unsigned int size){
-   if(zeroNum(A, size))
-        return 0;
     unsigned int bits_size = size * 32;
     unsigned int l = 0;
+    unsigned int tmp;
     for (long int i = size - 1; i != -1; i --){
-        unsigned int tmp = 0x80000000;
+    	tmp = 0x80000000;
         while ((A[i] & tmp) == 0 && tmp != 0){
             tmp >>= 1;
             l ++;
@@ -185,6 +185,7 @@ unsigned int getHighBit(unsigned int * A, unsigned int size){
     l = bits_size - l;
     return l;
 }
+
 
 char isEven(unsigned int * A, unsigned int size){
 	if ((A[0] & 1) == 0)
@@ -258,6 +259,67 @@ void divNum(unsigned int * N, unsigned int * D, unsigned int * Q, unsigned int s
     free(R);
 }
 
+void shiftLeftNumBy(unsigned int * A, unsigned int gen, unsigned int size){ // shift for 32 bits in one step would be nice to consider
+    unsigned int howmuch = gen / 32; // needed to be changed accordingly to datatype
+	unsigned int wheremc = gen % 32; // needed to be changed accordingly to datatype
+	//printf("%u \n", howmuch);
+	if(howmuch > 0){
+		for(unsigned int k = size - 1;  ; k --){
+			A[k] = A[k - howmuch];
+			if (k - howmuch == 0)
+				break;
+		}
+    }
+	//printf("%u \n", wheremc);
+	while(wheremc){
+    	shiftLeftNum(A, size);
+    	wheremc --;
+    }
+    /*while(gen){
+    	shiftLeftNum(A, size);
+    	gen --;
+    }*/
+    /*char flg;
+    char flc = 0;
+    for (unsigned int j = 0 ; j < size; j++){
+    	((((unsigned int) A[j] & 0x80000000)) ? flg = 1 : flg = 0 );
+    	A[j] = (A[j] << 1);
+    	if(flc)
+    		A[j] |= 1;
+    	(flg == 1 ? flc = 1 : flc = 0);
+    }*/
+}
+
+void modNum(unsigned int * A, unsigned int * B, unsigned int size){
+    if (zeroNum(A, size) || zeroNum(B, size) || bigger(B, A, size) == 1){
+        return;
+    }
+    unsigned int * tmp_b = (unsigned int *)malloc(sizeof(unsigned int) * size);
+    char gr_des;
+    unsigned int dr;
+    unsigned int gen;
+    while( 1 ){
+        copyNum(tmp_b, B, size);
+        dr = 0;
+        //gr_des = bigger(tmp_b, A, size);
+        gen = getHighBit(A, size) - getHighBit(tmp_b, size);
+        shiftLeftNumBy(tmp_b, gen, size);
+        gr_des = bigger(tmp_b, A, size);
+        // pokud bylo rovno ok
+        // pokud bylo větší shift doprava
+        if(gr_des == 1){
+            shiftRightNum(tmp_b, size);
+            dr --;
+        }
+        subNum(A, tmp_b, size); // residuo
+        if(bigger(B, A, size)){
+            break;
+        }
+    }
+    free(tmp_b);
+}
+
+/*
 void modNum(unsigned int * A, unsigned int * B, unsigned int size){
     if (zeroNum(A, size) || zeroNum(B, size) || bigger(B, A, size) == 1){
         return;
@@ -286,3 +348,4 @@ void modNum(unsigned int * A, unsigned int * B, unsigned int size){
     }
     free(tmp_b);
 }
+*/

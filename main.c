@@ -131,8 +131,8 @@ void PollardRho(unsigned int * N, unsigned int size){
 		j++;
 		if(j%1000 == 0){
 			printf("%d\n", j);
-			if (j == 10000) 
-				return;
+			/*if (j == 10000) 
+				return;*/
 		}
 		//sleep(1);
 	}
@@ -151,10 +151,10 @@ int main(int argc, char **argv) {
 	unsigned int N[32];
 	setZero(N, 32);
     //N[8] = 1;
-    N[8] = 1;
-    N[0] = 1;
-    //N[1] = 0x00000111;
-    //N[0] = 0x10000009;
+    //N[8] = 1;
+    //N[0] = 1;
+    N[1] = 0x00000111;
+    N[0] = 0x10000009;
     PollardRho(N, 32);
 	printf("Results \n");
     printNum(N, 32);
@@ -199,26 +199,29 @@ int main(int argc, char **argv) {
 	printNum(X, 32);
     printNum(C, 32);
 	printNum(Y, 32);	*/
-	/*printf("********************\n"); 	
+	/*unsigned int A[32];
+	unsigned int B[32];
+	printf("********************\n"); 	
 	setZero(A, 32);
 	setZero(B, 32);
 	//1B6 9B4B ACD0 5F15	
 	//A[1] = 0x01B69B4B;
     //A[0] = 0x00000000;
-	A[1] = 0x80000999; // to keep
+	A[31] = 0x80000999; // to keep
     A[0] = 0x10000002; // to keep
 	//A[0] = 0x80000003;
 	//DB4 DA5F 7EF4 12B1
 	//B[1] = 0x0DB4DA5F;
 	//B[1] = 0x00000001;
 	//B[0] = 0x00000000;
-	B[1] = 0x80000999; // to keep
-	B[0] = 0x00001000; // to keep
+	//B[1] = 0x80000999; // to keep
+	B[0] = 0x10001010; // to keep
 	//gcd(A, B, 32);
-    mulNum(A, B, 32);
+    modNum(A, B, 32);
     printf("Results \n");
-    printNum(A, 32);
-	//printNum(B, 32);*/
+    printNum(A, 32);*/
+	
+	//printNum(B, 32);
 /*
 	printf("********************\n");
     unsigned int A[2*32];

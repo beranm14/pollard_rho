@@ -1,49 +1,51 @@
 #ifndef BigNum
 #define BigNum
+#define SIZE ((32))
 
-void printNum(unsigned int * num, unsigned int size);
 
-void setZero(unsigned int * num, unsigned int size);
+void printNum(unsigned int * num);
 
-void addNum(unsigned int * A, unsigned int * B, unsigned int size);
+void setZero(unsigned int * num);
 
-void subNum(unsigned int * A, unsigned int * B, unsigned int size);
+void addNum(unsigned int * A, unsigned int * B);
 
-void copyNum(unsigned int * A, unsigned int * B, unsigned int size);
+void subNum(unsigned int * A, unsigned int * B);
 
-void copyFromTo(unsigned int * A, unsigned int * B, unsigned int from, unsigned int size);
+void copyNum(unsigned int * A, unsigned int * B);
 
-void shiftLeftNum(unsigned int * A, unsigned int k);
+void copyFromTo(unsigned int * A, unsigned int * B, unsigned int from);
 
-void mulNum(unsigned int * A, unsigned int * B, unsigned int size);
+void shiftLeftNum(unsigned int * A);
 
-char zeroNum(unsigned int * num, unsigned int size);
+void mulNum(unsigned int * A, unsigned int * B);
 
-char bigger(unsigned int * A, unsigned int * B, unsigned int size);
+char zeroNum(unsigned int * num);
 
-unsigned int getHighBit(unsigned int * A, unsigned int size);
+char bigger(unsigned int * A, unsigned int * B);
 
-char isEven(unsigned int * A, unsigned int size);
+unsigned int getHighBit(unsigned int * A);
 
-char isOne(unsigned int * A, unsigned int size);
+char isEven(unsigned int * A);
 
-void addOne(unsigned int * A, unsigned int * C, unsigned int size);
+char isOne(unsigned int * A);
+
+void addOne(unsigned int * A, unsigned int * C);
 
 void getNum(unsigned int a, unsigned int * A);
 
-void powNum(unsigned int * A, unsigned int size);
+void powNum(unsigned int * A);
 
-void modNum(unsigned int * A, unsigned int * B, unsigned int size);
+void modNum(unsigned int * A, unsigned int * B);
 
-void divNum(unsigned int * A, unsigned int * B, unsigned int * D, unsigned int size);
+void divNum(unsigned int * A, unsigned int * B, unsigned int * D);
 
-void addfromto(unsigned int * A, unsigned int * B, unsigned int from, unsigned int size);
+void addfromto(unsigned int * A, unsigned int * B, unsigned int from);
 
-void shiftRightNum(unsigned int * A, unsigned int k);
+void shiftRightNum(unsigned int * A);
 
-unsigned int getBit(unsigned int a, unsigned int * A, unsigned int size);
+unsigned int getBit(unsigned int a, unsigned int * A);
 
-void setBit(unsigned int a, unsigned int * A, unsigned int size);
+void setBit(unsigned int a, unsigned int * A);
 
 
 #endif

@@ -4,6 +4,7 @@
 #include <math.h>
 #include <unistd.h>
 #include "BigNum/BigNum.h"
+#define SIZE ((32))
 
 
 /*
@@ -24,36 +25,37 @@ static long gcdl(long a, long b) {
 }*/
 
 
-void gcd(unsigned int * A, unsigned int * B, unsigned int size){
-	unsigned int * R = (unsigned int *)malloc(sizeof(unsigned int) * size);
-	while(!zeroNum(B, size)){
+void gcd(unsigned int * A, unsigned int * B){
+	//unsigned int * R = (unsigned int *)malloc(sizeof(unsigned int) * SIZE);
+	unsigned int R[SIZE];
+	while(!zeroNum(B)){
 		/*printf("**************************\n");
 		printf("N:\n");
-		printNum(N, size);
+		printNum(N);
 		printf("M:\n");
-		printNum(M, size);
+		printNum(M);
 		printf("++++++++++++++++++++++++++\n");*/
-		copyNum(R, A, size);
-		modNum(R, B, size);
-		copyNum(A, B, size);
-		copyNum(B, R, size);
+		copyNum(R, A);
+		modNum(R, B);
+		copyNum(A, B);
+		copyNum(B, R);
 		
 		/*printf("**************************\n");
 		printf("nm_r: \n");
-		printNum(nm_r, size);
+		printNum(nm_r);
 		printf("++++++++++++++++++++++++++\n");*/
 		//getchar(); 
 	}
-	free(R);
+	//free(R);
 }
 
-void fxfun(unsigned int * N, unsigned int * X, unsigned int * C, unsigned int size){
-	//setZero(Y, size);
-	powNum(X, size);
-	modNum(X, N, size);
-	addNum(X, C, size);
-	modNum(X, N, size);
-	//copyNum(Y, X, size);
+void fxfun(unsigned int * N, unsigned int * X, unsigned int * C){
+	//setZero(Y);
+	powNum(X);
+	modNum(X, N);
+	addNum(X, C);
+	modNum(X, N);
+	//copyNum(Y, X);
 }
 /*
 def pollardRho(N):
@@ -71,62 +73,75 @@ def pollardRho(N):
 	return g
 */
 
-void PollardRho(unsigned int * N, unsigned int size){
-	if (isEven(N, size)){
-		zeroNum(N, size);
+void PollardRho(unsigned int * N){
+	/*
+The idea I've got in mind is to prepare multiple starting points
+for X, Y and C
+and each thread can actually count Y in place without bothering CPU
+Therefore reasonable aproach would be to just prepare huge chunk of memory
+for GPU to work with.
+	*/
+	if (isEven(N)){
+		zeroNum(N);
 		N[0] = 2;
 		return;
 	}
 	unsigned int j = 0;
-	unsigned int * X = (unsigned int *)malloc(sizeof(unsigned int) * size);
-	unsigned int * Y = (unsigned int *)malloc(sizeof(unsigned int) * size);
-	unsigned int * C = (unsigned int *)malloc(sizeof(unsigned int) * size);
-	unsigned int * G = (unsigned int *)malloc(sizeof(unsigned int) * size);
-	unsigned int * N_tmp = (unsigned int *)malloc(sizeof(unsigned int) * size);
-	unsigned int * abs_mxy = (unsigned int *)malloc(sizeof(unsigned int) * size);
+	//unsigned int * X = (unsigned int *)malloc(sizeof(unsigned int) * SIZE);
+	unsigned int X[SIZE];
+	//unsigned int * Y = (unsigned int *)malloc(sizeof(unsigned int) * SIZE);
+	unsigned int Y[SIZE];
+	//unsigned int * C = (unsigned int *)malloc(sizeof(unsigned int) * SIZE);
+	unsigned int C[SIZE];
+	//unsigned int * G = (unsigned int *)malloc(sizeof(unsigned int) * SIZE);
+	unsigned int G[SIZE];
+	//unsigned int * N_tmp = (unsigned int *)malloc(sizeof(unsigned int) * SIZE);
+	unsigned int N_tmp[SIZE];
+	//unsigned int * abs_mxy = (unsigned int *)malloc(sizeof(unsigned int) * SIZE);
+	unsigned int abs_mxy[SIZE];
 	
-	setZero(X, size);
+	setZero(X);
 	X[0] = 7;
-	setZero(C, size);
+	setZero(C);
 	C[0] = 1;
-	setZero(G, size);
+	setZero(G);
 	G[0] = 1;
-	copyNum(Y, X, size);
-	fxfun(N, Y, C, size);
+	copyNum(Y, X);
+	fxfun(N, Y, C);
 	//printf();
-	while (isOne(G, size)){
+	while (isOne(G)){
 		/*printf("Tady to padlo\n");
-		printNum(N, size);
-		printNum(x, size);
-		printNum(c, size);*/
-		fxfun(N, X, C, size);
-		fxfun(N, Y, C, size);
-		fxfun(N, Y, C, size);
+		printNum(N);
+		printNum(x);
+		printNum(c);*/
+		fxfun(N, X, C);
+		fxfun(N, Y, C);
+		fxfun(N, Y, C);
 		/*printf("B========================\n");
 		printf("X\n");
-		printNum(X, size);
+		printNum(X);
 		printf("Y\n");
-		printNum(Y, size);
+		printNum(Y);
 		printf("N\n");
-		printNum(N, size);
+		printNum(N);
 		printf("B========================\n"); */
-		if(bigger(X, Y, size) == 1){
-			copyNum(abs_mxy, X, size);
-			subNum(abs_mxy, Y, size);
+		if(bigger(X, Y) == 1){
+			copyNum(abs_mxy, X);
+			subNum(abs_mxy, Y);
 		}else{
-			copyNum(abs_mxy, Y, size);
-			subNum(abs_mxy, X, size);	
+			copyNum(abs_mxy, Y);
+			subNum(abs_mxy, X);	
 		}
-		copyNum(G, abs_mxy, size);
-		copyNum(N_tmp, N, size);
-		gcd(G, N_tmp, size);
+		copyNum(G, abs_mxy);
+		copyNum(N_tmp, N);
+		gcd(G, N_tmp);
 		/*printf("A========================\n");
 		printf("X\n");
-		printNum(X, size);
+		printNum(X);
 		printf("Y\n");
-		printNum(Y, size);
+		printNum(Y);
 		printf("N\n");
-		printNum(N, size);
+		printNum(N);
 		printf("A========================\n");*/
 		j++;
 		if(j%1000 == 0){
@@ -137,27 +152,27 @@ void PollardRho(unsigned int * N, unsigned int size){
 		//sleep(1);
 	}
 	printf("%d\n", j);
-	copyNum(N, G, size);
-	free(X);
-	free(Y);
-	free(C);
-	free(G);
-	free(abs_mxy);
+	copyNum(N, G);
+	//free(X);
+	//free(Y);
+	//free(C);
+	//free(G);
+	//free(abs_mxy);
 }
 
 
 
 int main(int argc, char **argv) {
-	unsigned int N[32];
-	setZero(N, 32);
+	unsigned int N[SIZE];
+	setZero(N);
     //N[8] = 1;
     //N[8] = 1;
     //N[0] = 1;
     N[1] = 0x00000111;
-    N[0] = 0x10000009;
-    PollardRho(N, 32);
+    N[0] = 0x10010009;
+    PollardRho(N);
 	printf("Results \n");
-    printNum(N, 32);
+    printNum(N);
 	printf("********************\n");
 	/*unsigned int X[32];
 	unsigned int C[32];
@@ -165,7 +180,7 @@ int main(int argc, char **argv) {
 	unsigned int Y[32];
 	unsigned int C[32];
 	unsigned int N[32];*/
-	//void fxfun(unsigned int * N, unsigned int * X, unsigned int * C, unsigned int * Y, unsigned int size)
+	//void fxfun(unsigned int * N, unsigned int * X, unsigned int * C, unsigned int * Y)
 	//setZero(N, 32);	
 	//setZero(R, 32);
 	//N[0] = 0x00000009;

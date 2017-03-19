@@ -50,10 +50,8 @@ for GPU to work with.
 	unsigned int * mem_xyc = (unsigned int *) malloc(3 * blocks * threads * SIZE * sizeof(unsigned int));
 	for(unsigned int i = 0; i < 3 * blocks * threads; i ++){
 		genNum(mem_xyc); // X
-		mem_xyc += SIZE;		
-		copyNum(mem_xyc, (mem_xyc - SIZE)); // Y
-		mem_xyc += SIZE;
-		genNum(mem_xyc); // C
+		copyNum(mem_xyc, (mem_xyc + 1 * SIZE)); // Y
+		genNum(mem_xyc + 2 * SIZE); // C
 	}
 	unsigned int * result = (unsigned int *) malloc(sizeof(unsigned int) * SIZE);
 	setZero(result);

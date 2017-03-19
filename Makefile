@@ -1,7 +1,7 @@
-CXX=g++
-LD=g++
+CXX=nvcc
+LD=nvcc
 #CFLAGS=-Wall -pedantic -g -std=c++0x
-CFLAGS=-Wall -pedantic -O3 -std=c++0x
+CFLAGS=-Xcompiler "-std=c++11 -O3"
 LIBS=
 
 all: ./BigNum/BigNum.o main.o

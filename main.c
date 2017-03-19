@@ -57,21 +57,7 @@ void fxfun(unsigned int * N, unsigned int * X, unsigned int * C){
 	modNum(X, N);
 	//copyNum(Y, X);
 }
-/*
-def pollardRho(N):
-	if N%2==0:
-		return 2
-	x = 7
-	y = ((x*x)%N+c)%N
-	c = 1
-	g = 1
-	while g==1:             
-		x = ((x*x)%N+c)%N
-		y1 = ((y*y)%N+c)%N
-		y = ((y1*y1)%N+c)%N
-		g = gcd(abs(x-y),N)
-	return g
-*/
+
 
 void PollardRho(unsigned int * N){
 	/*
@@ -86,6 +72,47 @@ for GPU to work with.
 		N[0] = 2;
 		return;
 	}
+// run some tests on CUDA device
+    int num;
+    if (cudaGetDeviceCount(&num)){
+    	printf("Cannot get number of CUDA devices\n");
+    	return;
+	}
+	if (num < 1){
+		printf("No CUDA devices found\n");
+    	return;
+	}
+    cudaDeviceProp prop;
+    int   MaxDevice = -1;
+    int   MaxGflops = -1;
+    for (int dev=0;dev<num;dev++)
+    {
+        if (cudaGetDeviceProperties(&prop,dev)){
+        	printf("Error getting device %d properties\n",dev);
+        	return;	
+    	}
+    	int Gflops = prop.multiProcessorCount * prop.clockRate;
+        if (verbose){ 
+        	printf("CUDA Device %d: %s Gflops %f Processors %d Threads/Block %d\n",dev,prop.name,1e-6*Gflops,prop.multiProcessorCount,prop.maxThreadsPerBlock);
+        }
+        if(Gflops > MaxGflops)
+        {
+            MaxGflops = Gflops;
+            MaxDevice = dev;
+        }
+    }
+    
+    //  Print and set device
+    if (cudaGetDeviceProperties(&prop,MaxDevice)){
+    	printf("Error getting device %d properties\n", MaxDevice);
+    	return;
+    }
+    printf("Fastest CUDA Device %d: %s\n",MaxDevice,prop.name);
+    cudaSetDevice(MaxDevice);
+    //  Return max thread count
+	printf("maxThreadsPerBlock %d \n", prop.maxThreadsPerBlock);
+	return;
+
 	unsigned int j = 0;
 	//unsigned int * X = (unsigned int *)malloc(sizeof(unsigned int) * SIZE);
 	unsigned int X[SIZE];

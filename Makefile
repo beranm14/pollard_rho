@@ -1,19 +1,19 @@
 CXX=nvcc
 LD=nvcc
 #CFLAGS=-Wall -pedantic -g -std=c++0x
-CFLAGS=-lcudart
+FLAGS=-lcudart -g
 LIBS=
 
-all: ./BigNum/BigNum.o main.o
-	$(LD) -o try ./BigNum/BigNum.o main.o $(LIBS) $(FLAGS)
+all: ./BigNum/BigNum.o ./BigNum/BigNum_cuda.o main.o
+	$(LD) ./BigNum/BigNum.o ./BigNum/BigNum_cuda.o main.o $(LIBS) $(FLAGS) -o try 
 
 BigNum/BigNum.o: ./BigNum/BigNum.h ./BigNum/BigNum.cpp
 	$(CXX) $(CFLAGS) -c -o ./BigNum/BigNum.o ./BigNum/BigNum.cpp
 
-#BigNum/BigNum_cuda.o: ./BigNum/BigNum.cuh ./BigNum/BigNum.cu
-#	$(CXX) $(CFLAGS) -c -o ./BigNum/BigNum_cuda.o ./BigNum/BigNum.cu
+BigNum/BigNum_cuda.o: ./BigNum/BigNum.cuh ./BigNum/BigNum.cu
+	$(CXX) $(CFLAGS) -c -o ./BigNum/BigNum_cuda.o ./BigNum/BigNum.cu
 
-main.o: main.cu ./BigNum/BigNum.h
+main.o: main.cu ./BigNum/BigNum.h ./BigNum/BigNum.cuh
 	$(CXX) $(CFLAGS) -c -o main.o main.cu
 
 clm:

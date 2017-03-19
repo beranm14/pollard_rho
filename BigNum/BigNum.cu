@@ -354,3 +354,76 @@ __device__ void  modNum(unsigned int * A, unsigned int * B){
     free(tmp_b);
 }
 */
+
+
+__device__  void cuda_gcd(unsigned int * A, unsigned int * B){
+    //unsigned int * R = (unsigned int *)malloc(sizeof(unsigned int) * SIZE);
+    unsigned int R[SIZE];
+    while(!cuda_zeroNum(B)){
+        /*printf("**************************\n");
+        printf("N:\n");
+        printNum(N);
+        printf("M:\n");
+        printNum(M);
+        printf("++++++++++++++++++++++++++\n");*/
+        cuda_copyNum(R, A);
+        cuda_modNum(R, B);
+        cuda_copyNum(A, B);
+        cuda_copyNum(B, R);
+        
+        /*printf("**************************\n");
+        printf("nm_r: \n");
+        printNum(nm_r);
+        printf("++++++++++++++++++++++++++\n");*/
+        //getchar(); 
+    }
+    //free(R);
+}
+
+__device__  void cuda_fxfun(unsigned int * N, unsigned int * X, unsigned int * C){
+    //setZero(Y);
+    cuda_powNum(X);
+    cuda_modNum(X, N);
+    cuda_addNum(X, C);
+    cuda_modNum(X, N);
+    //copyNum(Y, X);
+}
+
+__global__ void pollardKernel(unsigned int * N, unsigned int * mem_xyc, unsigned int * result){
+    int threadID = blockIdx.x * blockDim.x + threadIdx.x;
+    unsigned int * X = &mem_xyc[3 * threadID + SIZE * 0];
+    unsigned int * Y = &mem_xyc[3 * threadID + SIZE * 1];
+    unsigned int * C = &mem_xyc[3 * threadID + SIZE * 2];
+    unsigned int G[SIZE];
+    unsigned int N_tmp[SIZE];
+    unsigned int abs_mxy[SIZE];
+    
+    /*
+    // THIS SHOULD BE PREPARED IN MEMORY
+    setZero(X);
+    X[0] = 7;
+    setZero(C);
+    C[0] = 1;
+    setZero(G);
+    G[0] = 1;
+    */
+    cuda_copyNum(Y, X);
+    cuda_fxfun(N, Y, C);
+    //while (isOne(G)){
+        cuda_fxfun(N, X, C);
+        cuda_fxfun(N, Y, C);
+        cuda_fxfun(N, Y, C);
+        if(cuda_bigger(X, Y) == 1){
+            cuda_copyNum(abs_mxy, X);
+            cuda_subNum(abs_mxy, Y);
+        }else{
+            cuda_copyNum(abs_mxy, Y);
+            cuda_subNum(abs_mxy, X);    
+        }
+        cuda_copyNum(G, abs_mxy);
+        cuda_copyNum(N_tmp, N);
+        cuda_gcd(G, N_tmp);
+    //}
+    if(! cuda_isOne(G))
+        cuda_copyNum(result, G);    
+}

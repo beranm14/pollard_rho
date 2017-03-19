@@ -47,5 +47,10 @@ __device__ unsigned int cuda_getBit(unsigned int a, unsigned int * A);
 
 __device__ void   cuda_setBit(unsigned int a, unsigned int * A);
 
+__device__  void cuda_gcd(unsigned int * A, unsigned int * B);
+
+__device__  void cuda_fxfun(unsigned int * N, unsigned int * X, unsigned int * C);
+
+__global__ void pollardKernel(unsigned int * N, unsigned int * mem_xyc, unsigned int * result);
 
 #endif

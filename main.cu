@@ -32,7 +32,7 @@ void genNum(unsigned int * x, unsigned int * N){
 	for (unsigned int i = 0; i < SIZE; i ++){
 		x[i] = rand();
 	}
-	divNum(x, N);
+	modNum(x, N);
 }
 
 void PollardRhoCu(unsigned int * N, unsigned int blocks, unsigned int threads){

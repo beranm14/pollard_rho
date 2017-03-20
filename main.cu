@@ -7,7 +7,7 @@
 #include <time.h> 
 #include "BigNum/BigNum.h"
 #include "BigNum/BigNum.cuh"
-#define SIZE ((8))
+#define SIZE ((17))
 
 /*
 static long gcdl(long a, long b) {
@@ -116,7 +116,8 @@ void getGpuNfo(){
     	return;
     }
     printf("Fastest CUDA Device %d: %s\n",MaxDevice,prop.name);
-    cudaSetDevice(MaxDevice);
+    // cudaSetDevice(MaxDevice);
+    cudaSetDevice(0);
     //  Return max thread count
 	printf("maxThreadsPerBlock %d \n", prop.maxThreadsPerBlock);
 	return;
@@ -130,13 +131,13 @@ int main(int argc, char **argv) {
     //N[8] = 1;
     //N[8] = 1;
     //N[0] = 1;
-    //N[1] = 0x00000111;
-    //N[0] = 0x10010009;
+    N[1] = 0x00000111;
+    N[0] = 0x10010009;
     //123432322333420120051
-    N[0] = 0x20120051;
-    N[1] = 0x23223334;
-    N[3] = 0x00012343;
-    PollardRhoCu(N, 1024, 1024);
+    //N[0] = 0x20120051;
+    //N[1] = 0x23223334;
+    //N[3] = 0x00012343;
+    PollardRhoCu(N, 1024, 15);
 	printf("Results \n");
     printNum(N);
 	printf("********************\n");

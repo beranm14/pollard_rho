@@ -7,7 +7,7 @@
 #include <time.h> 
 #include "BigNum/BigNum.h"
 #include "BigNum/BigNum.cuh"
-#define SIZE ((32))
+#define SIZE ((8))
 
 /*
 static long gcdl(long a, long b) {
@@ -28,10 +28,11 @@ static long gcdl(long a, long b) {
 
 
 
-void genNum(unsigned int * x){
+void genNum(unsigned int * x, unsigned int * N){
 	for (unsigned int i = 0; i < SIZE; i ++){
 		x[i] = rand();
 	}
+	divNum(x, N);
 }
 
 void PollardRhoCu(unsigned int * N, unsigned int blocks, unsigned int threads){
@@ -49,9 +50,9 @@ for GPU to work with.
 	}
 	unsigned int * mem_xyc = (unsigned int *) malloc(3 * blocks * threads * SIZE * sizeof(unsigned int));
 	for(unsigned int i = 0; i < 3 * blocks * threads; i ++){
-		genNum(mem_xyc); // X
+		genNum(mem_xyc, N); // X
 		copyNum(mem_xyc, (mem_xyc + 1 * SIZE)); // Y
-		genNum(mem_xyc + 2 * SIZE); // C
+		genNum(mem_xyc + 2 * SIZE, N); // C
 	}
 	unsigned int * result = (unsigned int *) malloc(sizeof(unsigned int) * SIZE);
 	setZero(result);
@@ -129,9 +130,13 @@ int main(int argc, char **argv) {
     //N[8] = 1;
     //N[8] = 1;
     //N[0] = 1;
-    N[1] = 0x00000111;
-    N[0] = 0x10010009;
-    PollardRhoCu(N, 1, 1);
+    //N[1] = 0x00000111;
+    //N[0] = 0x10010009;
+    //123432322333420120051
+    N[0] = 0x20120051;
+    N[1] = 0x23223334;
+    N[3] = 0x00012343;
+    PollardRhoCu(N, 1024, 1024);
 	printf("Results \n");
     printNum(N);
 	printf("********************\n");

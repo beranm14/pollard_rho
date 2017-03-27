@@ -1,6 +1,6 @@
 #ifndef BigNum
 #define BigNum
-#define SIZE ((8))
+#define SIZE ((17))
 
 
  void   printNum(unsigned int * num);
@@ -8,6 +8,8 @@
  void   setZero(unsigned int * num);
 
  void   addNum(unsigned int * A, unsigned int * B);
+
+ void   addOne(unsigned int * A);
 
  void   subNum(unsigned int * A, unsigned int * B);
 
@@ -28,8 +30,6 @@
  char isEven(unsigned int * A);
 
  char isOne(unsigned int * A);
-
- void   addOne(unsigned int * A, unsigned int * C);
 
  void   getNum(unsigned int a, unsigned int * A);
 

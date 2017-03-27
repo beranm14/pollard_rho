@@ -28,10 +28,9 @@ static long gcdl(long a, long b) {
 
 
 
-void genNum(unsigned int * x, unsigned int * N){
-	for (unsigned int i = 0; i < SIZE; i ++){
-		x[i] = rand();
-	}
+void genNum(unsigned int * x, unsigned int * N, unsigned int * counter){
+	copyNum(x, counter);
+	addOne(counter);
 	modNum(x, N);
 }
 
@@ -48,11 +47,15 @@ for GPU to work with.
 		N[0] = 2;
 		return;
 	}
+	unsigned int * counter[SIZE];
+	setZero(counter);
+	counter[0] = 0x01;
+
 	unsigned int * mem_xyc = (unsigned int *) malloc(3 * blocks * threads * SIZE * sizeof(unsigned int));
 	for(unsigned int i = 0; i < 3 * blocks * threads; i ++){
-		genNum(mem_xyc, N); // X
+		genNum(mem_xyc, N, counter); // X
 		copyNum(mem_xyc, (mem_xyc + 1 * SIZE)); // Y
-		genNum(mem_xyc + 2 * SIZE, N); // C
+		genNum(mem_xyc + 2 * SIZE, N, counter); // C
 	}
 	unsigned int * result = (unsigned int *) malloc(sizeof(unsigned int) * SIZE);
 	setZero(result);
@@ -64,7 +67,6 @@ for GPU to work with.
   	unsigned int * gpu_N;
   	cudaMalloc((void **)&gpu_N, SIZE * sizeof(unsigned int));
 	cudaMemcpy(gpu_N, N, SIZE * sizeof(unsigned int), cudaMemcpyHostToDevice);
-
   	unsigned int * gpu_result;
   	cudaMalloc((void **)&gpu_result, SIZE * sizeof(unsigned int));
 	cudaMemcpy(gpu_result, result, SIZE * sizeof(unsigned int), cudaMemcpyHostToDevice);

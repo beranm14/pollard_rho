@@ -77,6 +77,7 @@ for GPU to work with.
   	cudaMalloc((void **)&gpu_result, SIZE * sizeof(unsigned int));
 	cudaMemcpy(gpu_result, result, SIZE * sizeof(unsigned int), cudaMemcpyHostToDevice);
 
+	printf("Running Kernel\n");
 	do{
 		pollardKernel<<<blocks, threads>>>(gpu_N, gpu_xyc, gpu_result);
 		cudaThreadSynchronize();
@@ -124,11 +125,7 @@ void getGpuNfo(){
     	return;
     }
     printf("Fastest CUDA Device %d: %s\n",MaxDevice,prop.name);
-<<<<<<< HEAD
-    // cudaSetDevice(MaxDevice);
-=======
     // cudaSetDevice(MaxDevice);    
->>>>>>> temp
     cudaSetDevice(0);
     //  Return max thread count
 	printf("maxThreadsPerBlock %d \n", prop.maxThreadsPerBlock);
@@ -145,14 +142,11 @@ int main(int argc, char **argv) {
     //N[0] = 1;
     N[1] = 0x00000111;
     N[0] = 0x10010009;
-<<<<<<< HEAD
     //123432322333420120051
     //N[0] = 0x20120051;
     //N[1] = 0x23223334;
     //N[3] = 0x00012343;
-=======
->>>>>>> temp
-    PollardRhoCu(N, 128, 128);
+    PollardRhoCu(N, 1, 64);
 	printf("Results \n");
     printNum(N);
 	printf("********************\n");

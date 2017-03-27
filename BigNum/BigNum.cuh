@@ -1,6 +1,6 @@
 #ifndef BigNum_cuda
 #define BigNum_cuda
-#define SIZE ((17))
+#define SIZE ((9))
 
 
 __device__ void   cuda_printNum(unsigned int * num);

@@ -7,7 +7,7 @@
 #include <time.h> 
 #include "BigNum/BigNum.h"
 #include "BigNum/BigNum.cuh"
-#define SIZE ((17))
+#define SIZE ((9))
 
 /*
 static long gcdl(long a, long b) {
@@ -133,8 +133,8 @@ void getGpuNfo(){
 }
 
 int main(int argc, char **argv) {
-	srand (time(NULL));
-	getGpuNfo();
+	cudaSetDevice(0);
+	//getGpuNfo();
 	unsigned int N[SIZE];
 	setZero(N);
     //N[8] = 1;
@@ -146,7 +146,7 @@ int main(int argc, char **argv) {
     //N[0] = 0x20120051;
     //N[1] = 0x23223334;
     //N[3] = 0x00012343;
-    PollardRhoCu(N, 1, 64);
+    PollardRhoCu(N, 1, 16);
 	printf("Results \n");
     printNum(N);
 	printf("********************\n");

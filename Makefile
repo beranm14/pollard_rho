@@ -1,7 +1,7 @@
 CXX=nvcc
 LD=nvcc
 #CFLAGS=-Wall -pedantic -g -std=c++0x
-FLAGS=-lcudart -g
+FLAGS=-O3
 LIBS=
 
 all: ./BigNum/BigNum.o ./BigNum/BigNum_cuda.o main.o

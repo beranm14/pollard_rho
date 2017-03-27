@@ -4,6 +4,7 @@
 #include <ctype.h>
 #include <math.h>
 #include <unistd.h>
+#define SIZE ((9))
 
 __device__ void  cuda_printNum(unsigned int * num){
 	unsigned int i;

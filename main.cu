@@ -32,6 +32,7 @@ void genNum(unsigned int * x, unsigned int * N, unsigned int * counter){
 	copyNum(x, counter);
 	addOne(counter);
 	modNum(x, N);
+	printNum(x);
 }
 
 void PollardRhoCu(unsigned int * N, unsigned int blocks, unsigned int threads){
@@ -47,7 +48,7 @@ for GPU to work with.
 		N[0] = 2;
 		return;
 	}
-	unsigned int * counter[SIZE];
+	unsigned int  counter[SIZE];
 	setZero(counter);
 	counter[0] = 0x01;
 
@@ -139,7 +140,7 @@ int main(int argc, char **argv) {
     //N[0] = 0x20120051;
     //N[1] = 0x23223334;
     //N[3] = 0x00012343;
-    PollardRhoCu(N, 1024, 15);
+    PollardRhoCu(N, 128, 128);
 	printf("Results \n");
     printNum(N);
 	printf("********************\n");

@@ -28,12 +28,17 @@ static long gcdl(long a, long b) {
 
 
 
-void genNum(unsigned int * x, unsigned int * N, unsigned int * counter){
+
+void genNum(unsigned int * x, unsigned int * counter){
 	copyNum(x, counter);
 	addOne(counter);
-	modNum(x, N);
-	printNum(x);
 }
+
+void genC(unsigned int * x){
+	setZero(x);
+	x[0] = 0x07;
+}
+
 
 void PollardRhoCu(unsigned int * N, unsigned int blocks, unsigned int threads){
 	/*
@@ -54,9 +59,9 @@ for GPU to work with.
 
 	unsigned int * mem_xyc = (unsigned int *) malloc(3 * blocks * threads * SIZE * sizeof(unsigned int));
 	for(unsigned int i = 0; i < 3 * blocks * threads; i ++){
-		genNum(mem_xyc, N, counter); // X
+		genNum(mem_xyc, counter); // X
 		copyNum(mem_xyc, (mem_xyc + 1 * SIZE)); // Y
-		genNum(mem_xyc + 2 * SIZE, N, counter); // C
+		genC(mem_xyc + 2 * SIZE); // C
 	}
 	unsigned int * result = (unsigned int *) malloc(sizeof(unsigned int) * SIZE);
 	setZero(result);
@@ -119,7 +124,11 @@ void getGpuNfo(){
     	return;
     }
     printf("Fastest CUDA Device %d: %s\n",MaxDevice,prop.name);
+<<<<<<< HEAD
     // cudaSetDevice(MaxDevice);
+=======
+    // cudaSetDevice(MaxDevice);    
+>>>>>>> temp
     cudaSetDevice(0);
     //  Return max thread count
 	printf("maxThreadsPerBlock %d \n", prop.maxThreadsPerBlock);
@@ -136,10 +145,13 @@ int main(int argc, char **argv) {
     //N[0] = 1;
     N[1] = 0x00000111;
     N[0] = 0x10010009;
+<<<<<<< HEAD
     //123432322333420120051
     //N[0] = 0x20120051;
     //N[1] = 0x23223334;
     //N[3] = 0x00012343;
+=======
+>>>>>>> temp
     PollardRhoCu(N, 128, 128);
 	printf("Results \n");
     printNum(N);

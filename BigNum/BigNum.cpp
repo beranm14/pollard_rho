@@ -39,9 +39,9 @@ void  addOne(unsigned int * A){
 		if ( i == 0)
 			tmp = ((unsigned long int) A[i] + 1);
 		else
-			tmp = ((unsigned long int) A[i]);
+			tmp = ((unsigned long int) A[i]);	
 		A[i] = (tmp & 0xFFFFFFFF) + carry;
-		tmp_carry = ((unsigned long int) tmp & 0xFFFFFFFF00000000);
+		tmp_carry = ((unsigned long int) tmp & 0xFFFFFFFF00000000); 
 		carry = ((unsigned long int) tmp_carry >> 32);
 	}
 }

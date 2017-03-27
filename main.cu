@@ -28,11 +28,16 @@ static long gcdl(long a, long b) {
 
 
 
-void genNum(unsigned int * x){
-	for (unsigned int i = 0; i < SIZE; i ++){
-		x[i] = rand();
-	}
+void genNum(unsigned int * x, unsigned int * counter){
+	copyNum(x, counter);
+	addOne(counter);
 }
+
+void genC(unsigned int * x){
+	setZero(x);
+	x[0] = 0x07;
+}
+
 
 void PollardRhoCu(unsigned int * N, unsigned int blocks, unsigned int threads){
 	/*
@@ -47,11 +52,15 @@ for GPU to work with.
 		N[0] = 2;
 		return;
 	}
+	unsigned int  counter[SIZE];
+	setZero(counter);
+	counter[0] = 0x01;
+
 	unsigned int * mem_xyc = (unsigned int *) malloc(3 * blocks * threads * SIZE * sizeof(unsigned int));
 	for(unsigned int i = 0; i < 3 * blocks * threads; i ++){
-		genNum(mem_xyc); // X
+		genNum(mem_xyc, counter); // X
 		copyNum(mem_xyc, (mem_xyc + 1 * SIZE)); // Y
-		genNum(mem_xyc + 2 * SIZE); // C
+		genC(mem_xyc + 2 * SIZE); // C
 	}
 	unsigned int * result = (unsigned int *) malloc(sizeof(unsigned int) * SIZE);
 	setZero(result);
@@ -115,7 +124,8 @@ void getGpuNfo(){
     	return;
     }
     printf("Fastest CUDA Device %d: %s\n",MaxDevice,prop.name);
-    cudaSetDevice(MaxDevice);
+    // cudaSetDevice(MaxDevice);    
+    cudaSetDevice(0);
     //  Return max thread count
 	printf("maxThreadsPerBlock %d \n", prop.maxThreadsPerBlock);
 	return;
@@ -131,7 +141,7 @@ int main(int argc, char **argv) {
     //N[0] = 1;
     N[1] = 0x00000111;
     N[0] = 0x10010009;
-    PollardRhoCu(N, 1, 1);
+    PollardRhoCu(N, 128, 128);
 	printf("Results \n");
     printNum(N);
 	printf("********************\n");

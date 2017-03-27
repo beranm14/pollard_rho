@@ -29,7 +29,7 @@
 
  char isOne(unsigned int * A);
 
- void   addOne(unsigned int * A, unsigned int * C);
+ void   addOne(unsigned int * A);
 
  void   getNum(unsigned int a, unsigned int * A);
 

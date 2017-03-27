@@ -424,6 +424,6 @@ __global__ void pollardKernel(unsigned int * N, unsigned int * mem_xyc, unsigned
         cuda_copyNum(N_tmp, N);
         cuda_gcd(G, N_tmp);
     //}
-    if(! cuda_isOne(G))
+    if(!cuda_isOne(G) && cuda_bigger(G, N) != 2)
         cuda_copyNum(result, G);    
 }

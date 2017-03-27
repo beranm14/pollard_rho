@@ -30,7 +30,7 @@ void  addNum(unsigned int * A, unsigned int * B){
 		carry = ((unsigned long int) tmp_carry >> 32);
 	}
 }
-void  addOne(unsigned int * A, unsigned int * C){
+void  addOne(unsigned int * A){
 	unsigned int i;
 	unsigned long int tmp;
 	unsigned long int tmp_carry;
@@ -40,7 +40,7 @@ void  addOne(unsigned int * A, unsigned int * C){
 			tmp = ((unsigned long int) A[i] + 1);
 		else
 			tmp = ((unsigned long int) A[i]);	
-		C[i] = (tmp & 0xFFFFFFFF) + carry;
+		A[i] = (tmp & 0xFFFFFFFF) + carry;
 		tmp_carry = ((unsigned long int) tmp & 0xFFFFFFFF00000000); 
 		carry = ((unsigned long int) tmp_carry >> 32);
 	}

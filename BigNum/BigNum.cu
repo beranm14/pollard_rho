@@ -358,27 +358,43 @@ __device__ void  modNum(unsigned int * A, unsigned int * B){
 
 
 __device__  void cuda_gcd(unsigned int * A, unsigned int * B){
-    //unsigned int * R = (unsigned int *)malloc(sizeof(unsigned int) * SIZE);
+/*
     unsigned int R[SIZE];
     while(!cuda_zeroNum(B)){
-        /*printf("**************************\n");
-        printf("N:\n");
-        printNum(N);
-        printf("M:\n");
-        printNum(M);
-        printf("++++++++++++++++++++++++++\n");*/
         cuda_copyNum(R, A);
         cuda_modNum(R, B);
         cuda_copyNum(A, B);
         cuda_copyNum(B, R);
-        
-        /*printf("**************************\n");
-        printf("nm_r: \n");
-        printNum(nm_r);
-        printf("++++++++++++++++++++++++++\n");*/
-        //getchar(); 
     }
-    //free(R);
+*/
+    unsigned int t[SIZE];
+    unsigned int shift;
+    if(cuda_zeroNum(B)){
+        cuda_copyNum(A, B);
+        return;      
+    }
+    if(cuda_zeroNum(A)){
+        return;
+    }
+    for(shift = 0; ((A[0] | B[0]) & 1) == 0; ++ shift){
+        cuda_shiftRightNum(A);
+        cuda_shiftRightNum(B);
+    }
+    while((A[0] & 1) == 0){
+        cuda_shiftRightNum(A);
+    }
+    do{
+        while((B[0] & 1) == 0){
+            cuda_shiftRightNum(A);
+        }
+        if(cuda_bigger(A, B) == 1){
+            cuda_copyNum(t, B);
+            cuda_copyNum(B, A);
+            cuda_copyNum(B, t);
+        }
+        cuda_subNum(B, A);
+    } while (! cuda_zeroNum(B));
+    cuda_shiftLeftNum(A);
 }
 
 __device__  void cuda_fxfun(unsigned int * N, unsigned int * X, unsigned int * C){

@@ -25,26 +25,58 @@ static long gcdl(long a, long b) {
 
 
 void gcd(unsigned int * A, unsigned int * B, unsigned int size){
-	unsigned int * R = (unsigned int *)malloc(sizeof(unsigned int) * size);
-	while(!zeroNum(B, size)){
+//	unsigned int * R = (unsigned int *)malloc(sizeof(unsigned int) * size);
+//	while(!zeroNum(B, size)){
 		/*printf("**************************\n");
 		printf("N:\n");
 		printNum(N, size);
 		printf("M:\n");
 		printNum(M, size);
 		printf("++++++++++++++++++++++++++\n");*/
-		copyNum(R, A, size);
-		modNum(R, B, size);
-		copyNum(A, B, size);
-		copyNum(B, R, size);
-		
+//		copyNum(R, A, size);
+//		modNum(R, B, size);
+//		copyNum(A, B, size);
+//		copyNum(B, R, size);		
 		/*printf("**************************\n");
 		printf("nm_r: \n");
 		printNum(nm_r, size);
 		printf("++++++++++++++++++++++++++\n");*/
 		//getchar(); 
-	}
-	free(R);
+//	}
+//	free(R);
+    unsigned int * t = (unsigned int *)malloc(sizeof(unsigned int) * size);
+    unsigned int shift;
+    
+    if(zeroNum(B, size)){
+        return;      
+    }
+    if(zeroNum(A, size)){
+        copyNum(A, B, size);
+        return;
+    }
+
+    for(shift = 0; ((A[0] | B[0]) & 1) == 0; ++ shift){
+        shiftRightNum(A, size);
+        shiftRightNum(B, size);
+    }
+    
+    while((A[0] & 1) == 0){
+        shiftRightNum(A, size);
+    }
+
+    do{
+        while((B[0] & 1) == 0){
+            shiftRightNum(B, size);
+        }
+        if(bigger(A, B, size) == 1){
+            copyNum(t, B, size);
+            copyNum(B, A, size);
+            copyNum(B, t, size);
+        }
+        subNum(B, A, size);
+    } while (! zeroNum(B, size));
+    shiftLeftNum(A, size);
+    free(t);
 }
 
 void fxfun(unsigned int * N, unsigned int * X, unsigned int * C, unsigned int size){

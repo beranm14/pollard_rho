@@ -15,6 +15,8 @@ void copyFromTo(unsigned int * A, unsigned int * B, unsigned int from, unsigned 
 
 void shiftLeftNum(unsigned int * A, unsigned int k);
 
+void shiftLeftNumBy(unsigned int * A, unsigned int gen, unsigned int size);
+
 void mulNum(unsigned int * A, unsigned int * B, unsigned int size);
 
 char zeroNum(unsigned int * num, unsigned int size);

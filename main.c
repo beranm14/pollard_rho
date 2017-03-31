@@ -71,11 +71,11 @@ void gcd(unsigned int * A, unsigned int * B, unsigned int size){
         if(bigger(A, B, size) == 1){
             copyNum(t, B, size);
             copyNum(B, A, size);
-            copyNum(B, t, size);
+            copyNum(A, t, size);
         }
         subNum(B, A, size);
     } while (! zeroNum(B, size));
-    shiftLeftNum(A, size);
+   	shiftLeftNumBy(A, shift, size);
     free(t);
 }
 
@@ -180,16 +180,17 @@ void PollardRho(unsigned int * N, unsigned int size){
 
 
 int main(int argc, char **argv) {
-	unsigned int N[32];
-	setZero(N, 32);
+	unsigned int N[5];
+	setZero(N, 5);
     //N[8] = 1;
     //N[8] = 1;
     //N[0] = 1;
     N[1] = 0x00000111;
+    //N[0] = 0x10000009;
     N[0] = 0x10000009;
-    PollardRho(N, 32);
+    PollardRho(N, 5);
 	printf("Results \n");
-    printNum(N, 32);
+    printNum(N, 5);
 	printf("********************\n");
 	/*unsigned int X[32];
 	unsigned int C[32];

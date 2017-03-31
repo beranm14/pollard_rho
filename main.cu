@@ -147,7 +147,7 @@ int main(int argc, char **argv) {
     //N[0] = 0x20120051;
     //N[1] = 0x23223334;
     //N[3] = 0x00012343;
-    PollardRhoCu(N, 1, 16);
+    PollardRhoCu(N, 1, 1);
 	printf("Results \n");
     printNum(N);
 	printf("********************\n");

@@ -374,7 +374,7 @@ __device__  void cuda_gcd(unsigned int * A, unsigned int * B){
         return;      
     }
     if(cuda_zeroNum(A)){
-        cuda_copyNum(A, B, size);
+        cuda_copyNum(A, B);
         return;
     }
     for(shift = 0; ((A[0] | B[0]) & 1) == 0; ++ shift){
@@ -395,7 +395,7 @@ __device__  void cuda_gcd(unsigned int * A, unsigned int * B){
         }
         cuda_subNum(B, A);
     } while (! cuda_zeroNum(B));
-    cuda_shiftLeftNumBy(A, shift, size);
+    cuda_shiftLeftNumBy(A, shift);
 }
 
 __device__  void cuda_fxfun(unsigned int * N, unsigned int * X, unsigned int * C){

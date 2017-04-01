@@ -9,6 +9,8 @@
 #include "BigNum/BigNum.cuh"
 #define SIZE ((9))
 
+//
+
 /*
 static long gcdl(long a, long b) {
   long r;
@@ -39,6 +41,14 @@ void genC(unsigned int * x){
 	x[0] = 0x07;
 }
 
+void printMat(unsigned int * mem_xyc, unsigned int blocks, unsigned int threads){
+	for(unsigned int i = 0; i < 3 * blocks * threads; i += 3){
+		printNum ( mem_xyc + SIZE * ( i     )); // X
+		printNum ( mem_xyc + SIZE * ( i + 1 )); // Y
+		printNum ( mem_xyc + SIZE * ( i + 2 )); // C 
+		printf("===================================================== \n");
+	}
+}
 
 void PollardRhoCu(unsigned int * N, unsigned int blocks, unsigned int threads){
 	/*
@@ -58,17 +68,21 @@ for GPU to work with.
 	counter[0] = 0x01;
 
 	unsigned int * mem_xyc = (unsigned int *) malloc(3 * blocks * threads * SIZE * sizeof(unsigned int));
-	for(unsigned int i = 0; i < 3 * blocks * threads; i ++){
-		genNum(mem_xyc, counter); // X
-		copyNum(mem_xyc, (mem_xyc + 1 * SIZE)); // Y
-		genC(mem_xyc + 2 * SIZE); // C
+	for(unsigned int i = 0; i < 3 * blocks * threads; i += 3){
+		genNum   ( mem_xyc + SIZE * ( i     ), counter ); // X
+		copyNum  ( mem_xyc + SIZE * ( i + 1 ), mem_xyc + SIZE * i); // Y
+		genC     ( mem_xyc + SIZE * ( i + 2 )   ); // C 
+		printf("yep \n");
 	}
+
 	unsigned int * result = (unsigned int *) malloc(sizeof(unsigned int) * SIZE);
 	setZero(result);
 	
 	unsigned int * gpu_xyc; 
   	cudaMalloc((void **)&gpu_xyc, 3 * blocks * threads * SIZE * sizeof(unsigned int));
 	cudaMemcpy(gpu_xyc, mem_xyc, 3 * blocks * threads * SIZE * sizeof(unsigned int), cudaMemcpyHostToDevice);
+
+	printMat(mem_xyc, blocks, threads);
 
   	unsigned int * gpu_N;
   	cudaMalloc((void **)&gpu_N, SIZE * sizeof(unsigned int));
@@ -77,14 +91,22 @@ for GPU to work with.
   	cudaMalloc((void **)&gpu_result, SIZE * sizeof(unsigned int));
 	cudaMemcpy(gpu_result, result, SIZE * sizeof(unsigned int), cudaMemcpyHostToDevice);
 
+/*
+	unsigned int * cu_dbgs; 
+  	cudaMalloc((void **)&cu_dbgs, sizeof(unsigned int));
+	unsigned int * ma_dbgs = (unsigned int *) malloc(sizeof(unsigned int)); 
+*/
 	printf("Running Kernel\n");
 	do{
+		//pollardKernel<<<blocks, threads>>>(gpu_N, gpu_xyc, gpu_result, cu_dbgs);
 		pollardKernel<<<blocks, threads>>>(gpu_N, gpu_xyc, gpu_result);
 		cudaThreadSynchronize();
+		//cudaMemcpy(ma_dbgs, cu_dbgs, SIZE * sizeof(unsigned int), cudaMemcpyDeviceToHost);		
+		break;
 		cudaMemcpy(result, gpu_result, SIZE * sizeof(unsigned int), cudaMemcpyDeviceToHost);
 	} while (zeroNum(result));
 
-	printNum(result);
+	copyNum(N, result);
 	cudaFree(gpu_result);
 	cudaFree(gpu_N);
 	cudaFree(gpu_xyc);
@@ -142,12 +164,20 @@ int main(int argc, char **argv) {
     //N[0] = 1;
     //N[1] = 0x00000111;
     //N[0] = 0x10010009;
-    N[0] = 0x00044d69;
+    //N[0] = 0x00044d69;
     //123432322333420120051
     //N[0] = 0x20120051;
     //N[1] = 0x23223334;
     //N[3] = 0x00012343;
-    PollardRhoCu(N, 1, 1);
+    // cb3b6f92b9d54fd
+    //N[1] = 0x0cb3b6f9;
+    //N[0] = 0x2b9d54fd;
+    //a8bc39b45
+    //N[1] = 0x0000000a;
+    //N[0] = 0x8bc39b45;
+    //
+    N[0] = 0x00000121;
+    PollardRhoCu(N, 2, 2);
 	printf("Results \n");
     printNum(N);
 	printf("********************\n");

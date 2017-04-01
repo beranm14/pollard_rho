@@ -1,6 +1,8 @@
 CXX=nvcc
 LD=nvcc
-#CFLAGS=-Wall -pedantic -g -std=c++0x
+#CFLAGS=-g -G
+#FLAGS=-g -G
+CFLAGS=-O3
 FLAGS=-O3
 LIBS=
 

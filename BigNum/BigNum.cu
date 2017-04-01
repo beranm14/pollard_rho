@@ -386,7 +386,7 @@ __device__  void cuda_gcd(unsigned int * A, unsigned int * B){
     }
     do{
         while((B[0] & 1) == 0){
-            cuda_shiftRightNum(A);
+            cuda_shiftRightNum(B);
         }
         if(cuda_bigger(A, B) == 1){
             cuda_copyNum(t, B);
@@ -407,6 +407,7 @@ __device__  void cuda_fxfun(unsigned int * N, unsigned int * X, unsigned int * C
     //copyNum(Y, X);
 }
 
+//__global__ void pollardKernel(unsigned int * N, unsigned int * mem_xyc, unsigned int * result, unsigned int * dbgs){
 __global__ void pollardKernel(unsigned int * N, unsigned int * mem_xyc, unsigned int * result){
     int threadID = blockIdx.x * blockDim.x + threadIdx.x;
     unsigned int * X = &mem_xyc[3 * threadID + SIZE * 0];
@@ -415,7 +416,7 @@ __global__ void pollardKernel(unsigned int * N, unsigned int * mem_xyc, unsigned
     unsigned int G[SIZE];
     unsigned int N_tmp[SIZE];
     unsigned int abs_mxy[SIZE];
-    
+
     /*
     // THIS SHOULD BE PREPARED IN MEMORY
     setZero(X);

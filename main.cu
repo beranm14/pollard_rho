@@ -165,6 +165,14 @@ for GPU to work with.
 
 
 int main(int argc, char **argv) {
+	unsigned int blocks = 0;
+	unsigned int threads = 0;
+	unsigned int debug = 0;
+	if(argc == 4){
+		debug = atoi(argv[1]);
+		blocks = atoi(argv[2]);
+		threads = atoi(argv[3]);
+	}
 	cudaSetDevice(0);
 	//getGpuNfo();
 	unsigned int N[SIZE];
@@ -188,15 +196,40 @@ int main(int argc, char **argv) {
     //
     //N[0] = 0x00000121;
     //fd42d4eb2c4b7b1
-    N[1] = 0x0fd42d4e;
-    N[0] = 0xb2c4b7b1;
-    
+	
+    if(debug == 1){
+    	float milliseconds = 0;
+    	cudaEvent_t start, stop;
+		cudaEventCreate(&start);
+		cudaEventCreate(&stop);
 
-    PollardRhoCu(N, 128, 128);
-	printf("Results \n");
-    printNum(N);
-	printf("********************\n");
-	/*unsigned int X[32];
+    	N[1] = 0x0fd42d4e;
+    	N[0] = 0xb2c4b7b1;
+
+    	cudaEventRecord(start, 0);
+
+    	PollardRhoCu(N, blocks, threads);
+    	
+    	cudaEventRecord(stop, 0);
+		cudaEventSynchronize(stop);
+
+		cudaEventElapsedTime(&milliseconds, start, stop);
+		
+		printf("Results \n");
+   		printNum(N);
+		printf("Time: ");
+		printf("%f\n", milliseconds);
+		printf("********************\n");
+    }else{
+    	// custom
+    	N[1] = 0x0fd42d4e;
+    	N[0] = 0xb2c4b7b1;
+    	PollardRhoCu(N, 128, 128);
+		printf("Results \n");
+   		printNum(N);
+		printf("********************\n");
+	}
+    /*unsigned int X[32];
 	unsigned int C[32];
 	unsigned int X[32];
 	unsigned int Y[32];

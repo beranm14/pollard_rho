@@ -65,7 +65,7 @@ void getGpuNfo(){
     }
     printf("Fastest CUDA Device %d: %s\n",MaxDevice,prop.name);
     // cudaSetDevice(MaxDevice);    
-    cudaSetDevice(0);
+    //cudaSetDevice(0);
     //  Return max thread count
 	printf("maxThreadsPerBlock %d \n", prop.maxThreadsPerBlock);
 	return;
@@ -173,7 +173,7 @@ int main(int argc, char **argv) {
 		blocks = atoi(argv[2]);
 		threads = atoi(argv[3]);
 	}
-	cudaSetDevice(0);
+	cudaSetDevice(1);
 	//getGpuNfo();
 	unsigned int N[SIZE];
 	setZero(N);

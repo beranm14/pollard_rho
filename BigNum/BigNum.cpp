@@ -299,6 +299,36 @@ void  modNum(unsigned int * A, unsigned int * B){
     if (zeroNum(A) || zeroNum(B) || bigger(B, A) == 1){
         return;
     }
+    //unsigned int * tmp_b = (unsigned int *)malloc(sizeof(unsigned int) * size);
+    unsigned int tmp_b[SIZE];
+    while( 1 ){
+        copyNum(tmp_b, B);
+        unsigned int dr = 0;
+        char gr_des = bigger(tmp_b, A);
+        while(gr_des == 0){ // dokud je B menší než A
+            // shiftuj doleva
+            shiftLeftNum(tmp_b);
+            gr_des = bigger(tmp_b, A);
+            dr ++;
+        }
+        // pokud bylo rovno ok
+        // pokud bylo větší shift doprava
+        if(gr_des == 1){
+            shiftRightNum(tmp_b);
+            dr --;
+        }
+        subNum(A, tmp_b); // residuo
+        if(bigger(B, A)){
+            break;
+        }
+    }
+    //free(tmp_b);
+}
+/*
+void  modNum(unsigned int * A, unsigned int * B){
+    if (zeroNum(A) || zeroNum(B) || bigger(B, A) == 1){
+        return;
+    }
     //unsigned int * tmp_b = (unsigned int *)malloc(sizeof(unsigned int) * SIZE);
     unsigned int tmp_b[SIZE];
     char gr_des;
@@ -324,34 +354,13 @@ void  modNum(unsigned int * A, unsigned int * B){
     }
     //free(tmp_b);
 }
-
-/*
-void  modNum(unsigned int * A, unsigned int * B){
-    if (zeroNum(A) || zeroNum(B) || bigger(B, A) == 1){
-        return;
-    }
-    unsigned int * tmp_b = (unsigned int *)malloc(sizeof(unsigned int) * size);
-    while( 1 ){
-        copyNum(tmp_b, B);
-        unsigned int dr = 0;
-        char gr_des = bigger(tmp_b, A);
-        while(gr_des == 0){ // dokud je B menší než A
-            // shiftuj doleva
-            shiftLeftNum(tmp_b);
-            gr_des = bigger(tmp_b, A);
-            dr ++;
-        }
-        // pokud bylo rovno ok
-        // pokud bylo větší shift doprava
-        if(gr_des == 1){
-            shiftRightNum(tmp_b);
-            dr --;
-        }
-        subNum(A, tmp_b); // residuo
-        if(bigger(B, A)){
-            break;
-        }
-    }
-    free(tmp_b);
-}
 */
+void fxfun(unsigned int * N, unsigned int * X, unsigned int * C){
+    //setZero(Y);
+    powNum(X);
+    modNum(X, N);
+    addNum(X, C);
+    modNum(X, N);
+    //copyNum(Y, X);
+}
+

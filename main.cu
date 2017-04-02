@@ -29,89 +29,6 @@ static long gcdl(long a, long b) {
 }*/
 
 
-
-
-void genNum(unsigned int * x, unsigned int * counter){
-	copyNum(x, counter);
-	addOne(counter);
-}
-
-void genC(unsigned int * x){
-	setZero(x);
-	x[0] = 0x07;
-}
-
-void printMat(unsigned int * mem_xyc, unsigned int blocks, unsigned int threads){
-	for(unsigned int i = 0; i < 3 * blocks * threads; i += 3){
-		printNum ( mem_xyc + SIZE * ( i     )); // X
-		printNum ( mem_xyc + SIZE * ( i + 1 )); // Y
-		printNum ( mem_xyc + SIZE * ( i + 2 )); // C 
-		printf("===================================================== \n");
-	}
-}
-
-void PollardRhoCu(unsigned int * N, unsigned int blocks, unsigned int threads){
-	/*
-The idea I've got in mind is to prepare multiple starting points
-for X, Y and C
-and each thread can actually count Y in place without bothering CPU
-Therefore reasonable aproach would be to just prepare huge chunk of memory
-for GPU to work with.
-	*/
-	if (isEven(N)){
-		zeroNum(N);
-		N[0] = 2;
-		return;
-	}
-	unsigned int  counter[SIZE];
-	setZero(counter);
-	counter[0] = 0x01;
-
-	unsigned int * mem_xyc = (unsigned int *) malloc(3 * blocks * threads * SIZE * sizeof(unsigned int));
-	for(unsigned int i = 0; i < 3 * blocks * threads; i += 3){
-		genNum   ( mem_xyc + SIZE * ( i     ), counter ); // X
-		copyNum  ( mem_xyc + SIZE * ( i + 1 ), mem_xyc + SIZE * i); // Y
-		genC     ( mem_xyc + SIZE * ( i + 2 )   ); // C 
-		printf("yep \n");
-	}
-
-	unsigned int * result = (unsigned int *) malloc(sizeof(unsigned int) * SIZE);
-	setZero(result);
-	
-	unsigned int * gpu_xyc; 
-  	cudaMalloc((void **)&gpu_xyc, 3 * blocks * threads * SIZE * sizeof(unsigned int));
-	cudaMemcpy(gpu_xyc, mem_xyc, 3 * blocks * threads * SIZE * sizeof(unsigned int), cudaMemcpyHostToDevice);
-
-	printMat(mem_xyc, blocks, threads);
-
-  	unsigned int * gpu_N;
-  	cudaMalloc((void **)&gpu_N, SIZE * sizeof(unsigned int));
-	cudaMemcpy(gpu_N, N, SIZE * sizeof(unsigned int), cudaMemcpyHostToDevice);
-  	unsigned int * gpu_result;
-  	cudaMalloc((void **)&gpu_result, SIZE * sizeof(unsigned int));
-	cudaMemcpy(gpu_result, result, SIZE * sizeof(unsigned int), cudaMemcpyHostToDevice);
-
-/*
-	unsigned int * cu_dbgs; 
-  	cudaMalloc((void **)&cu_dbgs, sizeof(unsigned int));
-	unsigned int * ma_dbgs = (unsigned int *) malloc(sizeof(unsigned int)); 
-*/
-	printf("Running Kernel\n");
-	do{
-		//pollardKernel<<<blocks, threads>>>(gpu_N, gpu_xyc, gpu_result, cu_dbgs);
-		pollardKernel<<<blocks, threads>>>(gpu_N, gpu_xyc, gpu_result);
-		cudaThreadSynchronize();
-		//cudaMemcpy(ma_dbgs, cu_dbgs, SIZE * sizeof(unsigned int), cudaMemcpyDeviceToHost);		
-		break;
-		cudaMemcpy(result, gpu_result, SIZE * sizeof(unsigned int), cudaMemcpyDeviceToHost);
-	} while (zeroNum(result));
-
-	copyNum(N, result);
-	cudaFree(gpu_result);
-	cudaFree(gpu_N);
-	cudaFree(gpu_xyc);
-}
-
 void getGpuNfo(){
 	// run some tests on CUDA device
     int num;
@@ -154,6 +71,99 @@ void getGpuNfo(){
 	return;
 }
 
+
+void genNum(unsigned int * x){
+	setZero(x);
+	x[0] = 0x07;
+}
+
+void genC(unsigned int * x, unsigned int * counter){
+	setZero(x);
+	copyNum(x, counter);
+	addOne(counter);
+}
+
+void printMat(unsigned int * mem_xyc, unsigned int blocks, unsigned int threads){
+	for(unsigned int i = 0; i < 3 * blocks * threads; i += 3){
+		printNum ( mem_xyc + SIZE * ( i     )); // X
+		printNum ( mem_xyc + SIZE * ( i + 1 )); // Y
+		printNum ( mem_xyc + SIZE * ( i + 2 )); // C 
+		printf("===================================================== \n");
+	}
+}
+
+void PollardRhoCu(unsigned int * N, unsigned int blocks, unsigned int threads){
+	/*
+The idea I've got in mind is to prepare multiple starting points
+for X, Y and C
+and each thread can actually count Y in place without bothering CPU
+Therefore reasonable aproach would be to just prepare huge chunk of memory
+for GPU to work with.
+	*/
+	if (isEven(N)){
+		zeroNum(N);
+		N[0] = 2;
+		return;
+	}
+	unsigned int  counter[SIZE];
+	setZero(counter);
+	counter[0] = 0x01;
+
+	unsigned int * mem_xyc = (unsigned int *) malloc(3 * blocks * threads * SIZE * sizeof(unsigned int));
+	for(unsigned int i = 0; i < 3 * blocks * threads; i += 3){
+		genNum   ( mem_xyc + SIZE * ( i     )); // X
+		copyNum  ( mem_xyc + SIZE * ( i + 1 ), mem_xyc + SIZE * i); // Y
+		genC     ( mem_xyc + SIZE * ( i + 2 ), counter ); // C 
+		fxfun    (N, mem_xyc + SIZE * ( i + 1 ), mem_xyc + SIZE * ( i + 2 ));
+	}
+
+	unsigned int * result = (unsigned int *) malloc(sizeof(unsigned int) * SIZE);
+	setZero(result);
+	
+	unsigned int * gpu_xyc; 
+  	cudaMalloc((void **)&gpu_xyc, 3 * blocks * threads * SIZE * sizeof(unsigned int));
+	cudaMemcpy(gpu_xyc, mem_xyc, 3 * blocks * threads * SIZE * sizeof(unsigned int), cudaMemcpyHostToDevice);
+
+	//printMat(mem_xyc, blocks, threads);
+
+  	unsigned int * gpu_N;
+  	cudaMalloc((void **)&gpu_N, SIZE * sizeof(unsigned int));
+	cudaMemcpy(gpu_N, N, SIZE * sizeof(unsigned int), cudaMemcpyHostToDevice);
+  	unsigned int * gpu_result;
+  	cudaMalloc((void **)&gpu_result, SIZE * sizeof(unsigned int));
+	cudaMemcpy(gpu_result, result, SIZE * sizeof(unsigned int), cudaMemcpyHostToDevice);
+
+/*
+	unsigned int * cu_dbgs; 
+  	cudaMalloc((void **)&cu_dbgs, sizeof(unsigned int));
+	unsigned int * ma_dbgs = (unsigned int *) malloc(sizeof(unsigned int)); 
+*/
+	unsigned int it = 0;
+	printf("Running Kernel\n");
+	do{
+		//pollardKernel<<<blocks, threads>>>(gpu_N, gpu_xyc, gpu_result, cu_dbgs);
+		pollardKernel<<<blocks, threads>>>(gpu_N, gpu_xyc, gpu_result);
+		cudaThreadSynchronize();
+		//cudaMemcpy(ma_dbgs, cu_dbgs, SIZE * sizeof(unsigned int), cudaMemcpyDeviceToHost);		
+		//break;
+		
+		//cudaMemcpy(mem_xyc, gpu_xyc, 3 * blocks * threads * SIZE * sizeof(unsigned int), cudaMemcpyDeviceToHost);
+		//printMat(mem_xyc, blocks, threads);
+		//printf("++++++++++++++++++++++++++++++++++++++++++\n");
+		cudaMemcpy(result, gpu_result, SIZE * sizeof(unsigned int), cudaMemcpyDeviceToHost);
+		//sleep(1);
+		if(it % 1000 == 0 && it != 0)
+			printf("%u\n", it);
+		it ++;
+	} while (zeroNum(result));
+
+	copyNum(N, result);
+	cudaFree(gpu_result);
+	cudaFree(gpu_N);
+	cudaFree(gpu_xyc);
+}
+
+
 int main(int argc, char **argv) {
 	cudaSetDevice(0);
 	//getGpuNfo();
@@ -176,8 +186,13 @@ int main(int argc, char **argv) {
     //N[1] = 0x0000000a;
     //N[0] = 0x8bc39b45;
     //
-    N[0] = 0x00000121;
-    PollardRhoCu(N, 2, 2);
+    //N[0] = 0x00000121;
+    //fd42d4eb2c4b7b1
+    N[1] = 0x0fd42d4e;
+    N[0] = 0xb2c4b7b1;
+    
+
+    PollardRhoCu(N, 128, 128);
 	printf("Results \n");
     printNum(N);
 	printf("********************\n");

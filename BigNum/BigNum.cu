@@ -295,6 +295,7 @@ __device__ void  cuda_shiftLeftNumBy(unsigned int * A, unsigned int gen){ // shi
     }*/
 }
 
+/*
 __device__ void  cuda_modNum(unsigned int * A, unsigned int * B){
     if (cuda_zeroNum(A) || cuda_zeroNum(B) || cuda_bigger(B, A) == 1){
         return;
@@ -324,41 +325,41 @@ __device__ void  cuda_modNum(unsigned int * A, unsigned int * B){
     }
     //free(tmp_b);
 }
+*/
 
-/*
-__device__ void  modNum(unsigned int * A, unsigned int * B){
-    if (zeroNum(A) || zeroNum(B) || bigger(B, A) == 1){
+__device__ void  cuda_modNum(unsigned int * A, unsigned int * B){
+    if (cuda_zeroNum(A) || cuda_zeroNum(B) || cuda_bigger(B, A) == 1){
         return;
     }
-    unsigned int * tmp_b = (unsigned int *)malloc(sizeof(unsigned int) * size);
+    unsigned int tmp_b[SIZE];
     while( 1 ){
-        copyNum(tmp_b, B);
+        cuda_copyNum(tmp_b, B);
         unsigned int dr = 0;
-        char gr_des = bigger(tmp_b, A);
+        char gr_des = cuda_bigger(tmp_b, A);
         while(gr_des == 0){ // dokud je B menší než A
             // shiftuj doleva
-            shiftLeftNum(tmp_b);
-            gr_des = bigger(tmp_b, A);
+            cuda_shiftLeftNum(tmp_b);
+            gr_des = cuda_bigger(tmp_b, A);
             dr ++;
         }
         // pokud bylo rovno ok
         // pokud bylo větší shift doprava
         if(gr_des == 1){
-            shiftRightNum(tmp_b);
+            cuda_shiftRightNum(tmp_b);
             dr --;
         }
-        subNum(A, tmp_b); // residuo
-        if(bigger(B, A)){
+        cuda_subNum(A, tmp_b); // residuo
+        if(cuda_bigger(B, A)){
             break;
         }
     }
-    free(tmp_b);
+    //free(tmp_b);
 }
-*/
+
 
 
 __device__  void cuda_gcd(unsigned int * A, unsigned int * B){
-/*
+    
     unsigned int R[SIZE];
     while(!cuda_zeroNum(B)){
         cuda_copyNum(R, A);
@@ -366,7 +367,7 @@ __device__  void cuda_gcd(unsigned int * A, unsigned int * B){
         cuda_copyNum(A, B);
         cuda_copyNum(B, R);
     }
-*/
+    /*
     unsigned int t[SIZE];
     unsigned int shift;
 
@@ -396,6 +397,7 @@ __device__  void cuda_gcd(unsigned int * A, unsigned int * B){
         cuda_subNum(B, A);
     } while (! cuda_zeroNum(B));
     cuda_shiftLeftNumBy(A, shift);
+    */
 }
 
 __device__  void cuda_fxfun(unsigned int * N, unsigned int * X, unsigned int * C){
@@ -409,10 +411,11 @@ __device__  void cuda_fxfun(unsigned int * N, unsigned int * X, unsigned int * C
 
 //__global__ void pollardKernel(unsigned int * N, unsigned int * mem_xyc, unsigned int * result, unsigned int * dbgs){
 __global__ void pollardKernel(unsigned int * N, unsigned int * mem_xyc, unsigned int * result){
-    int threadID = blockIdx.x * blockDim.x + threadIdx.x;
-    unsigned int * X = &mem_xyc[3 * threadID + SIZE * 0];
-    unsigned int * Y = &mem_xyc[3 * threadID + SIZE * 1];
-    unsigned int * C = &mem_xyc[3 * threadID + SIZE * 2];
+    unsigned int threadID = blockIdx.x * blockDim.x + threadIdx.x;
+    unsigned int * X = &mem_xyc[3 * threadID * SIZE + SIZE * 0];
+    unsigned int * Y = &mem_xyc[3 * threadID * SIZE + SIZE * 1];
+    unsigned int * C = &mem_xyc[3 * threadID * SIZE + SIZE * 2];
+    
     unsigned int G[SIZE];
     unsigned int N_tmp[SIZE];
     unsigned int abs_mxy[SIZE];
@@ -426,23 +429,25 @@ __global__ void pollardKernel(unsigned int * N, unsigned int * mem_xyc, unsigned
     setZero(G);
     G[0] = 1;
     */
-    cuda_copyNum(Y, X);
-    cuda_fxfun(N, Y, C);
+    
+    //cuda_copyNum(Y, X);
+    //cuda_fxfun(N, Y, C);
     //while (isOne(G)){
-        cuda_fxfun(N, X, C);
-        cuda_fxfun(N, Y, C);
-        cuda_fxfun(N, Y, C);
-        if(cuda_bigger(X, Y) == 1){
-            cuda_copyNum(abs_mxy, X);
-            cuda_subNum(abs_mxy, Y);
-        }else{
-            cuda_copyNum(abs_mxy, Y);
-            cuda_subNum(abs_mxy, X);    
-        }
-        cuda_copyNum(G, abs_mxy);
-        cuda_copyNum(N_tmp, N);
-        cuda_gcd(G, N_tmp);
+    cuda_fxfun(N, X, C);
+    cuda_fxfun(N, Y, C);
+    cuda_fxfun(N, Y, C);
+    if(cuda_bigger(X, Y) == 1){
+        cuda_copyNum(abs_mxy, X);
+        cuda_subNum(abs_mxy, Y);
+    }else{
+        cuda_copyNum(abs_mxy, Y);
+        cuda_subNum(abs_mxy, X);    
+    }
+    cuda_copyNum(G, abs_mxy);
+    cuda_copyNum(N_tmp, N);
+    cuda_gcd(G, N_tmp);
     //}
-    if(!cuda_isOne(G) && cuda_bigger(G, N) != 2)
+    //if(!cuda_isOne(G) && cuda_bigger(G, N) != 2)
+    if(!cuda_isOne(G))
         cuda_copyNum(result, G);    
 }

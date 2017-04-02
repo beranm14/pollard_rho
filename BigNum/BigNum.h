@@ -48,6 +48,8 @@
 
  unsigned int getBit(unsigned int a, unsigned int * A);
 
+ void fxfun(unsigned int * N, unsigned int * X, unsigned int * C);
+
  void   setBit(unsigned int a, unsigned int * A);
 
 

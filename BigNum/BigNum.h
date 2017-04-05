@@ -1,6 +1,6 @@
 #ifndef BigNum
 #define BigNum
-#define SIZE ((9))
+#define SIZE ((5))
 
 
  void   printNum(unsigned int * num);

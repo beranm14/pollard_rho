@@ -7,7 +7,7 @@
 #include <time.h> 
 #include "BigNum/BigNum.h"
 #include "BigNum/BigNum.cuh"
-#define SIZE ((9))
+#define SIZE ((5))
 
 //
 
@@ -173,7 +173,7 @@ int main(int argc, char **argv) {
 		blocks = atoi(argv[2]);
 		threads = atoi(argv[3]);
 	}
-	cudaSetDevice(1);
+	cudaSetDevice(0);
 	//getGpuNfo();
 	unsigned int N[SIZE];
 	setZero(N);

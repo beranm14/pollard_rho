@@ -4,7 +4,7 @@
 #include <ctype.h>
 #include <math.h>
 #include <unistd.h>
-#define SIZE ((9))
+#define SIZE ((5))
 
 void  printNum(unsigned int * num){
 	unsigned int i;

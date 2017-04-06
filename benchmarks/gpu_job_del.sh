@@ -30,4 +30,4 @@
 # Do not change.
 #$ -q gpu_long.q
 
-../pollard 1 10 610
+../pollard 1 910 1010

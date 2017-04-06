@@ -360,14 +360,13 @@ __device__ void  cuda_modNum(unsigned int * A, unsigned int * B){
 
 __device__  void cuda_gcd(unsigned int * A, unsigned int * B){
     
-    unsigned int R[SIZE];
+    /*unsigned int R[SIZE];
     while(!cuda_zeroNum(B)){
         cuda_copyNum(R, A);
         cuda_modNum(R, B);
         cuda_copyNum(A, B);
         cuda_copyNum(B, R);
-    }
-    /*
+    }*/
     unsigned int t[SIZE];
     unsigned int shift;
 
@@ -397,7 +396,6 @@ __device__  void cuda_gcd(unsigned int * A, unsigned int * B){
         cuda_subNum(B, A);
     } while (! cuda_zeroNum(B));
     cuda_shiftLeftNumBy(A, shift);
-    */
 }
 
 __device__  void cuda_fxfun(unsigned int * N, unsigned int * X, unsigned int * C){
@@ -408,7 +406,17 @@ __device__  void cuda_fxfun(unsigned int * N, unsigned int * X, unsigned int * C
     cuda_modNum(X, N);
     //copyNum(Y, X);
 }
-
+__global__ void prepareDataKernel(unsigned int * N, unsigned int * mem_xyc){
+    unsigned int threadID = blockIdx.x * blockDim.x + threadIdx.x;
+    unsigned int * X = &mem_xyc[3 * threadID * SIZE + SIZE * 0];
+    unsigned int * Y = &mem_xyc[3 * threadID * SIZE + SIZE * 1];
+    unsigned int * C = &mem_xyc[3 * threadID * SIZE + SIZE * 2];
+    X[0] = 0x07;
+    cuda_copyNum(Y, X);
+    cuda_setZero(C);
+    C[0] = threadID + 1;
+    cuda_fxfun(N, Y, C);
+}
 //__global__ void pollardKernel(unsigned int * N, unsigned int * mem_xyc, unsigned int * result, unsigned int * dbgs){
 __global__ void pollardKernel(unsigned int * N, unsigned int * mem_xyc, unsigned int * result){
     unsigned int threadID = blockIdx.x * blockDim.x + threadIdx.x;

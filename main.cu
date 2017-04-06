@@ -92,6 +92,14 @@ void printMat(unsigned int * mem_xyc, unsigned int blocks, unsigned int threads)
 	}
 }
 
+bool compareFields(unsigned int * a, unsigned int * b, unsigned int count){
+	for (unsigned int i = 0; i < count; ++i){
+		if (a [i] != b[i])
+			return false;
+	}
+	return true;
+}
+
 void PollardRhoCu(unsigned int * N, unsigned int blocks, unsigned int threads){
 	/*
 The idea I've got in mind is to prepare multiple starting points
@@ -105,24 +113,28 @@ for GPU to work with.
 		N[0] = 2;
 		return;
 	}
+	unsigned int sz = 3 * blocks * threads * SIZE;
+
 	unsigned int  counter[SIZE];
 	setZero(counter);
 	counter[0] = 0x01;
 
-	unsigned int * mem_xyc = (unsigned int *) malloc(3 * blocks * threads * SIZE * sizeof(unsigned int));
+	/*
+	unsigned int * mem_xyc = (unsigned int *) malloc(sz * sizeof(unsigned int));
 	for(unsigned int i = 0; i < 3 * blocks * threads; i += 3){
 		genNum   ( mem_xyc + SIZE * ( i     )); // X
 		copyNum  ( mem_xyc + SIZE * ( i + 1 ), mem_xyc + SIZE * i); // Y
 		genC     ( mem_xyc + SIZE * ( i + 2 ), counter ); // C 
-		fxfun    (N, mem_xyc + SIZE * ( i + 1 ), mem_xyc + SIZE * ( i + 2 ));
+		fxfun    ( N, mem_xyc + SIZE * ( i + 1 ), mem_xyc + SIZE * ( i + 2 )); // Y
 	}
+	*/
 
 	unsigned int * result = (unsigned int *) malloc(sizeof(unsigned int) * SIZE);
 	setZero(result);
 	
 	unsigned int * gpu_xyc; 
-  	cudaMalloc((void **)&gpu_xyc, 3 * blocks * threads * SIZE * sizeof(unsigned int));
-	cudaMemcpy(gpu_xyc, mem_xyc, 3 * blocks * threads * SIZE * sizeof(unsigned int), cudaMemcpyHostToDevice);
+  	cudaMalloc((void **)&gpu_xyc, sz * sizeof(unsigned int));
+	//cudaMemcpy(gpu_xyc, mem_xyc, sz * sizeof(unsigned int), cudaMemcpyHostToDevice);
 
 	//printMat(mem_xyc, blocks, threads);
 
@@ -133,13 +145,32 @@ for GPU to work with.
   	cudaMalloc((void **)&gpu_result, SIZE * sizeof(unsigned int));
 	cudaMemcpy(gpu_result, result, SIZE * sizeof(unsigned int), cudaMemcpyHostToDevice);
 
+	//unsigned int * gpu_temp_xyc;
+	//unsigned int * temp_mem_xyc = (unsigned int *) malloc(sz * sizeof(unsigned int));
+  	//cudaMalloc((void **)&gpu_temp_xyc, sz * sizeof(unsigned int));
+	
+	prepareDataKernel<<<blocks, threads>>>(gpu_N, gpu_xyc);
+
+	//cudaMemcpy(temp_mem_xyc, gpu_temp_xyc, sz * sizeof(unsigned int), cudaMemcpyDeviceToHost);
+
+	/*
+	if(compareFields(temp_mem_xyc, mem_xyc, sz)){
+		printf("Yep\n");
+	}else{
+		printMat(temp_mem_xyc, blocks, threads);
+		printf("+++++++++++++++++++++\n");
+		printMat(mem_xyc, blocks, threads);
+	}*/
+	// printf(compareFields(temp_mem_xyc, mem_xyc, 3 * blocks * threads * SIZE) ? "true\n" : "false\n");	
+
 /*
 	unsigned int * cu_dbgs; 
   	cudaMalloc((void **)&cu_dbgs, sizeof(unsigned int));
 	unsigned int * ma_dbgs = (unsigned int *) malloc(sizeof(unsigned int)); 
 */
+	
 	unsigned int it = 0;
-	printf("Running Kernel\n");
+	printf("Running Kernels\n");
 	do{
 		//pollardKernel<<<blocks, threads>>>(gpu_N, gpu_xyc, gpu_result, cu_dbgs);
 		pollardKernel<<<blocks, threads>>>(gpu_N, gpu_xyc, gpu_result);
@@ -160,7 +191,7 @@ for GPU to work with.
 	copyNum(N, result);
 	cudaFree(gpu_result);
 	cudaFree(gpu_N);
-	cudaFree(gpu_xyc);
+	cudaFree(gpu_xyc); 
 }
 
 

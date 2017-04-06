@@ -7,7 +7,7 @@ FLAGS=-O3
 LIBS=
 
 all: ./BigNum/BigNum.o ./BigNum/BigNum_cuda.o main.o
-	$(LD) ./BigNum/BigNum.o ./BigNum/BigNum_cuda.o main.o $(LIBS) $(FLAGS) -o try
+	$(LD) ./BigNum/BigNum.o ./BigNum/BigNum_cuda.o main.o $(LIBS) $(FLAGS) -o pollard
 
 BigNum/BigNum.o: ./BigNum/BigNum.h ./BigNum/BigNum.cpp
 	$(CXX) $(CFLAGS) -c -o ./BigNum/BigNum.o ./BigNum/BigNum.cpp
@@ -28,6 +28,6 @@ clo:
 	[ -f ./BigNum/BigNum_cuda.o ] && rm ./BigNum/BigNum_cuda.o || exit 0;
 
 clt:
-	[ -f try ] && rm try || exit 0;
+	[ -f try ] && rm pollard || exit 0;
 
 clean: clm cln clt clo

@@ -3,13 +3,13 @@
 #define SIZE ((5))
 
 
-__device__ inline void   cuda_printNum(unsigned int * num);
+//__device__ inline void   cuda_printNum(unsigned int * num);
 
-__device__ inline void   cuda_setZero(unsigned int * num);
+__device__ inline void   cuda_setZero(unsigned int *__restrict__ num);
 
-__device__ inline void   cuda_addNum(unsigned int * A, unsigned int * B);
+__device__ inline void   cuda_addNum(unsigned int *__restrict__ A, unsigned int *__restrict__ B);
 
-__device__ inline void   cuda_subNum(unsigned int * A, unsigned int * B);
+__device__ inline void   cuda_subNum(unsigned int *__restrict__ A, unsigned int *__restrict__ B);
 
 __device__ inline void   cuda_copyNum(unsigned int * A, unsigned int * B);
 

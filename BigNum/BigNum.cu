@@ -6,20 +6,21 @@
 #include <unistd.h>
 #define SIZE ((5))
 
-__device__ inline void  cuda_printNum(unsigned int * num){
+/*
+__device__ inline void  cuda_printNum(unsigned int *__restrict__ num){
 	unsigned int i;
 	for(i = 0; i < SIZE; i ++)
 		printf("%x ", num[i]);
 	printf("\n");
-}
+}*/
 
-__device__ inline void  cuda_setZero(unsigned int * num){
+__device__ inline void  cuda_setZero(unsigned int *__restrict__ num){
 	unsigned int i;
 	for(i = 0; i < SIZE; i ++)
 		num[i] = 0;
 }
 
-__device__ inline void  cuda_addNum(unsigned int * A, unsigned int * B){
+__device__ inline void  cuda_addNum(unsigned int  *__restrict__ A, unsigned int *__restrict__ B){
 	unsigned int i;
 	unsigned long int tmp;
 	unsigned long int tmp_carry;
@@ -46,7 +47,7 @@ __device__ inline void  cuda_addOne(unsigned int * A, unsigned int * C){
 		carry = ((unsigned long int) tmp_carry >> 32);
 	}
 }
-__device__ inline void  cuda_subNum(unsigned int * A, unsigned int * B){
+__device__ inline void  cuda_subNum(unsigned int *__restrict__ A, unsigned int *__restrict__ B){
 	unsigned int i;
 	unsigned long int tmp;
 	unsigned int carry = 0;

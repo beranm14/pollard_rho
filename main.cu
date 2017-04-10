@@ -115,11 +115,11 @@ for GPU to work with.
 	}
 	unsigned int sz = 3 * blocks * threads * SIZE;
 
+/*	
 	unsigned int  counter[SIZE];
 	setZero(counter);
 	counter[0] = 0x01;
 
-	/*
 	unsigned int * mem_xyc = (unsigned int *) malloc(sz * sizeof(unsigned int));
 	for(unsigned int i = 0; i < 3 * blocks * threads; i += 3){
 		genNum   ( mem_xyc + SIZE * ( i     )); // X
@@ -127,8 +127,7 @@ for GPU to work with.
 		genC     ( mem_xyc + SIZE * ( i + 2 ), counter ); // C 
 		fxfun    ( N, mem_xyc + SIZE * ( i + 1 ), mem_xyc + SIZE * ( i + 2 )); // Y
 	}
-	*/
-
+*/	
 	unsigned int * result = (unsigned int *) malloc(sizeof(unsigned int) * SIZE);
 	setZero(result);
 	
@@ -151,16 +150,17 @@ for GPU to work with.
 	
 	prepareDataKernel<<<blocks, threads>>>(gpu_N, gpu_xyc);
 
-	//cudaMemcpy(temp_mem_xyc, gpu_temp_xyc, sz * sizeof(unsigned int), cudaMemcpyDeviceToHost);
+/*
+	cudaMemcpy(temp_mem_xyc, gpu_xyc, sz * sizeof(unsigned int), cudaMemcpyDeviceToHost);
 
-	/*
 	if(compareFields(temp_mem_xyc, mem_xyc, sz)){
 		printf("Yep\n");
 	}else{
 		printMat(temp_mem_xyc, blocks, threads);
 		printf("+++++++++++++++++++++\n");
 		printMat(mem_xyc, blocks, threads);
-	}*/
+	}
+*/
 	// printf(compareFields(temp_mem_xyc, mem_xyc, 3 * blocks * threads * SIZE) ? "true\n" : "false\n");	
 
 /*

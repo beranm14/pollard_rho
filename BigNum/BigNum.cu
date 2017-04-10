@@ -6,20 +6,20 @@
 #include <unistd.h>
 #define SIZE ((5))
 
-__device__ void  cuda_printNum(unsigned int * num){
+__device__ inline void  cuda_printNum(unsigned int * num){
 	unsigned int i;
 	for(i = 0; i < SIZE; i ++)
 		printf("%x ", num[i]);
 	printf("\n");
 }
 
-__device__ void  cuda_setZero(unsigned int * num){
+__device__ inline void  cuda_setZero(unsigned int * num){
 	unsigned int i;
 	for(i = 0; i < SIZE; i ++)
 		num[i] = 0;
 }
 
-__device__ void  cuda_addNum(unsigned int * A, unsigned int * B){
+__device__ inline void  cuda_addNum(unsigned int * A, unsigned int * B){
 	unsigned int i;
 	unsigned long int tmp;
 	unsigned long int tmp_carry;
@@ -31,7 +31,7 @@ __device__ void  cuda_addNum(unsigned int * A, unsigned int * B){
 		carry = ((unsigned long int) tmp_carry >> 32);
 	}
 }
-__device__ void  cuda_addOne(unsigned int * A, unsigned int * C){
+__device__ inline void  cuda_addOne(unsigned int * A, unsigned int * C){
 	unsigned int i;
 	unsigned long int tmp;
 	unsigned long int tmp_carry;
@@ -46,7 +46,7 @@ __device__ void  cuda_addOne(unsigned int * A, unsigned int * C){
 		carry = ((unsigned long int) tmp_carry >> 32);
 	}
 }
-__device__ void  cuda_subNum(unsigned int * A, unsigned int * B){
+__device__ inline void  cuda_subNum(unsigned int * A, unsigned int * B){
 	unsigned int i;
 	unsigned long int tmp;
 	unsigned int carry = 0;
@@ -58,19 +58,19 @@ __device__ void  cuda_subNum(unsigned int * A, unsigned int * B){
 	}
 }
 
-__device__ void  cuda_copyNum(unsigned int * A, unsigned int * B){
+__device__ inline void  cuda_copyNum(unsigned int * A, unsigned int * B){
 	unsigned int i;
 	for(i = 0; i < SIZE; i ++)
 		A[i] = B[i];
 }
 
-__device__ void  cuda_copyFromTo(unsigned int * A, unsigned int * B, unsigned int from){
+__device__ inline void  cuda_copyFromTo(unsigned int * A, unsigned int * B, unsigned int from){
 	unsigned int i;
 	for(i = from; i < SIZE; i ++)
 		A[i] = B[i - from];
 }
 
-__device__ void  cuda_shiftLeftNum(unsigned int * A){ // shift for 32 bits in one step would be nice to consider
+__device__ inline void  cuda_shiftLeftNum(unsigned int * A){ // shift for 32 bits in one step would be nice to consider
     char flg;
     char flc = 0;
     for (unsigned int j = 0 ; j < SIZE; j++){
@@ -81,7 +81,7 @@ __device__ void  cuda_shiftLeftNum(unsigned int * A){ // shift for 32 bits in on
     	(flg == 1 ? flc = 1 : flc = 0);
     }
 }
-__device__ void  cuda_shiftRightNum(unsigned int * A){
+__device__ inline void  cuda_shiftRightNum(unsigned int * A){
     char flg;
     char flc = 0;
     for (unsigned char j = SIZE - 1; ; j --){
@@ -95,7 +95,7 @@ __device__ void  cuda_shiftRightNum(unsigned int * A){
     }
 }
 
-__device__ void  cuda_addfromto(unsigned int * A, unsigned int * B, unsigned int from){
+__device__ inline void  cuda_addfromto(unsigned int * A, unsigned int * B, unsigned int from){
 	unsigned int i;
 	unsigned long int tmp;
 	unsigned long int tmp_carry;
@@ -108,7 +108,7 @@ __device__ void  cuda_addfromto(unsigned int * A, unsigned int * B, unsigned int
 	}
 }
 
-__device__ void  cuda_mulNum(unsigned int * A, unsigned int * B){
+__device__ inline void  cuda_mulNum(unsigned int * A, unsigned int * B){
     //unsigned int * tmpa = (unsigned int *)malloc(sizeof(unsigned int) * SIZE);
     unsigned int tmpa[SIZE];
     //unsigned int * tmpc = (unsigned int *)malloc(sizeof(unsigned int) * SIZE);
@@ -130,7 +130,7 @@ __device__ void  cuda_mulNum(unsigned int * A, unsigned int * B){
     //free(tmpc);
 }
 
-__device__ void  cuda_powNum(unsigned int * A){
+__device__ inline void  cuda_powNum(unsigned int * A){
     //unsigned int * tmpa = (unsigned int *)malloc(sizeof(unsigned int) * SIZE);
     unsigned int tmpa[SIZE];
     //unsigned int * tmpc = (unsigned int *)malloc(sizeof(unsigned int) * SIZE);
@@ -152,7 +152,7 @@ __device__ void  cuda_powNum(unsigned int * A){
     //free(tmpc);
 }
 
-__device__ char cuda_zeroNum(unsigned int * num){
+__device__ inline char cuda_zeroNum(unsigned int * num){
 	unsigned int i;
 	for(i = 0; i < SIZE; i ++)
 		if (num[i] > 0)
@@ -160,7 +160,7 @@ __device__ char cuda_zeroNum(unsigned int * num){
 	return 1;
 }
 
-__device__ char cuda_bigger(unsigned int * A, unsigned int * B){
+__device__ inline char cuda_bigger(unsigned int * A, unsigned int * B){
 	unsigned int i;
 	for(i = SIZE - 1; ; i --){
 		if (A[i] > B[i])
@@ -173,7 +173,7 @@ __device__ char cuda_bigger(unsigned int * A, unsigned int * B){
 	return 2;
 }
 
-__device__ unsigned int cuda_getHighBit(unsigned int * A){
+__device__ inline unsigned int cuda_getHighBit(unsigned int * A){
     unsigned int bits_size = SIZE * 32;
     unsigned int l = 0;
     unsigned int tmp;
@@ -191,12 +191,12 @@ __device__ unsigned int cuda_getHighBit(unsigned int * A){
 }
 
 
-__device__ char cuda_isEven(unsigned int * A){
+__device__ inline char cuda_isEven(unsigned int * A){
 	if ((A[0] & 1) == 0)
 		return 1;
 	return 0;
 }
-__device__ char cuda_isOne(unsigned int * A){
+__device__ inline char cuda_isOne(unsigned int * A){
 	for (unsigned int i = 1; i < SIZE; i++){
 		if (A[i] > 0)
 			return 0;
@@ -206,7 +206,7 @@ __device__ char cuda_isOne(unsigned int * A){
 	return 0;
 }
 
-__device__ void  cuda_getNum(unsigned int a, unsigned int * A){
+__device__ inline void  cuda_getNum(unsigned int a, unsigned int * A){
     unsigned int where = a / SIZE;
     unsigned int which = a % SIZE;
     A[where] = 1;
@@ -216,19 +216,19 @@ __device__ void  cuda_getNum(unsigned int a, unsigned int * A){
     }
 }
 
-__device__ unsigned int cuda_getBit(unsigned int a, unsigned int * A){
+__device__ inline unsigned int cuda_getBit(unsigned int a, unsigned int * A){
     unsigned int where = a / SIZE;
     unsigned int which = a % SIZE;
     unsigned int pnt = ((unsigned int)1 << which);
     return ((unsigned int) A[where] & pnt); 
 }
-__device__ void  cuda_setBit(unsigned int a, unsigned int * A){
+__device__ inline void  cuda_setBit(unsigned int a, unsigned int * A){
     unsigned int where = a / SIZE;
     unsigned int which = a % SIZE;
     unsigned int pnt = ((unsigned int) 1 << which);
     A[where] |= pnt; 
 }
-__device__ void  cuda_unsBit(unsigned int a, unsigned int * A){
+__device__ inline void  cuda_unsBit(unsigned int a, unsigned int * A){
     unsigned int where = a / SIZE;
     unsigned int which = a % SIZE;
     unsigned int pnt = ((unsigned int) 1 << which);
@@ -236,7 +236,7 @@ __device__ void  cuda_unsBit(unsigned int a, unsigned int * A){
 }
 
 
-__device__ void  cuda_divNum(unsigned int * N, unsigned int * D, unsigned int * Q){
+__device__ inline void  cuda_divNum(unsigned int * N, unsigned int * D, unsigned int * Q){
     if (cuda_zeroNum(D) || cuda_zeroNum(N) || cuda_bigger(D, N) == 1){
         return;
     }
@@ -264,7 +264,7 @@ __device__ void  cuda_divNum(unsigned int * N, unsigned int * D, unsigned int * 
     //free(R);
 }
 
-__device__ void  cuda_shiftLeftNumBy(unsigned int * A, unsigned int gen){ // shift for 32 bits in one step would be nice to consider
+__device__ inline void  cuda_shiftLeftNumBy(unsigned int * A, unsigned int gen){ // shift for 32 bits in one step would be nice to consider
     unsigned int howmuch = gen / 32; // needed to be changed accordingly to datatype
 	unsigned int wheremc = gen % 32; // needed to be changed accordingly to datatype
 	//printf("%u \n", howmuch);
@@ -327,7 +327,7 @@ __device__ void  cuda_modNum(unsigned int * A, unsigned int * B){
 }
 */
 
-__device__ void  cuda_modNum(unsigned int * A, unsigned int * B){
+__device__ inline void  cuda_modNum(unsigned int * A, unsigned int * B){
     if (cuda_zeroNum(A) || cuda_zeroNum(B) || cuda_bigger(B, A) == 1){
         return;
     }
@@ -358,7 +358,7 @@ __device__ void  cuda_modNum(unsigned int * A, unsigned int * B){
 
 
 
-__device__  void cuda_gcd(unsigned int * A, unsigned int * B){
+__device__  inline void cuda_gcd(unsigned int * A, unsigned int * B){
     
     /*unsigned int R[SIZE];
     while(!cuda_zeroNum(B)){
@@ -398,7 +398,7 @@ __device__  void cuda_gcd(unsigned int * A, unsigned int * B){
     cuda_shiftLeftNumBy(A, shift);
 }
 
-__device__  void cuda_fxfun(unsigned int * N, unsigned int * X, unsigned int * C){
+__device__  inline void cuda_fxfun(unsigned int * N, unsigned int * X, unsigned int * C){
     //setZero(Y);
     cuda_powNum(X);
     cuda_modNum(X, N);
@@ -411,13 +411,14 @@ __global__ void prepareDataKernel(unsigned int * N, unsigned int * mem_xyc){
     unsigned int * X = &mem_xyc[3 * threadID * SIZE + SIZE * 0];
     unsigned int * Y = &mem_xyc[3 * threadID * SIZE + SIZE * 1];
     unsigned int * C = &mem_xyc[3 * threadID * SIZE + SIZE * 2];
+    cuda_setZero(X);
     X[0] = 0x07;
     cuda_copyNum(Y, X);
     cuda_setZero(C);
     C[0] = threadID + 1;
     cuda_fxfun(N, Y, C);
 }
-//__global__ void pollardKernel(unsigned int * N, unsigned int * mem_xyc, unsigned int * result, unsigned int * dbgs){
+//__global__ inline void pollardKernel(unsigned int * N, unsigned int * mem_xyc, unsigned int * result, unsigned int * dbgs){
 __global__ void pollardKernel(unsigned int * N, unsigned int * mem_xyc, unsigned int * result){
     unsigned int threadID = blockIdx.x * blockDim.x + threadIdx.x;
     unsigned int * X = &mem_xyc[3 * threadID * SIZE + SIZE * 0];

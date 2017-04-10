@@ -52,6 +52,28 @@ __device__ inline void  cuda_addNum(unsigned int  * A, const unsigned int * B){
     }
     */
 }
+
+__device__ inline void  cuda_addfromto(unsigned int * A, const unsigned int * B, const unsigned int from){
+    unsigned int i;
+    unsigned long int tmp;
+    unsigned long int tmp_carry;
+    unsigned int carry[SIZE];
+    
+    #pragma unroll
+    for(i = from; i < SIZE - 1; i ++){
+        tmp = ((unsigned long int) A[i] + B[i-from]);
+        //A[i] = (tmp & 0xFFFFFFFF) + carry;
+        A[i] = (tmp & 0xFFFFFFFF);
+        tmp_carry = ((unsigned long int) tmp & 0xFFFFFFFF00000000); 
+        carry[i] = ((unsigned long int) tmp_carry >> 32);
+    }
+    A[SIZE - 1] = ((unsigned long int) A[SIZE - 1] + B[SIZE - 1]);
+    #pragma unroll
+    for(i = from + 1; i < SIZE; i ++){
+        A[i] = A[i] + carry[i - 1];
+    }
+
+}
 __device__ inline void  cuda_addOne(unsigned int * A, unsigned int * C){ // not used for anything currently
 	unsigned int i;
 	unsigned long int tmp;
@@ -123,19 +145,6 @@ __device__ inline void  cuda_shiftRightNum(unsigned int * A){
         if (j == 0)
             break;
     }
-}
-
-__device__ inline void  cuda_addfromto(unsigned int * A, const unsigned int * B, unsigned int from){
-	unsigned int i;
-	unsigned long int tmp;
-	unsigned long int tmp_carry;
-	unsigned int carry = 0;
-	for(i = from; i < SIZE; i ++){
-		tmp = ((unsigned long int) A[i] + B[i-from]);
-		A[i] = (tmp & 0xFFFFFFFF) + carry;
-		tmp_carry = ((unsigned long int) tmp & 0xFFFFFFFF00000000); 
-		carry = ((unsigned long int) tmp_carry >> 32);
-	}
 }
 
 __device__ inline void  cuda_mulNum(unsigned int * A, const unsigned int * B){

@@ -39,7 +39,7 @@ __device__ inline void   cuda_modNum(unsigned int * A, const unsigned int * B);
 
 __device__ inline void   cuda_divNum(unsigned int * A, unsigned int * B, unsigned int * D);
 
-__device__ inline void   cuda_addfromto(unsigned int * A, const unsigned int * B, unsigned int from);
+__device__ inline void   cuda_addfromto(unsigned int * A, const unsigned int * B, const unsigned int from);
 
 __device__ inline void   cuda_shiftRightNum(unsigned int * A);
 

@@ -411,6 +411,7 @@ __global__ void prepareDataKernel(unsigned int * N, unsigned int * mem_xyc){
     unsigned int * X = &mem_xyc[3 * threadID * SIZE + SIZE * 0];
     unsigned int * Y = &mem_xyc[3 * threadID * SIZE + SIZE * 1];
     unsigned int * C = &mem_xyc[3 * threadID * SIZE + SIZE * 2];
+    cuda_setZero(X);
     X[0] = 0x07;
     cuda_copyNum(Y, X);
     cuda_setZero(C);

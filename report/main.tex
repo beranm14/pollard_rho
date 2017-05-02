@@ -31,7 +31,7 @@
 \title{Basic Pollard Rho Algorithm Implementation On \texttt{CUDA} Device}
 \author{Martin Beránek}
 \date{\today}
-\affil{Faculty of Information -- Technology Czech Technical University}
+\affil{Faculty of Information Technology -- Czech Technical University in Prague}
 \maketitle
 
 %\tableofcontents
@@ -45,7 +45,16 @@ Factorisation problem of a huge number resolved into massive parallel solutions.
 \section{Definition of the algorithm}
 
 
+The $\rho$ algorithm (named after the shape of curves symbolising two functions trying to reach themselves in projective space) is based on finding cycle. In t random numbers of $x_1, x_2, \dots, x_t$ in range $[1, n]$ will contain repetition with probability of $P > 0.5$ if $t > 1.777n^{\frac{1}{2}}$
+
+
 \section{\texttt{CUDA} Solution}
+
+
+\subsection{First solution with explicit barrier}
+
+
+\subsection{Second solution with independent runners}
 
 
 \section{Conclusion}

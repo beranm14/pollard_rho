@@ -107,6 +107,11 @@ for X, Y and C
 and each thread can actually count Y in place without bothering CPU
 Therefore reasonable aproach would be to just prepare huge chunk of memory
 for GPU to work with.
+
+This is going to be changed. Let's make just one kernel which is going to start
+on it's own given X, Y, C. All of the threads are going to iterate in algorithm
+as it is and check in memory array if anyone actually found sthing.
+If so all the threads just stop leaving result for the CPU to copy and show to user.
 	*/
 	if (isEven(N)){
 		zeroNum(N);
@@ -115,27 +120,11 @@ for GPU to work with.
 	}
 	unsigned int sz = 3 * blocks * threads * SIZE;
 
-/*	
-	unsigned int  counter[SIZE];
-	setZero(counter);
-	counter[0] = 0x01;
-
-	unsigned int * mem_xyc = (unsigned int *) malloc(sz * sizeof(unsigned int));
-	for(unsigned int i = 0; i < 3 * blocks * threads; i += 3){
-		genNum   ( mem_xyc + SIZE * ( i     )); // X
-		copyNum  ( mem_xyc + SIZE * ( i + 1 ), mem_xyc + SIZE * i); // Y
-		genC     ( mem_xyc + SIZE * ( i + 2 ), counter ); // C 
-		fxfun    ( N, mem_xyc + SIZE * ( i + 1 ), mem_xyc + SIZE * ( i + 2 )); // Y
-	}
-*/	
 	unsigned int * result = (unsigned int *) malloc(sizeof(unsigned int) * SIZE);
 	setZero(result);
 	
 	unsigned int * gpu_xyc; 
   	cudaMalloc((void **)&gpu_xyc, sz * sizeof(unsigned int));
-	//cudaMemcpy(gpu_xyc, mem_xyc, sz * sizeof(unsigned int), cudaMemcpyHostToDevice);
-
-	//printMat(mem_xyc, blocks, threads);
 
   	unsigned int * gpu_N;
   	cudaMalloc((void **)&gpu_N, SIZE * sizeof(unsigned int));
@@ -144,48 +133,17 @@ for GPU to work with.
   	cudaMalloc((void **)&gpu_result, SIZE * sizeof(unsigned int));
 	cudaMemcpy(gpu_result, result, SIZE * sizeof(unsigned int), cudaMemcpyHostToDevice);
 
-	//unsigned int * gpu_temp_xyc;
-	//unsigned int * temp_mem_xyc = (unsigned int *) malloc(sz * sizeof(unsigned int));
-  	//cudaMalloc((void **)&gpu_temp_xyc, sz * sizeof(unsigned int));
-
   	cudaFuncSetCacheConfig(prepareDataKernel, cudaFuncCachePreferL1);
 	cudaFuncSetCacheConfig(pollardKernel, cudaFuncCachePreferL1);
 	
 	prepareDataKernel<<<blocks, threads>>>(gpu_N, gpu_xyc);
-
-/*
-	cudaMemcpy(temp_mem_xyc, gpu_xyc, sz * sizeof(unsigned int), cudaMemcpyDeviceToHost);
-
-	if(compareFields(temp_mem_xyc, mem_xyc, sz)){
-		printf("Yep\n");
-	}else{
-		printMat(temp_mem_xyc, blocks, threads);
-		printf("+++++++++++++++++++++\n");
-		printMat(mem_xyc, blocks, threads);
-	}
-*/
-	// printf(compareFields(temp_mem_xyc, mem_xyc, 3 * blocks * threads * SIZE) ? "true\n" : "false\n");	
-
-/*
-	unsigned int * cu_dbgs; 
-  	cudaMalloc((void **)&cu_dbgs, sizeof(unsigned int));
-	unsigned int * ma_dbgs = (unsigned int *) malloc(sizeof(unsigned int)); 
-*/
 	
 	unsigned int it = 0;
 	printf("Running Kernels\n");
 	do{
-		//pollardKernel<<<blocks, threads>>>(gpu_N, gpu_xyc, gpu_result, cu_dbgs);
 		pollardKernel<<<blocks, threads>>>(gpu_N, gpu_xyc, gpu_result);
 		cudaThreadSynchronize();
-		//cudaMemcpy(ma_dbgs, cu_dbgs, SIZE * sizeof(unsigned int), cudaMemcpyDeviceToHost);		
-		//break;
-		
-		//cudaMemcpy(mem_xyc, gpu_xyc, 3 * blocks * threads * SIZE * sizeof(unsigned int), cudaMemcpyDeviceToHost);
-		//printMat(mem_xyc, blocks, threads);
-		//printf("++++++++++++++++++++++++++++++++++++++++++\n");
 		cudaMemcpy(result, gpu_result, SIZE * sizeof(unsigned int), cudaMemcpyDeviceToHost);
-		//sleep(1);
 		if(it % 1000 == 0 && it != 0)
 			printf("%u\n", it);
 		it ++;

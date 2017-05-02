@@ -52,5 +52,6 @@
 
  void   setBit(unsigned int a, unsigned int * A);
 
+void SinglePollardKernel(unsigned int * N, unsigned int * result);
 
 #endif

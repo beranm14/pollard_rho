@@ -51,9 +51,6 @@ __device__  inline void cuda_gcd(unsigned int * A, const unsigned int * B);
 
 __device__  inline void cuda_fxfun(const unsigned int * N, unsigned int * X, unsigned int * C);
 
-//__global__ inline void pollardKernel(unsigned int * N, unsigned int * mem_xyc, unsigned int * result, unsigned int * dbgs);
-__global__  void pollardKernel(const unsigned int * N, unsigned int * mem_xyc, unsigned int * result);
-
-__global__  void prepareDataKernel(const unsigned int * N, unsigned int * mem_xyc);
+__global__  void pollardKernel(const unsigned int * N, unsigned int * result);
 
 #endif

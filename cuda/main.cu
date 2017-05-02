@@ -118,41 +118,32 @@ If so all the threads just stop leaving result for the CPU to copy and show to u
 		N[0] = 2;
 		return;
 	}
-	unsigned int sz = 3 * blocks * threads * SIZE;
-
+	
+	// unsigned int sz = 3 * blocks * threads * SIZE;
 	unsigned int * result = (unsigned int *) malloc(sizeof(unsigned int) * SIZE);
 	setZero(result);
 	
-	unsigned int * gpu_xyc; 
-  	cudaMalloc((void **)&gpu_xyc, sz * sizeof(unsigned int));
-
-  	unsigned int * gpu_N;
+	unsigned int * gpu_N;
   	cudaMalloc((void **)&gpu_N, SIZE * sizeof(unsigned int));
 	cudaMemcpy(gpu_N, N, SIZE * sizeof(unsigned int), cudaMemcpyHostToDevice);
+
   	unsigned int * gpu_result;
   	cudaMalloc((void **)&gpu_result, SIZE * sizeof(unsigned int));
 	cudaMemcpy(gpu_result, result, SIZE * sizeof(unsigned int), cudaMemcpyHostToDevice);
 
-  	cudaFuncSetCacheConfig(prepareDataKernel, cudaFuncCachePreferL1);
-	cudaFuncSetCacheConfig(pollardKernel, cudaFuncCachePreferL1);
+  	cudaFuncSetCacheConfig(pollardKernel, cudaFuncCachePreferL1);
 	
-	prepareDataKernel<<<blocks, threads>>>(gpu_N, gpu_xyc);
-	
-	unsigned int it = 0;
 	printf("Running Kernels\n");
-	do{
-		pollardKernel<<<blocks, threads>>>(gpu_N, gpu_xyc, gpu_result);
-		cudaThreadSynchronize();
-		cudaMemcpy(result, gpu_result, SIZE * sizeof(unsigned int), cudaMemcpyDeviceToHost);
-		if(it % 1000 == 0 && it != 0)
-			printf("%u\n", it);
-		it ++;
-	} while (zeroNum(result));
+	
+	pollardKernel<<<blocks, threads>>>(gpu_N, gpu_result);
+	//SinglePollardKernel(N, result);
 
+	cudaThreadSynchronize();
+	cudaMemcpy(result, gpu_result, SIZE * sizeof(unsigned int), cudaMemcpyDeviceToHost);
+	
 	copyNum(N, result);
 	cudaFree(gpu_result);
-	cudaFree(gpu_N);
-	cudaFree(gpu_xyc); 
+	cudaFree(gpu_N); 
 }
 
 
@@ -214,6 +205,7 @@ int main(int argc, char **argv) {
 		printf("********************\n");
     }else{
     	// custom
+    	//fd42d4eb2c4b7b1 * 3fa81e47
     	N[1] = 0x0fd42d4e;
     	N[0] = 0xb2c4b7b1;
     	PollardRhoCu(N, 128, 128);

@@ -445,58 +445,46 @@ __device__  inline void cuda_fxfun(const unsigned int * N, unsigned int * X, uns
     cuda_modNum(X, N);
     //copyNum(Y, X);
 }
-__global__ void prepareDataKernel(const unsigned int * N, unsigned int * mem_xyc){
-    unsigned int threadID = blockIdx.x * blockDim.x + threadIdx.x;
-    unsigned int * __restrict__ X = &mem_xyc[3 * threadID * SIZE + SIZE * 0];
-    unsigned int * __restrict__ Y = &mem_xyc[3 * threadID * SIZE + SIZE * 1];
-    unsigned int * __restrict__ C = &mem_xyc[3 * threadID * SIZE + SIZE * 2];
-
-    cuda_setZero(X);
-    X[0] = 0x07;
-    cuda_copyNum(Y, X);
-    cuda_setZero(C);
-    C[0] = threadID + 1;
-    cuda_fxfun(N, Y, C);
-}
 //__global__ inline void pollardKernel(unsigned int * N, unsigned int * mem_xyc, unsigned int * result, unsigned int * dbgs){
-__global__ void pollardKernel(const unsigned int * N, unsigned int * mem_xyc, unsigned int * result){
+__global__ void pollardKernel(const unsigned int * N, unsigned int * result){
     unsigned int threadID = blockIdx.x * blockDim.x + threadIdx.x;
-    unsigned int * __restrict__ X = &mem_xyc[3 * threadID * SIZE + SIZE * 0];
-    unsigned int * __restrict__ Y = &mem_xyc[3 * threadID * SIZE + SIZE * 1];
-    unsigned int * __restrict__ C = &mem_xyc[3 * threadID * SIZE + SIZE * 2];
-    
+    unsigned int X[SIZE];
+    unsigned int Y[SIZE];
+    unsigned int C[SIZE];
     unsigned int G[SIZE];
     unsigned int N_tmp[SIZE];
     unsigned int abs_mxy[SIZE];
-
-    /*
-    // THIS SHOULD BE PREPARED IN MEMORY
-    setZero(X);
-    X[0] = 7;
-    setZero(C);
-    C[0] = 1;
-    setZero(G);
-    G[0] = 1;
-    */
     
-    //cuda_copyNum(Y, X);
-    //cuda_fxfun(N, Y, C);
-    //while (isOne(G)){
-    cuda_fxfun(N, X, C);
+    cuda_setZero(X);
+    X[0] = 0x07;
+    cuda_setZero(C);
+    C[0] = threadID + 1;
+    cuda_setZero(G);
+    G[0] = 0x01;
+    cuda_copyNum(Y, X);
     cuda_fxfun(N, Y, C);
-    cuda_fxfun(N, Y, C);
-    if(cuda_bigger(X, Y) == 1){
-        cuda_copyNum(abs_mxy, X);
-        cuda_subNum(abs_mxy, Y);
-    }else{
-        cuda_copyNum(abs_mxy, Y);
-        cuda_subNum(abs_mxy, X);    
+   
+    unsigned int check = 0;
+
+    while (cuda_isOne(G)){
+        cuda_fxfun(N, X, C);
+        cuda_fxfun(N, Y, C);
+        cuda_fxfun(N, Y, C);
+        if(cuda_bigger(X, Y) == 1){
+            cuda_copyNum(abs_mxy, X);
+            cuda_subNum(abs_mxy, Y);
+        }else{
+            cuda_copyNum(abs_mxy, Y);
+            cuda_subNum(abs_mxy, X);    
+        }
+        cuda_copyNum(G, abs_mxy);
+        cuda_copyNum(N_tmp, N);
+        cuda_gcd(G, N_tmp);
+        check ++;
+        if ((check % 1000 == 0) && !cuda_zeroNum(result)){
+            return;
+        }
     }
-    cuda_copyNum(G, abs_mxy);
-    cuda_copyNum(N_tmp, N);
-    cuda_gcd(G, N_tmp);
-    //}
-    //if(!cuda_isOne(G) && cuda_bigger(G, N) != 2)
-    if(!cuda_isOne(G))
-        cuda_copyNum(result, G);    
+    
+    cuda_copyNum(result, G);    
 }

@@ -30,4 +30,4 @@
 # Do not change.
 #$ -q gpu_long.q
 
-../pollard 1 BLOCKS THREADS
+../cuda/pollard 1 BLOCKS THREADS

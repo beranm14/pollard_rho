@@ -355,6 +355,47 @@ void  modNum(unsigned int * A, unsigned int * B){
     //free(tmp_b);
 }
 */
+
+inline void gcd(unsigned int * A, unsigned int * B){
+    
+    /*unsigned int R[SIZE];
+    while(!cuda_zeroNum(B)){
+        cuda_copyNum(R, A);
+        cuda_modNum(R, B);
+        cuda_copyNum(A, B);
+        cuda_copyNum(B, R);
+    }*/
+    unsigned int t [SIZE];
+    unsigned int shift;
+
+    if(zeroNum(B)){
+        return;      
+    }
+    if(zeroNum(A)){
+        copyNum(A, B);
+        return;
+    }
+    for(shift = 0; ((A[0] | B[0]) & 1) == 0; ++ shift){
+        shiftRightNum(A);
+        shiftRightNum(B);
+    }
+    while((A[0] & 1) == 0){
+        shiftRightNum(A);
+    }
+    do{
+        while((B[0] & 1) == 0){
+            shiftRightNum(B);
+        }
+        if(bigger(A, B) == 1){
+            copyNum(t, B);
+            copyNum(B, A);
+            copyNum(A, t);
+        }
+        subNum(B, A);
+    } while (! zeroNum(B));
+    shiftLeftNumBy(A, shift);
+}
+
 void fxfun(unsigned int * N, unsigned int * X, unsigned int * C){
     //setZero(Y);
     powNum(X);
@@ -364,3 +405,47 @@ void fxfun(unsigned int * N, unsigned int * X, unsigned int * C){
     //copyNum(Y, X);
 }
 
+void SinglePollardKernel(unsigned int * N, unsigned int * result){
+    // unsigned int threadID = blockIdx.x * blockDim.x + threadIdx.x;
+    unsigned int threadID = 0;
+    unsigned int X[SIZE];
+    unsigned int Y[SIZE];
+    unsigned int C[SIZE];
+    unsigned int G[SIZE];
+    unsigned int N_tmp[SIZE];
+    unsigned int abs_mxy[SIZE];
+
+    setZero(X);
+    X[0] = 0x07;
+    setZero(C);
+    C[0] = threadID + 1;
+    setZero(G);
+    G[0] = 0x01;
+    copyNum(Y, X);
+    fxfun(N, Y, C);
+   
+
+    unsigned int check = 0;
+
+    while (isOne(G)){
+        fxfun(N, X, C);
+        fxfun(N, Y, C);
+        fxfun(N, Y, C);
+        if(bigger(X, Y) == 1){
+            copyNum(abs_mxy, X);
+            subNum(abs_mxy, Y);
+        }else{
+            copyNum(abs_mxy, Y);
+            subNum(abs_mxy, X);    
+        }
+        copyNum(G, abs_mxy);
+        copyNum(N_tmp, N);
+        gcd(G, N_tmp);
+        printf("%u \n",check);
+        printNum(G);
+        check ++;
+    }
+
+    
+    copyNum(result, G);    
+}

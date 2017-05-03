@@ -481,7 +481,7 @@ __global__ void pollardKernel(const unsigned int * N, unsigned int * result){
         cuda_copyNum(N_tmp, N);
         cuda_gcd(G, N_tmp);
         check ++;
-        if ((check % (100 * (2 << SIZE)) == 0) && !cuda_zeroNum(result)){
+        if ((check % (100) == 0) && !cuda_zeroNum(result)){
             return;
         }
     }

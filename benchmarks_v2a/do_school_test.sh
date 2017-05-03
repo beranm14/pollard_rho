@@ -1,7 +1,7 @@
 #!/bin/bash
 mkdir log;
-for blocks in `seq 10 100 1024`;do
-        for threads in `seq 10 100 1024`;do
+for blocks in `seq 100 100 1024`;do
+        for threads in `seq 900 100 1024`;do
                 cat gpu_long_job.sh | sed -e "s/BLOCKS/${blocks}/g"  -e "s/THREADS/${threads}/g" > gpu_job_del.sh;
 
                 while [[ `qstat | grep beranm14` != "" ]]; do

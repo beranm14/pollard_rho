@@ -30,4 +30,4 @@
 # Do not change.
 #$ -q gpu_long.q
 
-../cuda/pollard_opt 1 10 310
+../cuda/pollard_opt 1 610 1010

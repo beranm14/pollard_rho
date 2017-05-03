@@ -259,7 +259,7 @@ void divNum(unsigned int * N, unsigned int * D, unsigned int * Q, unsigned int s
 	free(R);
 }
 
-void modNum(unsigned int * A, unsigned int * B, unsigned int size, unsigned int tm){
+void modNum(unsigned int * A, unsigned int * B, unsigned int size){
 	if (zeroNum(A, size) || zeroNum(B, size) || bigger(B, A, size) == 1){
         return;
     }
@@ -270,7 +270,7 @@ void modNum(unsigned int * A, unsigned int * B, unsigned int size, unsigned int 
     unsigned int m = countRealSize(A, size);
     unsigned int n = countRealSize(B, size);
     if(n > 1){
-    	KnuthDiv(A, B, D, R, m, n, tm);
+    	KnuthDiv(A, B, D, R, m, n);
     }else{
     	testModNum(A, B, size);
     	return;

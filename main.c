@@ -33,7 +33,6 @@ static long gcdl(long a, long b) {
   }
   return a;
 }*/
-unsigned int tm = 31;
 
 void gcd(unsigned int * A, unsigned int * B, unsigned int size){
 	unsigned int * BB = (unsigned int *)malloc(sizeof(unsigned int) * size);
@@ -63,7 +62,7 @@ void gcd(unsigned int * A, unsigned int * B, unsigned int size){
 		copyNum(BB, B, size);
 		copyNum(RR, R, size);
 		
-		modNum(R, B, size, tm);
+		modNum(R, B, size);
 		copyNum(A, B, size);
 		copyNum(B, R, size);
 
@@ -96,9 +95,9 @@ void fxfun(unsigned int * N, unsigned int * X, unsigned int * C, unsigned int si
 
 
 	powNum(X, size);
-	modNum(X, N, size, tm);
+	modNum(X, N, size);
 	addNum(X, C, size);
-	modNum(X, N, size, tm);
+	modNum(X, N, size);
 
 	if(bigger(X_tmp, X, size) != 2){
 		printf("fail on fxfun\n");

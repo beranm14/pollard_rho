@@ -1,8 +1,7 @@
 #ifndef KnuthDivH
 #define KnuthDivH
 
-
-int KnuthDiv(unsigned int *u, unsigned int *v, unsigned int *q, unsigned int *r, int m, int n, unsigned int tm); 
+void KnuthDiv(unsigned *u, unsigned *v, unsigned *q, unsigned* r, unsigned m, unsigned n);
 
 int countRealSize (unsigned int *v, unsigned int size);
 

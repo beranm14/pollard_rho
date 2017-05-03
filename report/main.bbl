@@ -1,0 +1,14 @@
+\begin{thebibliography}{1}
+\providecommand{\biburl}[1]{\url{#1}}
+\providecommand{\urlprefix}{Available from: }
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi:\discretionary{}{}{}#1}\else
+  \providecommand{\doi}{doi:\discretionary{}{}{}\begingroup
+  \urlstyle{rm}\Url}\fi
+\providecommand{\eprint}[2][]{\biburl{#2}}
+
+\bibitem{wiki}
+Wikipedia. Pollard's Rho algorithm. 2016.
+\urlprefix\biburl{https://en.wikipedia.org/wiki/Pollard's_rho_algorithm}
+
+\end{thebibliography}

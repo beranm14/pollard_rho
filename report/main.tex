@@ -10,7 +10,7 @@
  bottom=20mm,
  }
 \usepackage[utf8]{inputenc}
-\usepackage[english,czech]{babel}
+\usepackage[english]{babel}
 \usepackage{makeidx}
 \usepackage{url}
 \usepackage{tikz}
@@ -24,6 +24,7 @@
 \usepackage[T1]{fontenc}
 \usepackage{listingsutf8}
 \usepackage{cite}
+\usepackage{amsmath}
 \usepackage{mdframed}
 \usepackage[affil-it]{authblk}
 
@@ -44,8 +45,50 @@ Factorisation problem of a huge number resolved into massive parallel solutions.
 
 \section{Definition of the algorithm}
 
+The $\rho$ algorithm (named after the shape of curves symbolising two functions trying to reach themselves in projective space) is based on finding cycle. In $t$ random numbers of $x_1, x_2, \dots, x_t$ in range $[1, n]$ will contain repetition with probability of $P > 0.5$ if $t > 1.777n^{\frac{1}{2}}$
 
-The $\rho$ algorithm (named after the shape of curves symbolising two functions trying to reach themselves in projective space) is based on finding cycle. In t random numbers of $x_1, x_2, \dots, x_t$ in range $[1, n]$ will contain repetition with probability of $P > 0.5$ if $t > 1.777n^{\frac{1}{2}}$
+The $\rho$ algorithm uses $g(x)$ for modulo $n$ as a generator for pseudo-random sequence. In this article function $x^2 + k;\, k \in \mathbb{N}$. We are assuming that $n = p \cdot q$ that also mean $p < \sqrt{n}$ and $q < \sqrt{n}$. Algorithm actually generates sequence of $x_1 = g(2),\,x_2 = g(g(2)),\,\dots$ in two separated sequences running in same time. One sequence is generated as $x_1=g(x_0) \mod n$ and second as $x_1=g(g(x_0)) \mod n$. Since we know that $p < \sqrt{n}$ the faster sequence is likely to cycle faster then the sequence generated just in in application of a $g$ function. The repetition of the $\mod p$ will be detected with $| x_k - x_m |$ which will divide $p$ without residue \cite{wiki}.
+
+\begin{figure}[H]
+	\centering
+	\begin{lstlisting}
+    x=2; y=2; d=1
+    while d is 1:
+        x = g(x)
+        y = g(g(y))
+        d = gcd(|x - y|, n)
+        if d = n: 
+            return failure
+        else:
+            return d
+	\end{lstlisting}
+	\caption{Sequential pseudo-code of algorithm}
+	\label{singl_alg}
+\end{figure}
+
+While implementation in \texttt{Python} is basically just a copy of pseudo-code, in \texttt{C} there is plenty struggle with fix size integer size. Another problem will be with transformation of libraries like \texttt{GNU MP}, that's why the basic focus on sequential solution was on basic mathematical operation. For the basic adding and subtracting there was no bigger effort than just creating basic implementation with carry bits. Much more time was spent on operation like division and modulo.
+
+\subsection{Division}
+
+First idea on how to divide numbers was to use school \emph{Long division} algorithm which proved to be little bit expensive but was behaving in the same manners for every input numbers.
+
+\begin{figure}[H]
+	\centering
+	\begin{lstlisting}
+Q = 0
+R = 0                     
+for i = n − 1 .. 0 do
+    R = R << 1
+    R(0) = N(i)
+    if R >= D then
+        R = R − D
+        Q(i) = 1
+	\end{lstlisting}
+	\caption{Long division \cite{long_div}}
+	\label{long_div}
+\end{figure}
+
+Another much faster division was to use \emph{Knuth's division}
 
 
 \section{\texttt{CUDA} Solution}

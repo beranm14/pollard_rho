@@ -1,0 +1,59 @@
+\documentclass[a4paper]{article}
+%\documentclass[a4paper,10pt]{article}
+\usepackage{geometry}
+ \geometry{
+ a4paper,
+ total={210mm,297mm},
+ left=20mm,
+ right=20mm,
+ top=20mm,
+ bottom=20mm,
+ }
+\usepackage[utf8]{inputenc}
+\usepackage[english,czech]{babel}
+\usepackage{makeidx}
+\usepackage{url}
+\usepackage{tikz}
+\usepackage{float}
+\usepackage{pdfpages}
+\usepackage{amsfonts}
+\usepackage{mdwlist}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{listingsutf8}
+\usepackage{cite}
+\usepackage{mdframed}
+\usepackage[affil-it]{authblk}
+
+\begin{document}
+\title{Basic Pollard Rho Algorithm Implementation On \texttt{CUDA} Device}
+\author{Martin Beránek}
+\date{\today}
+\affil{Faculty of Information -- Technology Czech Technical University}
+\maketitle
+
+%\tableofcontents
+%\listoffigures
+%\listoftables
+
+\section{Introduction}
+
+Factorisation problem of a huge number resolved into massive parallel solutions. Large number of algorithms are currently state-of-art and are continuously developed into better forms. This short article is focused on implementation of Pollard-Rho algorithm on \texttt{CUDA} device. In first part there is a definition of algorithm. Next the article focuses on options of parallelism on CUDA device. Results are measured in multiple instances and compared in graphs. 
+
+\section{Definition of the algorithm}
+
+
+\section{\texttt{CUDA} Solution}
+
+
+\section{Conclusion}
+
+\bibliographystyle{iso690}
+\bibliography{mybibliographyfile}
+
+
+\appendix
+
+\end{document}

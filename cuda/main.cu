@@ -147,6 +147,9 @@ for GPU to work with.
 	//unsigned int * gpu_temp_xyc;
 	//unsigned int * temp_mem_xyc = (unsigned int *) malloc(sz * sizeof(unsigned int));
   	//cudaMalloc((void **)&gpu_temp_xyc, sz * sizeof(unsigned int));
+
+  	cudaFuncSetCacheConfig(prepareDataKernel, cudaFuncCachePreferL1);
+	cudaFuncSetCacheConfig(pollardKernel, cudaFuncCachePreferL1);
 	
 	prepareDataKernel<<<blocks, threads>>>(gpu_N, gpu_xyc);
 

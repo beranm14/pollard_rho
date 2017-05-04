@@ -1,7 +1,7 @@
 CXX=nvcc
 LD=nvcc
-# CFLAGS=-g -G
-# FLAGS=-g -G
+#CFLAGS=-g -G
+#FLAGS=-g -G
 CFLAGS=-O3 --use_fast_math
 FLAGS=-O3 --use_fast_math
 LIBS=

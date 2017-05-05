@@ -5,6 +5,7 @@
 #include <ctype.h>
 #include <math.h>
 #include <unistd.h>
+#include <stdint.h>
 
 void printNum(unsigned int * num, unsigned int size){
 	unsigned int i;
@@ -269,10 +270,34 @@ void modNum(unsigned int * A, unsigned int * B, unsigned int size){
     setZero(D, size);
     unsigned int m = countRealSize(A, size);
     unsigned int n = countRealSize(B, size);
-    if(n > 1){
-    	KnuthDiv(A, B, D, R, m, n);
+    printf("m: %u\n", m);
+    printf("n: %u\n", n);
+    if(n == 1){
+        unsigned divisor = B[0];
+        unsigned remainder = 0;
+        for (int i = m+n-1; i >= 0; i--) {
+            uint64_t partial_dividend = uint64_t(remainder) << 32 | A[i];
+            if (partial_dividend == 0) {
+                D[i] = 0;
+                remainder = 0;
+            } else if (partial_dividend < divisor) {
+                D[i] = 0;
+                remainder = (unsigned)partial_dividend;
+            } else if (partial_dividend == divisor) {
+                D[i] = 1;
+                remainder = 0;
+            } else {
+                D[i] = (unsigned)(partial_dividend / divisor);
+                remainder = (unsigned)(partial_dividend - (D[i] * divisor));
+            }
+        }
+        R[0] = remainder;    
     }else{
-    	testModNum(A, B, size);
+        KnuthDiv(A, B, D, R, m, n);
+
+        for (unsigned i = 0; i < countRealSize(R); ++i)
+        Quotient->pVal[i] =
+uint64_t(Q[i*2]) | (uint64_t(Q[i*2+1]) << (APINT_BITS_PER_WORD / 2));
     	return;
     }
     copyNum(A, R, size);

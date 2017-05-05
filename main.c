@@ -177,6 +177,39 @@ void PollardRho(unsigned int * N, unsigned int size){
 
 
 int main(int argc, char **argv) {
+
+
+	unsigned int U[32];
+	unsigned int V[32];
+	unsigned int D[32];
+	unsigned int R[32];
+	setZero(U, 32);
+	setZero(V, 32);
+	setZero(D, 32);
+	setZero(R, 32);
+	U[1] = 0xb1e80000;
+	U[0] = 0x00000000;
+	V[1] = 0x73e00000;
+	V[0] = 0x00000000;
+	printNum(U, 32);
+	printNum(V, 32);	
+	modNum(U, V, 32);
+	printNum(U, 32);
+	printf("===========\n");
+	setZero(U, 32);
+	setZero(V, 32);
+	setZero(D, 32);
+	setZero(R, 32);
+	U[1] = 0xb1e80000;
+	U[0] = 0x00000000;
+	V[1] = 0x73e00000;
+	V[0] = 0x00000000;
+	printNum(U, 32);
+	printNum(V, 32);	
+	
+	testModNum(U, V, 32);
+	printNum(U, 32);
+
 	/*unsigned int X[32];
 	unsigned int C[32];
 	unsigned int X[32];
@@ -193,8 +226,7 @@ int main(int argc, char **argv) {
     N[1] = 0xfeba9876;
     N[0] = 0x7530eca9;*/
     /*0 x 1 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000001*/
-
-
+/*
 	unsigned int N[32];
 	setZero(N, 32);
     //N[8] = 1;
@@ -205,7 +237,7 @@ int main(int argc, char **argv) {
 	printf("Results \n");
     printNum(N, 32);
 	printf("********************\n");
-
+*/
 /*
 	unsigned int U[32];
 	unsigned int V[32];

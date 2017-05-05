@@ -15,7 +15,7 @@ And edited to work on 32 bit unsigned integers
 
 
 inline unsigned int max ( int a, int b ) { return a > b ? a : b; }
-inline unsigned int min ( int a, int b ) { return a > b ? b : a; }
+//inline unsigned int min ( int a, int b ) { return a > b ? b : a; }
 
 
 int countRealSize (unsigned int *v, unsigned int size){
@@ -25,9 +25,8 @@ int countRealSize (unsigned int *v, unsigned int size){
    return size;
 }
 
-int nlz(unsigned x) {
+unsigned countLeadingZeros(unsigned x){
    int n;
- 
    if (x == 0) return(32);
    n = 0;
    if (x <= 0x0000FFFF) {n = n +16; x = x <<16;}
@@ -38,19 +37,9 @@ int nlz(unsigned x) {
    return n;
 }
 
-unsigned countLeadingZeros(unsigned in){
-	unsigned out = 0;
-	unsigned pnt = 0x80000000;
-	while((in & pnt) == 0){
-		out ++;
-		pnt >>= 1;
-	}
-	return out;
-}
 void KnuthDiv(unsigned *u, unsigned *v, unsigned *q, unsigned* r,
                      unsigned m, unsigned n) {
-
-  uint64_t b = uint64_t(1) << 32;
+  const uint64_t b = uint64_t(1) << 32;
 
   unsigned shift = countLeadingZeros(v[n-1]);
   unsigned v_carry = 0;
@@ -68,6 +57,7 @@ void KnuthDiv(unsigned *u, unsigned *v, unsigned *q, unsigned* r,
     }
   }
   u[m+n] = u_carry;
+
   int j = m;
   do {
     uint64_t dividend = ((uint64_t(u[j+n]) << 32) + u[j+n-1]);
@@ -79,29 +69,16 @@ void KnuthDiv(unsigned *u, unsigned *v, unsigned *q, unsigned* r,
       if (rp < b && (qp == b || qp*v[n-2] > b*rp + u[j+n-2]))
         qp--;
     }
-    bool isNeg = false;
+    int64_t borrow = 0;
     for (unsigned i = 0; i < n; ++i) {
-      uint64_t u_tmp = uint64_t(u[j+i]) | (uint64_t(u[j+i+1]) << 32);
-      uint64_t subtrahend = uint64_t(qp) * uint64_t(v[i]);
-      bool borrow = subtrahend > u_tmp;
-      uint64_t result = u_tmp - subtrahend;
-      unsigned k = j + i;
-      u[k++] = (unsigned)(result & (b-1));
-      u[k++] = (unsigned)(result >> 32);
-      while (borrow && k <= m+n) {
-        borrow = u[k] == 0;
-        u[k]--;
-        k++;
-      }
-      isNeg |= borrow;
+      uint64_t p = uint64_t(qp) * uint64_t(v[i]);
+      int64_t subres = int64_t(u[j+i]) - borrow - (unsigned)p;
+      u[j+i] = (unsigned)subres;
+      borrow = (p >> 32) - (subres >> 32);
     }
-    if (isNeg) {
-      bool carry = true; 
-      for (unsigned i = 0; i <= m+n; ++i) {
-        u[i] = ~u[i] + carry;
-        carry = carry && u[i] == 0;
-      }
-    }
+    bool isNeg = u[j+n] < borrow;
+    u[j+n] -= (unsigned)borrow;
+
     q[j] = (unsigned)qp;
     if (isNeg) {
       q[j]--;
@@ -114,6 +91,7 @@ void KnuthDiv(unsigned *u, unsigned *v, unsigned *q, unsigned* r,
       u[j+n] += carry;
     }
   } while (--j >= 0);
+
   if (r) {
     if (shift) {
       unsigned carry = 0;

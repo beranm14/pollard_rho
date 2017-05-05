@@ -77,11 +77,11 @@ First idea on how to divide numbers was to use school \emph{Long division} algor
 	\begin{lstlisting}
 Q = 0
 R = 0                     
-for i = n − 1 .. 0 do
+for i = n - 1 .. 0 do
     R = R << 1
     R(0) = N(i)
     if R >= D then
-        R = R − D
+        R = R - D
         Q(i) = 1
 	\end{lstlisting}
 	\caption{Long division \cite{long_div}}

@@ -11,4 +11,8 @@
 Wikipedia. Pollard's Rho algorithm. 2016.
 \urlprefix\biburl{https://en.wikipedia.org/wiki/Pollard's_rho_algorithm}
 
+\bibitem{long_div}
+Wikipedia. Division algorithm. 2016.
+\urlprefix\biburl{https://en.wikipedia.org/wiki/Division_algorithm}
+
 \end{thebibliography}

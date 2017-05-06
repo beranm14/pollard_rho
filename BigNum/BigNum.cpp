@@ -289,7 +289,7 @@ void shiftLeftNumBy(unsigned int * A, unsigned int gen, unsigned int size){ // s
     	(flg == 1 ? flc = 1 : flc = 0);
     }*/
 }
-
+/*
 void modNum(unsigned int * A, unsigned int * B, unsigned int size){
     if (zeroNum(A, size) || zeroNum(B, size) || bigger(B, A, size) == 1){
         return;
@@ -318,8 +318,8 @@ void modNum(unsigned int * A, unsigned int * B, unsigned int size){
     }
     free(tmp_b);
 }
+*/
 
-/*
 void modNum(unsigned int * A, unsigned int * B, unsigned int size){
     if (zeroNum(A, size) || zeroNum(B, size) || bigger(B, A, size) == 1){
         return;
@@ -348,4 +348,3 @@ void modNum(unsigned int * A, unsigned int * B, unsigned int size){
     }
     free(tmp_b);
 }
-*/

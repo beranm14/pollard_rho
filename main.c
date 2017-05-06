@@ -185,9 +185,12 @@ int main(int argc, char **argv) {
     //N[8] = 1;
     //N[8] = 1;
     //N[0] = 1;
-    N[1] = 0x00000111;
+    N[1] = 0x0fd42d4e;
+    N[0] = 0xb2c4b7b1;
+
+    //N[1] = 0x00000111;
     //N[0] = 0x10000009;
-    N[0] = 0x10000009;
+    //N[0] = 0x10000009;
     PollardRho(N, 5);
 	printf("Results \n");
     printNum(N, 5);

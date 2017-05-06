@@ -358,5 +358,6 @@ int main(int argc, char **argv) {
     printNum(D, 32);
 	printNum(R, 32);*/
 	//printf("gcdl %ld\n",gcdl(0x00000005, 0x00000002));
+	cudaDeviceReset();
 	return 0;
 }

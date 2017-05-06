@@ -1,9 +1,9 @@
 CXX=nvcc
 LD=nvcc
-# CFLAGS=-g -G
-# FLAGS=-g -G
-CFLAGS=-Xptxas -dlcm=ca -O3 --use_fast_math
-FLAGS=-Xptxas -dlcm=ca -O3 --use_fast_math
+CFLAGS=-g -G
+FLAGS=-g -G
+#CFLAGS=-Xptxas -dlcm=ca -O3 --use_fast_math
+#FLAGS=-Xptxas -dlcm=ca -O3 --use_fast_math
 LIBS=
 
 all: ./BigNum/BigNum.o ./BigNum/BigNum_cuda.o main.o

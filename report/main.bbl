@@ -1,0 +1,31 @@
+\begin{thebibliography}{1}
+\providecommand{\biburl}[1]{\url{#1}}
+\providecommand{\urlprefix}{Available from: }
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi:\discretionary{}{}{}#1}\else
+  \providecommand{\doi}{doi:\discretionary{}{}{}\begingroup
+  \urlstyle{rm}\Url}\fi
+\providecommand{\eprint}[2][]{\biburl{#2}}
+
+\bibitem{long_div}
+Wikipedia. Division algorithm. 2017.
+\urlprefix\biburl{https://en.wikipedia.org/wiki/Division_algorithm}
+
+\bibitem{wiki}
+Wikipedia. Pollard's Rho algorithm. 2017.
+\urlprefix\biburl{https://en.wikipedia.org/wiki/Pollard's_rho_algorithm}
+
+\bibitem{knuth}
+Knuth, D. \emph{The Art of Computer Programming: Volume 1: Fundamental
+  Algorithms}. Pearson Education, 1997, ISBN 9780321635747.
+\urlprefix\biburl{https://books.google.cz/books?id=x9AsAwAAQBAJ}
+
+\bibitem{llvm}
+Community, L. The LLVM Compiler Infrastructure. 2017.
+\urlprefix\biburl{https://github.com/Microsoft/llvm/blob/master/lib/Support/APInt.cpp}
+
+\bibitem{cuRAND}
+NVidia. cuRAND. 2017.
+\urlprefix\biburl{https://developer.nvidia.com/curand}
+
+\end{thebibliography}

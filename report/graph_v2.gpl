@@ -1,0 +1,8 @@
+#!/usr/bin/gnuplot
+set terminal png
+set output "graph_v2.png"
+set ticslevel 0
+set dgrid3d 30,30
+set hidden3d
+set title "Time of execution [ms]"
+splot "./data_v2.txt" u 1:2:3 with lines notitle

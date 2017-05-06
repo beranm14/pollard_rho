@@ -186,8 +186,13 @@ int main(int argc, char **argv) {
 		cudaEventCreate(&start);
 		cudaEventCreate(&stop);
 
-    	N[1] = 0x0fd42d4e;
-    	N[0] = 0xb2c4b7b1;
+    	//N[1] = 0x0fd42d4e;
+    	//N[0] = 0xb2c4b7b1;
+    	//N[1] = 0x0000000a;
+    	//N[0] = 0x8bc39b45;
+    	// 3b52bc bb1a2c33
+    	N[1] = 0x003b52bc;
+    	N[0] = 0xbb1a2c33;
 
     	cudaEventRecord(start, 0);
 

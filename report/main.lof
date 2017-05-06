@@ -1,0 +1,13 @@
+\select@language {english}
+\contentsline {figure}{\numberline {1}{\ignorespaces Sequential pseudo-code of algorithm}}{2}
+\contentsline {figure}{\numberline {2}{\ignorespaces Long division \cite {long_div}}}{2}
+\contentsline {figure}{\numberline {3}{\ignorespaces \texttt {GCD} algorithm}}{3}
+\contentsline {figure}{\numberline {4}{\ignorespaces Command time output on sequential run}}{3}
+\contentsline {figure}{\numberline {5}{\ignorespaces First version of Pollard-Rho on \texttt {CUDA}}}{4}
+\contentsline {figure}{\numberline {6}{\ignorespaces Changing caching policy for both kernels}}{4}
+\contentsline {figure}{\numberline {7}{\ignorespaces Graph of execution time}}{5}
+\contentsline {figure}{\numberline {8}{\ignorespaces Inactivity of threads in \texttt {warp}}}{5}
+\contentsline {figure}{\numberline {9}{\ignorespaces Count of instructions used by kernels}}{6}
+\contentsline {figure}{\numberline {10}{\ignorespaces Kernel from second version}}{7}
+\contentsline {figure}{\numberline {11}{\ignorespaces Graph of execution time}}{8}
+\contentsline {figure}{\numberline {12}{\ignorespaces Inactivity of threads in \texttt {warp}}}{8}

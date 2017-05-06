@@ -1,23 +1,56 @@
 \relax 
 \providecommand\zref@newlabel[2]{}
-\citation{wiki}
 \citation{long_div}
 \select@language{english}
 \@writefile{toc}{\select@language{english}}
 \@writefile{lof}{\select@language{english}}
 \@writefile{lot}{\select@language{english}}
-\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}}
-\@writefile{toc}{\contentsline {section}{\numberline {2}Definition of the algorithm}{1}}
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Sequential pseudo-code of algorithm}}{1}}
-\newlabel{singl_alg}{{1}{1}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Division}{1}}
-\bibstyle{iso690}
-\bibdata{mybibliographyfile}
-\bibcite{wiki}{1}
-\bibcite{long_div}{2}
+\citation{wiki}
+\citation{long_div}
+\citation{knuth}
+\citation{llvm}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{2}}
+\@writefile{toc}{\contentsline {section}{\numberline {2}Definition of the algorithm}{2}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Sequential pseudo-code of algorithm}}{2}}
+\newlabel{singl_alg}{{1}{2}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Division}{2}}
 \@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Long division \cite  {long_div}}}{2}}
 \newlabel{long_div}{{2}{2}}
-\@writefile{toc}{\contentsline {section}{\numberline {3}\texttt  {CUDA} Solution}{2}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}First solution with explicit barrier}{2}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Second solution with independent runners}{2}}
-\@writefile{toc}{\contentsline {section}{\numberline {4}Conclusion}{2}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}\texttt  {GCD}}{3}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces \texttt  {GCD} algorithm}}{3}}
+\newlabel{gcd}{{3}{3}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Measurements}{3}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Command time output on sequential run}}{3}}
+\newlabel{tmsq}{{4}{3}}
+\@writefile{toc}{\contentsline {section}{\numberline {3}\texttt  {CUDA} Solution}{3}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}First solution with explicit barrier}{3}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces First version of Pollard-Rho on \texttt  {CUDA}}}{4}}
+\newlabel{gcd}{{5}{4}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Measurements}{4}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Changing caching policy for both kernels}}{4}}
+\newlabel{llcache}{{6}{4}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Graph of execution time}}{5}}
+\newlabel{exec}{{7}{5}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.1}Profiler output}{5}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Inactivity of threads in \texttt  {warp}}}{5}}
+\newlabel{inactive}{{8}{5}}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Count of instructions used by kernels}}{6}}
+\newlabel{inactive}{{9}{6}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Second solution with independent runners}{6}}
+\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces Kernel from second version}}{7}}
+\newlabel{kernelv2}{{10}{7}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4}Measurements}{7}}
+\citation{cuRAND}
+\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces Graph of execution time}}{8}}
+\newlabel{exec2}{{11}{8}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.4.1}Profiler output}{8}}
+\@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces Inactivity of threads in \texttt  {warp}}}{8}}
+\newlabel{inactive2}{{12}{8}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Conclusion}{8}}
+\bibstyle{iso690}
+\bibdata{mybibliographyfile}
+\bibcite{long_div}{1}
+\bibcite{wiki}{2}
+\bibcite{knuth}{3}
+\bibcite{llvm}{4}
+\bibcite{cuRAND}{5}

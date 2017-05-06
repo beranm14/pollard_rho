@@ -1,0 +1,68 @@
+\documentclass[a4paper]{article}
+%\documentclass[a4paper,10pt]{article}
+\usepackage{geometry}
+ \geometry{
+ a4paper,
+ total={210mm,297mm},
+ left=20mm,
+ right=20mm,
+ top=20mm,
+ bottom=20mm,
+ }
+\usepackage[utf8]{inputenc}
+\usepackage[english,czech]{babel}
+\usepackage{makeidx}
+\usepackage{url}
+\usepackage{tikz}
+\usepackage{float}
+\usepackage{pdfpages}
+\usepackage{amsfonts}
+\usepackage{mdwlist}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{listingsutf8}
+\usepackage{cite}
+\usepackage{mdframed}
+\usepackage[affil-it]{authblk}
+
+\begin{document}
+\title{Basic Pollard Rho Algorithm Implementation On \texttt{CUDA} Device}
+\author{Martin Beránek}
+\date{\today}
+\affil{Faculty of Information Technology -- Czech Technical University in Prague}
+\maketitle
+
+%\tableofcontents
+%\listoffigures
+%\listoftables
+
+\section{Introduction}
+
+Factorisation problem of a huge number resolved into massive parallel solutions. Large number of algorithms are currently state-of-art and are continuously developed into better forms. This short article is focused on implementation of Pollard-Rho algorithm on \texttt{CUDA} device. In first part there is a definition of algorithm. Next the article focuses on options of parallelism on CUDA device. Results are measured in multiple instances and compared in graphs. 
+
+\section{Definition of the algorithm}
+
+
+The $\rho$ algorithm (named after the shape of curves symbolising two functions trying to reach themselves in projective space) is based on finding cycle. In t random numbers of $x_1, x_2, \dots, x_t$ in range $[1, n]$ will contain repetition with probability of $P > 0.5$ if $t > 1.777n^{\frac{1}{2}}$
+
+
+\section{\texttt{CUDA} Solution}
+
+
+\subsection{First solution with explicit barrier}
+
+
+\subsection{Second solution with independent runners}
+
+
+\section{Conclusion}
+
+\bibliographystyle{iso690}
+\bibliography{mybibliographyfile}
+
+
+\appendix
+
+\end{document}

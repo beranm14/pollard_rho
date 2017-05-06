@@ -88,14 +88,57 @@ for i = n - 1 .. 0 do
 	\label{long_div}
 \end{figure}
 
-Another much faster division was to use \emph{Knuth's division} \cite{knuth} which took considerably shorter time to compute. Yet there was no luck in implementation.   
+Another much faster division was to use \emph{Knuth's division} \cite{knuth} which took considerably shorter time to compute. Yet there was no luck in implementation. Current version which was considered is from \texttt{llvm} \cite{llvm}. But it failed with some badly shifted bits in residuum hence was not used.
 
+\subsection{\texttt{GCD}}
+
+Since division wasn't fast enough, at least \texttt{GCD} was implemented with shifts and small bit checks. This maybe led to more divergent behaviour in \texttt{CUDA} implementation.
+
+\begin{figure}[H]
+	\centering
+	\begin{lstlisting}
+__device__  inline void gcd(unsigned int * A, unsigned int * B){
+    unsigned int t [SIZE];
+    unsigned int shift;
+
+    if(zeroNum(B)){
+        return;
+    }
+    if(zeroNum(A)){
+        copyNum(A, B);
+        return;
+    }
+    for(shift = 0; ((A[0] | B[0]) & 1) == 0; ++ shift){
+        shiftRightNum(A);
+        shiftRightNum(B);
+    }
+    while((A[0] & 1) == 0){
+        shiftRightNum(A);
+    }
+    do{
+        while((B[0] & 1) == 0){
+            shiftRightNum(B);
+        }
+        if(bigger(A, B) == 1){
+            copyNum(t, B);
+            copyNum(B, A);
+            copyNum(A, t);
+        }
+        subNum(B, A);
+    } while (! zeroNum(B));
+    shiftLeftNumBy(A, shift);
+}
+	\end{lstlisting}
+	\caption{\texttt{GCD} algorithm}
+	\label{gcd}
+\end{figure}
 
 \section{\texttt{CUDA} Solution}
 
 
 \subsection{First solution with explicit barrier}
 
+First idea which was found at \url{https://github.com/dghost/factor-cuda}. Implementation prepared at host memory $X, Y, C$ for algorithm which was later on run with multiple kernels and .
 
 \subsection{Second solution with independent runners}
 

@@ -11,4 +11,4 @@
 \contentsline {subsection}{\numberline {3.3}Second solution with independent runners}{6}
 \contentsline {subsection}{\numberline {3.4}Measurements}{7}
 \contentsline {subsubsection}{\numberline {3.4.1}Profiler output}{8}
-\contentsline {section}{\numberline {4}Conclusion}{8}
+\contentsline {section}{\numberline {4}Conclusion}{9}
